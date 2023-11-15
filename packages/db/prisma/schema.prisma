@@ -1,0 +1,118 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema", "views"]
+  output          = "../src/generated/client"
+}
+
+generator pothos {
+  provider     = "prisma-pothos-types"
+  clientOutput = "../client"
+  output       = "../src/generated/pothos/prisma-pothos-types.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum UserPermissionRole {
+  ADMIN @map("admin")
+  USER  @map("user")
+}
+
+enum AttendanceStatus {
+  ATTENDING @map("attending")
+  NOT_ATTENDING @map("not_attending")
+  MAYBE @map("maybe")
+}
+
+model User {
+  id          Int                @id @default(autoincrement())
+  phoneNumber String             @unique @db.Text
+  username    String             @db.Text
+  role        UserPermissionRole @default(USER)
+  password    String?            @db.Text
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  accounts    Account[]
+  sessions    Session[]
+
+  attendances Attendance[]
+  events Event[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("auth_accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @db.Text
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_sessions")
+}
+
+model VerificationToken {
+  id         Int      @id @default(autoincrement())
+  identifier String   @db.Text
+  token      String   @unique @db.Text
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("auth_verification_tokens")
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique
+  title       String    @db.VarChar(300)
+  date        DateTime
+  location   String?    @db.VarChar(300)
+  description     String?    @db.Text
+  coverImage       String?   @db.VarChar(300) @map(name: "cover_image")
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int      @map(name: "author_id")
+  authorName  String?   @map(name: "author_name")
+  publishedAt DateTime? @map(name: "published_at")
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+
+  attendances Attendance[]
+
+  @@map(name: "events")
+}
+
+model Attendance {
+  id          Int       @id @default(autoincrement())
+  userId      Int @map(name: "user_id")
+  eventId     Int @map(name: "event_id")
+  status      AttendanceStatus
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@map(name: "event_attendees")
+}
