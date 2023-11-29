@@ -4,8 +4,11 @@ import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
-import SignInButton from "./components/LogoutButton";
+import SignOutButton from "./components/SignOutButton";
 import Link from "next/link";
+import { getServerSession } from "@/server/auth";
+import Avatar from "@/assets/avatar.svg";
+import AvatarButton from "./components/AvatarButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,30 +17,42 @@ export const metadata: Metadata = {
   description: "...",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>
         <SessionProvider>
-          <div className="min-hscreen relative flex flex-col">
-            <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="relative flex min-h-screen flex-col">
+            <header className="w-full bg-transparent">
               <div className="container flex h-14 items-center justify-between">
-                <div className="flex items-center">
+                <nav className="flex w-1/4 items-center space-x-6 text-sm font-medium">
+                  <Button variant="ghost" size="no-horizontal-padding" asChild>
+                    <Link href="/events/new">Create Event</Link>
+                  </Button>
+                </nav>
+                <div className="flex w-1/2 items-center justify-center">
                   <Link href="/">
                     <div className="font-bold">BASH</div>
                   </Link>
-                  <nav className="ml-4 flex items-center space-x-6 text-sm font-medium">
-                    <Button variant="ghost" asChild>
-                      <Link href="/events/new">Create Event</Link>
-                    </Button>
-                  </nav>
                 </div>
-                <div>
-                  <SignInButton />
+                <div className="flex w-1/4 items-center justify-end">
+                  {session ? (
+                    <AvatarButton />
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="no-horizontal-padding"
+                      asChild
+                    >
+                      <Link href="/signin">Sign In</Link>
+                    </Button>
+                  )}
                 </div>
               </div>
             </header>

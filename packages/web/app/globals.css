@@ -29,7 +29,7 @@
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --input: 0 0% 20.39%;
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
@@ -63,6 +63,30 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    .react-modal-sheet-backdrop {
+      /* custom styles */
+    }
+    .react-modal-sheet-container {
+      background-color: rgba(0, 0, 0, 0.80) !important;
+      backdrop-filter: blur(25px);
+    }
+    .react-modal-sheet-header {
+      /* custom styles */
+    }
+    .react-modal-sheet-drag-indicator {
+      /* custom styles */
+    }
+    .react-modal-sheet-content {
+      /* custom styles */
+    }
+
+    .layer {
+      .react-modal-sheet-container {
+        border-top-right-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+      }
+    }
   }
 
   @keyframes gradient {

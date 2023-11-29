@@ -6,8 +6,7 @@ export default async function Home() {
   const session = await getServerSession();
 
   return (
-    <main className="flex flex-col items-center justify-between pt-10">
-      <h1 className="text-2xl font-medium leading-none">Bash</h1>
+    <main className="flex flex-col items-center justify-between">
       {session && (
         <div className="mt-10 w-full">
           <div className="w-full">

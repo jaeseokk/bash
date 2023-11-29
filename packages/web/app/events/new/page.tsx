@@ -7,7 +7,7 @@ export interface EventNewPageProps {}
 
 const EventNewPage = ({}: EventNewPageProps) => {
   return (
-    <main className="pb-20 pt-4">
+    <main className="pt-4">
       <CreateEventForm
         onSubmit={async (data) => {
           const res = await fetch("/api/events", {

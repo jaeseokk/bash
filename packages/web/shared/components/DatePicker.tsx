@@ -11,6 +11,8 @@ import { cn } from "@/utils";
 import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import BottomSheet from "@/components/BottomSheet";
 
 export interface DatePickerProps {
   value?: Date;
@@ -25,43 +27,42 @@ const DatePicker = ({
   placeholder,
   viewMode,
 }: DatePickerProps) => {
+  const [showCalendar, setShowCalendar] = useState(false);
+
   if (viewMode) {
-    return <Container>{value && format(value, "PPP")}</Container>;
+    return <Input value={value && format(value, "PPP")} readOnly />;
   }
 
   return (
-    <Container>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !value && "text-muted-foreground",
-            )}
-          >
-            {value ? format(value, "PPP") : <span>{placeholder}</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={value}
-            onSelect={onChange}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-    </Container>
+    <>
+      <button
+        className="w-full"
+        type="button"
+        onClick={() => {
+          setShowCalendar(true);
+        }}
+      >
+        <Input
+          placeholder={placeholder}
+          value={value ? format(value, "PPP") : undefined}
+          readOnly
+        />
+      </button>
+      <BottomSheet
+        isOpen={showCalendar}
+        onClose={() => {
+          setShowCalendar(false);
+        }}
+      >
+        <Calendar
+          mode="single"
+          selected={value}
+          onSelect={onChange}
+          initialFocus
+        />
+      </BottomSheet>
+    </>
   );
-};
-
-interface ContainerProps {
-  children: React.ReactNode;
-}
-
-const Container = ({ children }: ContainerProps) => {
-  return <div className="h-9">{children}</div>;
 };
 
 export default DatePicker;

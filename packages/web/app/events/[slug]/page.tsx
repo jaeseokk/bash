@@ -17,7 +17,7 @@ const EventPage = async ({ params: { slug } }: EventPageProps) => {
   }
 
   return (
-    <main className="relative pb-20 pt-4">
+    <main className="pt-4">
       <EventView eventInfo={eventData} />
     </main>
   );

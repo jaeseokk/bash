@@ -11,6 +11,7 @@
     "paths": {
       "@/components/*": [ "shared/components/*" ],
       "@/utils": [ "shared/lib/utils" ],
+      "@/assets/*": [ "shared/assets/*" ],
       "@/server/*": [ "server/*" ]
     }
   },

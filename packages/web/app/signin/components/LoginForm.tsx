@@ -44,12 +44,6 @@ const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
     setShowCodeField(true);
   };
 
-  useEffect(() => {
-    if (session.status === "authenticated") {
-      router.replace("/");
-    }
-  }, [router, session.status]);
-
   return (
     <form
       className="space-y-4"

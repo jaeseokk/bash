@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import EventInput from "@/components/EventInput";
+import { useState } from "react";
 import Image from "next/image";
 import DatePicker from "@/components/DatePicker";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,12 +9,18 @@ import { Button } from "@/components/ui/button";
 import { cn, shimmer, toBase64 } from "@/utils";
 import { Controller, useForm } from "react-hook-form";
 import BottomSheet from "@/components/BottomSheet";
-import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoginForm from "../../../signin/components/LoginForm";
 import { PrismaDBMainTypes } from "@bash/db";
-import { getPalette } from "../../../../shared/lib/color-thief";
+import InputContainer from "@/components/InputContainer";
+import { Input } from "@/components/ui/input";
+import { EventTitleInput } from "@/components/EventTitleInput";
+import BottomButton from "@/components/BottomButton";
+import EffectIcon from "@/assets/effect.svg";
+import PreviewIcon from "@/assets/preview.svg";
+import EditIcon from "@/assets/edit.svg";
+import FloatingArea from "@/components/FloatingArea";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -54,15 +60,6 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
-  const [coverImagePalette, setCoverImagePalette] =
-    useState<
-      [
-        [number, number, number],
-        [number, number, number],
-        [number, number, number],
-        [number, number, number],
-      ]
-    >();
   const submit = async (data: CreateEventFormData) => {
     const res = await onSubmit(data);
     router.push(`/events/${res.slug}`);
@@ -70,25 +67,32 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
 
   return (
     <>
-      <div
-        className="pointer-events-none fixed inset-0 z-[-1]"
-        style={
-          coverImagePalette
-            ? {
-                background: `linear-gradient(-45deg, rgb(${coverImagePalette[0].join(
-                  ",",
-                )}), rgb(${coverImagePalette[1].join(
-                  ",",
-                )}), rgb(${coverImagePalette[2].join(
-                  ",",
-                )}), rgb(${coverImagePalette[3].join(",")}))`,
-                animation: `gradient 5s ease infinite`,
-                backgroundSize: "150% 150%",
-              }
-            : undefined
-        }
-      />
+      {coverImage && (
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">
+          <div
+            className="absolute bottom-0 left-0 right-0 top-0"
+            style={{
+              background:
+                "linear-gradient(0deg, #000 27.08%, rgba(0, 0, 0, 0.50) 100%)",
+              backdropFilter: "blur(25px)",
+            }}
+          ></div>
+          <Image
+            src={coverImage}
+            alt=""
+            width="200"
+            height="200"
+            style={{
+              width: "auto",
+              height: "120%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        </div>
+      )}
       <form
+        className=""
         onSubmit={handleSubmit(async (data) => {
           if (session.status === "unauthenticated") {
             setShowLoginBottomSheet(true);
@@ -98,15 +102,16 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
           await submit(data);
         })}
       >
-        <Block className="mb-4">
-          <EventInput
-            placeholder="Title"
+        <Block className="mb-[3.125rem]">
+          <EventTitleInput
+            placeholder="이벤트 이름을 적어주세요"
+            maxHeight={500}
             {...register("title", {
               required: true,
             })}
           />
         </Block>
-        <div className="mb-4">
+        <Block className="mb-[3.125rem]">
           <input
             type="hidden"
             {...register("coverImage", {
@@ -115,6 +120,7 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
           />
           <div
             role="button"
+            className="relative overflow-hidden rounded-2xl border border-[#343434]"
             onClick={() => {
               setShowCoverImageBottomSheet(true);
             }}
@@ -133,15 +139,12 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
                 shimmer(1, 1),
               )}`}
               sizes="100vw"
-              onLoad={async (e) => {
-                const img = e.currentTarget;
-                const palette = await getPalette(img);
-
-                setCoverImagePalette(palette as any);
-              }}
             />
+            <button className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full bg-[#000000cc]">
+              <EditIcon />
+            </button>
           </div>
-        </div>
+        </Block>
         <Block className="mb-6">
           <Controller
             name="date"
@@ -164,30 +167,32 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
             control={control}
           />
         </Block>
-        <Block className="mb-6 space-y-2">
-          <EventInput
-            label="모임장"
-            placeholder="홍길동"
-            {...register("authorName")}
-          />
-          <EventInput
-            label="장소 위치"
-            placeholder="주소, 링크"
-            {...register("location")}
-          />
+        <Block className="mb-6 space-y-2.5">
+          <InputContainer label="주최자">
+            <Input placeholder="홍길동" {...register("authorName")} />
+          </InputContainer>
+          <InputContainer label="장소 위치 & 주소">
+            <Input placeholder="주소, 링크" {...register("location")} />
+          </InputContainer>
         </Block>
         <Block>
           <Textarea
-            placeholder="모임에 대한 설명을 적어주세요"
+            className="min-h-[11rem]"
+            placeholder="이벤트에 대한 설명을 적어주세요"
             {...register("description")}
           />
         </Block>
-        <FloatingArea>
-          <Button className="w-full" size="lg">
-            Save Draft
-          </Button>
-        </FloatingArea>
+        <Block className="mb-[2.7rem] mt-[2.625rem]">
+          <Button className="w-full">저장하기</Button>
+        </Block>
       </form>
+      <FloatingArea>
+        <BottomButton.Root>
+          <BottomButton.Item icon={<EffectIcon />}>꾸미기</BottomButton.Item>
+          <BottomButton.Divider />
+          <BottomButton.Item icon={<PreviewIcon />}>미리보기</BottomButton.Item>
+        </BottomButton.Root>
+      </FloatingArea>
       <BottomSheet
         isOpen={showCoverImageBottomSheet}
         onClose={() => {
@@ -259,18 +264,10 @@ interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Block = ({ children, className, ...rest }: BlockProps) => {
   return (
-    <div className={cn("mx-auto max-w-[750px] px-2", className)} {...rest}>
+    <div className={cn("mx-auto max-w-[750px] px-8", className)} {...rest}>
       {children}
     </div>
   );
-};
-
-interface FloatingAreaProps {
-  children: React.ReactNode;
-}
-
-const FloatingArea = ({ children }: FloatingAreaProps) => {
-  return <div className="fixed bottom-0 left-0 right-0">{children}</div>;
 };
 
 export default CreateEventForm;
