@@ -93,22 +93,37 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
       )}
       <form
         className=""
-        onSubmit={handleSubmit(async (data) => {
-          if (session.status === "unauthenticated") {
-            setShowLoginBottomSheet(true);
-            return;
-          }
+        onSubmit={handleSubmit(
+          async (data) => {
+            if (session.status === "unauthenticated") {
+              setShowLoginBottomSheet(true);
+              return;
+            }
 
-          await submit(data);
-        })}
+            await submit(data);
+          },
+          (e) => {
+            console.log(e);
+          },
+        )}
       >
         <Block className="mb-[3.125rem]">
-          <EventTitleInput
-            placeholder="이벤트 이름을 적어주세요"
-            maxHeight={500}
-            {...register("title", {
+          <Controller
+            name="title"
+            control={control}
+            rules={{
               required: true,
-            })}
+            }}
+            render={({ field: { value, onChange, ref } }) => (
+              <EventTitleInput
+                placeholder="이벤트 이름을 적어주세요"
+                value={value}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                ref={ref}
+              />
+            )}
           />
         </Block>
         <Block className="mb-[3.125rem]">
