@@ -3,18 +3,25 @@
 import LoginForm from "./components/LoginForm";
 import * as React from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams: { callbackUrl },
+}: {
+  searchParams: {
+    callbackUrl?: string;
+  };
+}) {
   const router = useRouter();
   const session = useSession();
 
   useEffect(() => {
     if (session.status === "authenticated") {
-      router.replace("/");
+      router.replace(callbackUrl ?? "/");
     }
-  }, [router, session.status]);
+  }, [session.status]);
 
   return (
     <main className="flex flex-col items-center justify-center pt-10">
@@ -23,11 +30,14 @@ export default function LoginPage() {
       </div>
       <div className="mt-4">
         <LoginForm
-          onSubmit={(data) => {
+          onSubmit={async (data) => {
             return signIn("credentials", {
               redirect: false,
               ...data,
             });
+          }}
+          onCallback={() => {
+            router.replace(callbackUrl ?? "/");
           }}
         />
       </div>

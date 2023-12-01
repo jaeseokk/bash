@@ -5,7 +5,7 @@ import { SignInResponse, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import NumericInput from "@/components/NumericInput";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";

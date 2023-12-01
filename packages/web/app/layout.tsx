@@ -4,8 +4,7 @@ import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getServerSession } from "@/server/auth";
-import AvatarButton from "./components/AvatarButton";
+import SignInButton from "./components/SignInButton";
 
 const Pretendard = localFont({
   src: "../public/fonts/PretendardVariable.woff2",
@@ -38,8 +37,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
-
   return (
     <html lang="en" className="dark">
       <body className={Pretendard.className}>
@@ -58,17 +55,7 @@ export default async function RootLayout({
                   </Link>
                 </div>
                 <div className="flex w-1/4 items-center justify-end">
-                  {session ? (
-                    <AvatarButton />
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="no-horizontal-padding"
-                      asChild
-                    >
-                      <Link href="/signin">Sign In</Link>
-                    </Button>
-                  )}
+                  <SignInButton />
                 </div>
               </div>
             </header>
