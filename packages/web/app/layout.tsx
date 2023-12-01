@@ -1,16 +1,32 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
 import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
-import SignOutButton from "./components/SignOutButton";
 import Link from "next/link";
 import { getServerSession } from "@/server/auth";
-import Avatar from "@/assets/avatar.svg";
 import AvatarButton from "./components/AvatarButton";
 
-const inter = Inter({ subsets: ["latin"] });
+const Pretendard = localFont({
+  src: "../public/fonts/PretendardVariable.woff2",
+  fallback: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "system-ui",
+    "Roboto",
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "sans-serif",
+  ],
+  adjustFontFallback: false,
+  display: "optional",
+});
 
 export const metadata: Metadata = {
   title: "Bash",
@@ -26,7 +42,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>
+      <body className={Pretendard.className}>
         <SessionProvider>
           <div className="relative flex min-h-screen flex-col">
             <header className="w-full bg-transparent">
