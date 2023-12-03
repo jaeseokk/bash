@@ -20,10 +20,10 @@ const BottomButtonItem = ({
 }: BottomButtonItemProps) => {
   return (
     <button
-      className="flex h-[3.75rem] flex-1 flex-col items-center justify-center bg-transparent font-bold"
+      className="flex h-[4.25rem] flex-1 flex-col items-center justify-between bg-transparent py-3.5 font-bold"
       {...props}
     >
-      <span className="mb-[2px] text-[1.625rem]">{icon}</span>
+      <span className="mb-[2px] [&>*]:w-[1.625rem]">{icon}</span>
       <span className="text-[0.625rem]">{children}</span>
     </button>
   );

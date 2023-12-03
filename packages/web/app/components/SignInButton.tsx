@@ -13,6 +13,10 @@ const SignInButton = ({}: SignInButtonProps) => {
   const session = useSession();
   const pathname = usePathname();
 
+  if (session.status === "loading") {
+    return null;
+  }
+
   if (session.status === "authenticated") {
     return <AvatarButton />;
   }

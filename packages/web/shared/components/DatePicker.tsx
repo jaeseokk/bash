@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import RemoveButton from "@/components/RemoveButton";
 import { set } from "date-fns";
+import BottomSheet2 from "@/components/BottomSheet2";
 
 const TIME_OPTIONS = [
   ...Array.from({ length: 24 })
@@ -42,35 +43,23 @@ const TIME_OPTIONS = [
 
 export interface DatePickerProps {
   startDate?: Date;
-  endDate?: Date;
   onChange?: (date: [Date] | [Date, Date] | undefined) => void;
   placeholder?: string;
 }
 
-const DatePicker = ({
-  startDate,
-  endDate,
-  onChange,
-  placeholder,
-}: DatePickerProps) => {
+const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
   const [startDateState, setStartDateState] = useState<Date | undefined>(
     startDate,
   );
-  const [endDateState, setEndDateState] = useState(endDate);
   const [showCalendar, setShowCalendar] = useState(false);
   const [isRange, setIsRange] = useState(false);
   const display = useMemo(() => {
-    if (startDateState && endDateState) {
-      return `${format(startDateState, "PPP")} ~ ${format(
-        endDateState,
-        "PPP",
-      )}`;
-    } else if (startDateState) {
-      return format(startDateState, "PPP");
+    if (!startDateState) {
+      return undefined;
     }
 
-    return undefined;
-  }, [startDateState, endDateState]);
+    return format(startDateState, "PPP");
+  }, [startDateState]);
   const [openTimeSelect, setOpenTimeSelect] = useState(false);
   const handleChangeSingleDate = (date: Date | undefined) => {
     if (!date) {
@@ -88,87 +77,28 @@ const DatePicker = ({
         date: date.getDate(),
       });
     });
-    setEndDateState(undefined);
     setIsRange(false);
     setOpenTimeSelect(true);
   };
-  const handleChangeRange = (range: DateRange | undefined, date: Date) => {
-    if (!date || !startDateState) {
-      return;
-    }
-
-    if (isBefore(date, startDateState)) {
-      setEndDateState((prev) => {
-        if (!prev) {
-          return startDateState;
-        }
-
-        return set(prev, {
-          year: startDateState?.getFullYear(),
-          month: startDateState?.getMonth(),
-          date: startDateState?.getDate(),
-        });
-      });
-      setStartDateState((prev) => {
-        if (!prev) {
-          return date;
-        }
-
-        return set(prev, {
-          year: date.getFullYear(),
-          month: date.getMonth(),
-          date: date.getDate(),
-        });
-      });
-      return;
-    }
-
-    setEndDateState((prev) => {
-      if (!prev) {
-        return date;
-      }
-
-      return set(prev, {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        date: date.getDate(),
-      });
-    });
-    setOpenTimeSelect(true);
+  const calendarProps = {
+    mode: "single" as const,
+    selected: startDateState,
+    onSelect: handleChangeSingleDate,
   };
-  const calendarProps = isRange
-    ? {
-        mode: "range" as const,
-        selected: {
-          from: startDateState,
-          to: endDateState,
-        },
-        onSelect: handleChangeRange,
-      }
-    : {
-        mode: "single" as const,
-        selected: startDateState,
-        onSelect: handleChangeSingleDate,
-      };
   const timeValue = useMemo(() => {
-    if (isRange && endDateState) {
-      return format(endDateState, "HH:mm:ss");
-    } else if (!isRange && startDateState) {
-      return format(startDateState, "HH:mm:ss");
+    if (!startDateState) {
+      return undefined;
     }
 
-    return undefined;
-  }, [endDateState, isRange, startDateState]);
+    return format(startDateState, "HH:mm:ss");
+  }, [startDateState]);
 
   const handleConfirm = () => {
-    if (isRange && startDateState && endDateState) {
-      onChange?.([startDateState, endDateState]);
-    } else if (!isRange && startDateState) {
-      onChange?.([startDateState]);
-    } else {
-      console.error("invalid date");
+    if (!startDateState) {
       return;
     }
+
+    onChange?.([startDateState]);
     setShowCalendar(false);
   };
 
@@ -183,9 +113,8 @@ const DatePicker = ({
       >
         <Input placeholder={placeholder} value={display} readOnly />
       </button>
-      <BottomSheet
-        snapPoints={[534]}
-        isOpen={showCalendar}
+      <BottomSheet2
+        open={showCalendar}
         onClose={() => {
           setShowCalendar(false);
         }}
@@ -194,7 +123,7 @@ const DatePicker = ({
           <div className="flex h-10 items-center justify-center">
             {startDateState && (
               <div className="flex w-[20rem] items-center justify-between">
-                <div className="flex w-[45%] items-center justify-between">
+                <div className="flex items-center justify-between">
                   <span className="flex-1 text-center">
                     {format(startDateState, "yyyy-MM-dd HH:mm")}
                   </span>
@@ -203,41 +132,8 @@ const DatePicker = ({
                     type="button"
                     onClick={() => {
                       setStartDateState(undefined);
-                      setEndDateState(undefined);
-                      setIsRange(false);
                     }}
                   />
-                </div>
-                <div className="w-[10%] text-center">~</div>
-                <div className="flex w-[45%] items-center justify-between">
-                  {isRange ? (
-                    <>
-                      <span className="flex-1 text-center">
-                        {endDateState
-                          ? format(endDateState, "yyyy-MM-dd HH:mm")
-                          : "-"}
-                      </span>
-                      <RemoveButton
-                        className="ml-4 flex-none"
-                        type="button"
-                        onClick={() => {
-                          setEndDateState(undefined);
-                          setIsRange(false);
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="no-horizontal-padding"
-                      onClick={() => {
-                        setIsRange(true);
-                      }}
-                    >
-                      종료 시간 추가
-                    </Button>
-                  )}
                 </div>
               </div>
             )}
@@ -248,9 +144,7 @@ const DatePicker = ({
             footer={
               <div className="mt-4">
                 <Select
-                  open={openTimeSelect}
                   value={timeValue}
-                  onOpenChange={setOpenTimeSelect}
                   onValueChange={(value) => {
                     if (!value) {
                       return;
@@ -258,15 +152,7 @@ const DatePicker = ({
 
                     const [hour, minute, second] = value.split(":");
 
-                    if (isRange && endDateState) {
-                      setEndDateState(
-                        set(endDateState, {
-                          hours: Number(hour),
-                          minutes: Number(minute),
-                          seconds: Number(second),
-                        }),
-                      );
-                    } else if (!isRange && startDateState) {
+                    if (startDateState) {
                       setStartDateState(
                         set(startDateState, {
                           hours: Number(hour),
@@ -305,7 +191,7 @@ const DatePicker = ({
             </div>
           </div>
         </div>
-      </BottomSheet>
+      </BottomSheet2>
     </>
   );
 };

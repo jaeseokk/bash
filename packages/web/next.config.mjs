@@ -2,6 +2,9 @@ import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    externalDir: true,
+  },
   images: {
     remotePatterns: [
       {

@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "postinstall": "pnpm --filter @bash/db run codegen"
+    "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
     "husky": "^8.0.3",

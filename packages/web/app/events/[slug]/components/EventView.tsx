@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import EventInput from "@/components/EventInput";
 import Image from "next/image";
 import { cn, shimmer, toBase64 } from "@/utils";
 import { PrismaDBMainTypes, PrismaDBMainConstants } from "@bash/db";
@@ -12,6 +11,22 @@ import { useMemo, useState } from "react";
 import LoginForm from "../../../signin/components/LoginForm";
 import BottomSheet from "@/components/BottomSheet";
 import { format } from "date-fns";
+import ViewField from "@/components/ViewField";
+import CalendarIcon from "@/assets/calendar_gradient.svg";
+import CrownIcon from "@/assets/crown_gradient.svg";
+import LocationIcon from "@/assets/location_gradient.svg";
+import ReplyRadioGroup from "@/components/ReplyRadioGroup";
+import { Button } from "@/components/ui/button";
+import FloatingArea from "@/components/FloatingArea";
+import BottomButton from "@/components/BottomButton";
+import Edit2Icon from "@/assets/edit2.svg";
+import NoticeIcon from "@/assets/notice.svg";
+import InviteIcon from "@/assets/invite.svg";
+import PosterIcon from "@/assets/poster.svg";
+import { useDisclosure } from "../../../../shared/hooks/useDisclosure";
+import { Sheet } from "@/components/ui/sheet";
+import BottomSheet2 from "@/components/BottomSheet2";
+import AttendForm from "@/components/AttendForm";
 
 export interface EventViewProps {
   eventInfo: PrismaDBMainTypes.Event & {
@@ -42,6 +57,12 @@ const EventView = ({ eventInfo }: EventViewProps) => {
   const attendanceStatus = eventInfo.attendances.find(
     (attendance) => attendance.userId === session.data?.user.id,
   )?.status;
+  const {
+    show: showAttendDialog,
+    handleShow: handleShowAttendDialog,
+    handleClose: handleCloseAttendDialog,
+    handleChange: handleChangeAttendDialog,
+  } = useDisclosure();
 
   const handlePublish = async () => {
     const res = await ky.put(`/api/publish-event`, {
@@ -130,77 +151,73 @@ const EventView = ({ eventInfo }: EventViewProps) => {
             />
           </div>
         </Block>
-        <Block className="mb-6">{dateDisplay}</Block>
-        <Block className="mb-6 space-y-2">
-          <div>{eventInfo.authorName ?? (session.data?.user.name || "")}</div>
-          <div>{eventInfo.location}</div>
+        <Block className="mb-6 space-y-6">
+          <div>
+            <ViewField icon={<CalendarIcon />} size="lg">
+              {dateDisplay}
+            </ViewField>
+          </div>
+          <div>
+            <ViewField icon={<CrownIcon />} size="lg">
+              주최자 : {eventInfo.authorName}
+            </ViewField>
+          </div>
         </Block>
-        {eventInfo.description && <Block>{eventInfo.description}</Block>}
-        {/*<FloatingArea>*/}
-        {/*  <div className="flex bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">*/}
-        {/*    {eventInfo.publishedAt && (*/}
-        {/*      <>*/}
-        {/*        <Button*/}
-        {/*          className={cn(*/}
-        {/*            "h-20 flex-1 text-2xl",*/}
-        {/*            attendanceStatus ===*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.ATTENDING &&*/}
-        {/*              "bg-green-500",*/}
-        {/*          )}*/}
-        {/*          variant="ghost"*/}
-        {/*          disabled={isMyEvent}*/}
-        {/*          onClick={() => {*/}
-        {/*            return handleAttend(*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.ATTENDING,*/}
-        {/*            );*/}
-        {/*          }}*/}
-        {/*        >*/}
-        {/*          👍*/}
-        {/*        </Button>*/}
-        {/*        <Button*/}
-        {/*          className={cn(*/}
-        {/*            "h-20 flex-1 text-2xl",*/}
-        {/*            attendanceStatus ===*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.MAYBE &&*/}
-        {/*              "bg-green-500",*/}
-        {/*          )}*/}
-        {/*          variant="ghost"*/}
-        {/*          disabled={isMyEvent}*/}
-        {/*          onClick={() => {*/}
-        {/*            return handleAttend(*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.MAYBE,*/}
-        {/*            );*/}
-        {/*          }}*/}
-        {/*        >*/}
-        {/*          🤔*/}
-        {/*        </Button>*/}
-        {/*        <Button*/}
-        {/*          className={cn(*/}
-        {/*            "h-20 flex-1 text-2xl",*/}
-        {/*            attendanceStatus ===*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.NOT_ATTENDING &&*/}
-        {/*              "bg-green-500",*/}
-        {/*          )}*/}
-        {/*          variant="ghost"*/}
-        {/*          disabled={isMyEvent}*/}
-        {/*          onClick={() => {*/}
-        {/*            return handleAttend(*/}
-        {/*              PrismaDBMainConstants.AttendanceStatus.NOT_ATTENDING,*/}
-        {/*            );*/}
-        {/*          }}*/}
-        {/*        >*/}
-        {/*          😢*/}
-        {/*        </Button>*/}
-        {/*      </>*/}
-        {/*    )}*/}
-        {/*  </div>*/}
-        {/*  {!isPublished && (*/}
-        {/*    <Button className="w-full" size="lg" onClick={handlePublish}>*/}
-        {/*      Publish*/}
-        {/*    </Button>*/}
-        {/*  )}*/}
-        {/*</FloatingArea>*/}
+        <Block className="mb-6 space-y-2">
+          <ViewField icon={<LocationIcon />}>{eventInfo.location}</ViewField>
+        </Block>
+        {eventInfo.description && (
+          <Block>
+            <div className="text-[1.5rem]">{eventInfo.description}</div>
+          </Block>
+        )}
+        <Block2 className="mb-[1.75rem] mt-8">
+          <div className="rounded-xl border border-[#343434] p-8">
+            <ReplyRadioGroup
+              value={""}
+              disabled={isMyEvent}
+              onClick={() => {
+                if (isMyEvent) {
+                  return;
+                }
+
+                handleShowAttendDialog();
+              }}
+            />
+          </div>
+        </Block2>
+        {isMyEvent && !isPublished && (
+          <Block2 className="mb-[1.75rem]">
+            <Button
+              type="button"
+              variant="highlight"
+              className="w-full"
+              onClick={handlePublish}
+            >
+              이벤트 오픈하기
+            </Button>
+          </Block2>
+        )}
       </div>
+      <FloatingArea>
+        <BottomButton.Root>
+          {isMyEvent && (
+            <>
+              <BottomButton.Item icon={<Edit2Icon />}>
+                이벤트 수정
+              </BottomButton.Item>
+              <BottomButton.Divider />
+            </>
+          )}
+          <BottomButton.Item icon={<NoticeIcon />}>공지하기</BottomButton.Item>
+          <BottomButton.Divider />
+          <BottomButton.Item icon={<InviteIcon />}>초대하기</BottomButton.Item>
+          <BottomButton.Divider />
+          <BottomButton.Item icon={<PosterIcon />}>
+            포스터 공유
+          </BottomButton.Item>
+        </BottomButton.Root>
+      </FloatingArea>
       <BottomSheet
         snapPoints={[400, 0]}
         isOpen={showLoginBottomSheet}
@@ -231,6 +248,9 @@ const EventView = ({ eventInfo }: EventViewProps) => {
           </div>
         </div>
       </BottomSheet>
+      <BottomSheet2 open={showAttendDialog} onClose={handleCloseAttendDialog}>
+        <AttendForm onSubmit={() => {}} />
+      </BottomSheet2>
     </>
   );
 };
@@ -241,7 +261,25 @@ interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Block = ({ children, className, ...rest }: BlockProps) => {
   return (
-    <div className={cn("mx-auto max-w-[750px] px-8", className)} {...rest}>
+    <div
+      className={cn("mx-auto max-w-[750px] px-8 text-center", className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+};
+
+interface Block2Props extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+const Block2 = ({ children, className, ...rest }: Block2Props) => {
+  return (
+    <div
+      className={cn("mx-auto max-w-[750px] px-4 text-center", className)}
+      {...rest}
+    >
       {children}
     </div>
   );

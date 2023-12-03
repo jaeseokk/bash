@@ -68,8 +68,6 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
     const res = await onSubmit(data);
     router.push(`/events/${res.slug}`);
   };
-  const endDateString = watch("endDate");
-  const endDate = endDateString ? new Date(endDateString) : undefined;
 
   return (
     <>
@@ -180,7 +178,6 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
                   <DatePicker
                     placeholder="날짜를 선택해주세요"
                     startDate={date}
-                    endDate={endDate}
                     onChange={(value) => {
                       if (!value) {
                         return;
