@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import Image from "next/image";
 import DatePicker from "@/components/DatePicker";
-import { Textarea } from "@/components/ui/textarea";
+import { AutosizeTextarea, Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn, shimmer, toBase64 } from "@/utils";
 import { Controller, useForm } from "react-hook-form";
@@ -13,13 +13,16 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoginForm from "../../../signin/components/LoginForm";
 import { PrismaDBMainTypes } from "@bash/db";
-import InputContainer from "@/components/InputContainer";
+import Field from "@/components/Field";
 import { Input } from "@/components/ui/input";
 import { EventTitleInput } from "@/components/EventTitleInput";
 import BottomButton from "@/components/BottomButton";
 import EffectIcon from "@/assets/effect.svg";
 import PreviewIcon from "@/assets/preview.svg";
 import EditIcon from "@/assets/edit.svg";
+import CrownIcon from "@/assets/crown_gradient.svg";
+import LocationIcon from "@/assets/location_gradient.svg";
+import CalendarIcon from "@/assets/calendar_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
 
 const COVER_IMAGE_LIST = [
@@ -37,10 +40,11 @@ const COVER_IMAGE_LIST = [
 interface CreateEventFormData {
   title: string;
   coverImage: string;
-  date: string;
-  authorName: string;
-  location: string;
-  description: string;
+  startDate: string;
+  endDate?: string;
+  authorName?: string;
+  location?: string;
+  description?: string;
 }
 
 export interface CreateEventFormProps {
@@ -64,6 +68,8 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
     const res = await onSubmit(data);
     router.push(`/events/${res.slug}`);
   };
+  const endDateString = watch("endDate");
+  const endDate = endDateString ? new Date(endDateString) : undefined;
 
   return (
     <>
@@ -161,34 +167,52 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
           </div>
         </Block>
         <Block className="mb-6">
-          <Controller
-            name="date"
-            rules={{
-              required: true,
-            }}
-            render={({ field: { value, onChange } }) => {
-              const date = value ? new Date(value) : undefined;
+          <Field labelIcon={<CalendarIcon />} label="날짜 및 시간">
+            <Controller
+              name="startDate"
+              rules={{
+                required: true,
+              }}
+              render={({ field: { value } }) => {
+                const date = value ? new Date(value) : undefined;
 
-              return (
-                <DatePicker
-                  placeholder="날짜 및 시간"
-                  value={date}
-                  onChange={(value) => {
-                    onChange(value?.toISOString());
-                  }}
-                />
-              );
-            }}
-            control={control}
-          />
+                return (
+                  <DatePicker
+                    placeholder="날짜를 선택해주세요"
+                    startDate={date}
+                    endDate={endDate}
+                    onChange={(value) => {
+                      if (!value) {
+                        return;
+                      }
+
+                      setValue("startDate", value[0].toISOString());
+
+                      if (value[1]) {
+                        setValue("endDate", value[1].toISOString());
+                      }
+                    }}
+                  />
+                );
+              }}
+              control={control}
+            />
+          </Field>
         </Block>
         <Block className="mb-6 space-y-2.5">
-          <InputContainer label="주최자">
-            <Input placeholder="홍길동" {...register("authorName")} />
-          </InputContainer>
-          <InputContainer label="장소 위치 & 주소">
-            <Input placeholder="주소, 링크" {...register("location")} />
-          </InputContainer>
+          <Field labelIcon={<CrownIcon />} label="주최자">
+            <Input
+              placeholder="이름을 적어주세요"
+              {...register("authorName")}
+            />
+          </Field>
+          <Field labelIcon={<LocationIcon />} label="장소 위치 & 주소">
+            <AutosizeTextarea
+              placeholder="장소 위치, 주소, 링크"
+              minRows={1}
+              {...register("location")}
+            />
+          </Field>
         </Block>
         <Block>
           <Textarea

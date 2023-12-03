@@ -88,7 +88,8 @@ model Event {
   id          Int       @id @default(autoincrement())
   slug        String    @unique
   title       String    @db.VarChar(300)
-  date        DateTime
+  startDate        DateTime @map("start_date")
+  endDate          DateTime? @map("end_date")
   location   String?    @db.VarChar(300)
   description     String?    @db.Text
   coverImage       String?   @db.VarChar(300) @map(name: "cover_image")

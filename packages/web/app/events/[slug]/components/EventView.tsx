@@ -8,9 +8,10 @@ import { PrismaDBMainTypes, PrismaDBMainConstants } from "@bash/db";
 import { signIn, useSession } from "next-auth/react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import LoginForm from "../../../signin/components/LoginForm";
 import BottomSheet from "@/components/BottomSheet";
+import { format } from "date-fns";
 
 export interface EventViewProps {
   eventInfo: PrismaDBMainTypes.Event & {
@@ -24,6 +25,18 @@ const EventView = ({ eventInfo }: EventViewProps) => {
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
   const [cachedAttendanceStatus, setCachedAttendanceStatus] =
     useState<PrismaDBMainTypes.AttendanceStatus>();
+  const dateDisplay = useMemo(() => {
+    if (eventInfo.startDate && eventInfo.endDate) {
+      return `${format(eventInfo.startDate, "PPP")} ~ ${format(
+        eventInfo.endDate,
+        "PPP",
+      )}`;
+    } else if (eventInfo.startDate) {
+      return format(eventInfo.startDate, "PPP");
+    }
+
+    return undefined;
+  }, [eventInfo.endDate, eventInfo.startDate]);
   const isMyEvent = session.data?.user.id === eventInfo.authorId;
   const isPublished = !!eventInfo.publishedAt;
   const attendanceStatus = eventInfo.attendances.find(
@@ -117,7 +130,7 @@ const EventView = ({ eventInfo }: EventViewProps) => {
             />
           </div>
         </Block>
-        <Block className="mb-6">{eventInfo.date.toDateString()}</Block>
+        <Block className="mb-6">{dateDisplay}</Block>
         <Block className="mb-6 space-y-2">
           <div>{eventInfo.authorName ?? (session.data?.user.name || "")}</div>
           <div>{eventInfo.location}</div>

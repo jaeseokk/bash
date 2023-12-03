@@ -7,7 +7,12 @@ export interface BottomSheetProps
 
 const BottomSheet = ({ children, ...props }: BottomSheetProps) => {
   return (
-    <Sheet snapPoints={[-50, 0.5, 0]} initialSnap={0} {...props}>
+    <Sheet
+      snapPoints={[-50, 0.5, 0]}
+      initialSnap={0}
+      className="!z-10"
+      {...props}
+    >
       <Sheet.Container>
         <Sheet.Header />
         <Sheet.Content>
