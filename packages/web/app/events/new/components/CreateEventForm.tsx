@@ -74,11 +74,10 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
       {coverImage && (
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">
           <div
-            className="absolute bottom-0 left-0 right-0 top-0"
+            className="absolute bottom-0 left-0 right-0 top-0 backdrop-blur-[25px]"
             style={{
               background:
                 "linear-gradient(0deg, #000 27.08%, rgba(0, 0, 0, 0.50) 100%)",
-              backdropFilter: "blur(25px)",
             }}
           ></div>
           <Image
@@ -92,6 +91,7 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
               objectFit: "cover",
               objectPosition: "center",
             }}
+            sizes="100vw"
           />
         </div>
       )}
