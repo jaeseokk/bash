@@ -7,7 +7,18 @@ import Link from "next/link";
 import SignInButton from "./components/SignInButton";
 
 const Pretendard = localFont({
-  src: "../public/fonts/PretendardVariable.woff2",
+  src: [
+    {
+      path: "../public/fonts/Pretendard-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Pretendard-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   fallback: [
     "-apple-system",
     "BlinkMacSystemFont",
