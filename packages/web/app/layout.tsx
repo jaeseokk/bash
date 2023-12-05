@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import SignInButton from "./components/SignInButton";
 import LetsLogo from "@/assets/lets_logo.svg";
+import AppProviders from "./components/AppProviders";
 
 const Pretendard = localFont({
   src: [
@@ -69,7 +70,9 @@ export default async function RootLayout({
                 </div>
               </div>
             </header>
-            <div className="flex-1">{children}</div>
+            <div className="flex-1">
+              <AppProviders>{children}</AppProviders>
+            </div>
           </div>
         </SessionProvider>
       </body>

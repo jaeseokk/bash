@@ -16,7 +16,12 @@ export interface BottomSheet2Props
   onClose?: () => void;
 }
 
-const BottomSheet2 = ({ children, onClose, ...props }: BottomSheet2Props) => {
+const BottomSheet2 = ({
+  children,
+  title,
+  onClose,
+  ...props
+}: BottomSheet2Props) => {
   return (
     <Sheet {...props}>
       <SheetContent
@@ -29,7 +34,7 @@ const BottomSheet2 = ({ children, onClose, ...props }: BottomSheet2Props) => {
         }}
       >
         <SheetHeader>
-          <SheetTitle>adsfasdfsadf</SheetTitle>
+          <SheetTitle>{title}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="mt-9 flex flex-col">
           <div className="px-9 pb-9">{children}</div>

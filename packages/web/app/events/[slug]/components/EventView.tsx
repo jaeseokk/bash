@@ -27,6 +27,11 @@ import { useDisclosure } from "../../../../shared/hooks/useDisclosure";
 import { Sheet } from "@/components/ui/sheet";
 import BottomSheet2 from "@/components/BottomSheet2";
 import AttendForm from "@/components/AttendForm";
+import AttendConfirmLayer from "./AttendConfirmLayer";
+import Divider from "@/components/Divider";
+import AttendeesStatus from "./AttendeesStatus";
+import ActivityStatus from "./ActivityStatus";
+import LetsLogo from "@/assets/lets_logo.svg";
 
 export interface EventViewProps {
   eventInfo: PrismaDBMainTypes.Event & {
@@ -169,6 +174,19 @@ const EventView = ({ eventInfo }: EventViewProps) => {
             <div className="text-[1.5rem]">{eventInfo.description}</div>
           </Block>
         )}
+        <Block>
+          <Divider />
+        </Block>
+        <div className="space-y-[2.5rem]">
+          <AttendeesStatus />
+          <ActivityStatus />
+        </div>
+        <div className="mt-8 flex justify-center">
+          <LetsLogo />
+        </div>
+        <Block2 className="mt-[1.5rem]">
+          <Button variant="outline">내 이벤트 직접 만들기</Button>
+        </Block2>
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
             <ReplyRadioGroup
@@ -246,8 +264,12 @@ const EventView = ({ eventInfo }: EventViewProps) => {
           </div>
         </div>
       </BottomSheet>
-      <BottomSheet2 open={showAttendDialog} onClose={handleCloseAttendDialog}>
-        <AttendForm onSubmit={() => {}} />
+      <BottomSheet2
+        title={"참석여부 답하기"}
+        open={showAttendDialog}
+        onClose={handleCloseAttendDialog}
+      >
+        <AttendForm onSubmit={() => {}} onCancel={handleCloseAttendDialog} />
       </BottomSheet2>
     </>
   );

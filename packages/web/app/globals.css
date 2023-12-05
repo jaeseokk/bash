@@ -8,6 +8,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  * {
+    word-break: keep-all;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

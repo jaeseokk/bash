@@ -12,7 +12,8 @@
       "@/components/*": [ "shared/components/*" ],
       "@/utils": [ "shared/lib/utils" ],
       "@/assets/*": [ "shared/assets/*" ],
-      "@/server/*": [ "server/*" ]
+      "@/server/*": [ "server/*" ],
+      "@/public/*": [ "public/*" ],
     }
   },
   "include": [
