@@ -24,11 +24,8 @@ export default function LoginPage({
   }, [session.status]);
 
   return (
-    <main className="flex flex-col items-center justify-center pt-10">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">Sign In</h1>
-      </div>
-      <div className="mt-4">
+    <main className="mx-auto flex max-w-[750px] flex-col items-center justify-center px-8 pt-10">
+      <div className="w-full">
         <LoginForm
           onSubmit={async (data) => {
             return signIn("credentials", {

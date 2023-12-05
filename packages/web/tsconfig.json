@@ -10,6 +10,7 @@
     "baseUrl": "./",
     "paths": {
       "@/components/*": [ "shared/components/*" ],
+      "@/hooks/*": [ "shared/hooks/*" ],
       "@/utils": [ "shared/lib/utils" ],
       "@/assets/*": [ "shared/assets/*" ],
       "@/server/*": [ "server/*" ],

@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import BottomSheet from "@/components/BottomSheet";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import LoginForm from "../../../signin/components/LoginForm";
+import LoginForm from "../../../../(main)/signin/components/LoginForm";
 import { PrismaDBMainTypes } from "@bash/db";
 import Field from "@/components/Field";
 import { Input } from "@/components/ui/input";

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import MyEvents from "./components/MyEvents";
+import MyEvents from "../components/MyEvents";
 import { getServerSession } from "@/server/auth";
 
 export default async function Home() {

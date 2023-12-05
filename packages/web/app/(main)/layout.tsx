@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import SessionProvider from "./components/SessionProvider";
+import "../globals.css";
+import SessionProvider from "../components/SessionProvider";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import SignInButton from "./components/SignInButton";
+import SignInButton from "../components/SignInButton";
 import LetsLogo from "@/assets/lets_logo.svg";
-import AppProviders from "./components/AppProviders";
+import AppProviders from "../components/AppProviders";
+import { cn } from "@/utils";
 
 const Pretendard = localFont({
   src: [
     {
-      path: "../public/fonts/Pretendard-Regular.woff2",
+      path: "../../public/fonts/Pretendard-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/Pretendard-Bold.woff2",
+      path: "../../public/fonts/Pretendard-Bold.woff2",
       weight: "700",
       style: "normal",
     },
@@ -52,7 +53,12 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={Pretendard.className}>
+      <body
+        className={cn(
+          Pretendard.className,
+          "bg-[url('/images/main_background.png')] bg-cover bg-center bg-no-repeat",
+        )}
+      >
         <SessionProvider>
           <div className="relative flex min-h-screen flex-col">
             <header className="w-full bg-transparent">
@@ -63,7 +69,9 @@ export default async function RootLayout({
                   </Button>
                 </nav>
                 <div className="flex w-1/2 items-center justify-center">
-                  <LetsLogo />
+                  <Link href="/">
+                    <LetsLogo />
+                  </Link>
                 </div>
                 <div className="flex w-1/4 items-center justify-end">
                   <SignInButton />

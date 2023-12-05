@@ -22,7 +22,7 @@ const SignInButton = ({}: SignInButtonProps) => {
   }
 
   return (
-    <Button variant="ghost" size="no-horizontal-padding" asChild>
+    <Button variant="outline" size="sm" asChild>
       <Link
         href={{
           pathname: "/signin",
@@ -31,7 +31,7 @@ const SignInButton = ({}: SignInButtonProps) => {
           },
         }}
       >
-        Sign In
+        Login
       </Link>
     </Button>
   );

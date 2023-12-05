@@ -2,9 +2,15 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getPrismaClientDbMain } from "@/server/prisma";
+import { Redis } from "@upstash/redis";
 
 const prisma = getPrismaClientDbMain();
 const oneDayInSeconds = 86400;
+
+const redis = new Redis({
+  url: `${process.env.UPSTASH_REDIS_URL}`,
+  token: `${process.env.UPSTASH_REDIS_TOKEN}`,
+});
 
 const handler = NextAuth({
   debug: true,
@@ -19,6 +25,12 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         if (!credentials || !credentials.phoneNumber || !credentials.code) {
+          return null;
+        }
+
+        const code = await redis.get<string>(credentials.phoneNumber);
+
+        if (!code || `${code}` !== credentials.code) {
           return null;
         }
 
@@ -68,6 +80,10 @@ const handler = NextAuth({
       return Promise.resolve(url.startsWith(baseUrl) ? url : baseUrl);
     },
     async signIn({ user, account, profile, email, credentials }) {
+      if (!user) {
+        return false;
+      }
+
       if (user?.needToRegister) {
         throw new Error("need to register");
       }

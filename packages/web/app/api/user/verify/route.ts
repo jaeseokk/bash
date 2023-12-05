@@ -1,50 +1,31 @@
 import { Redis } from "@upstash/redis";
-import { PrismaClientDbMain } from "@bash/db";
+import { SolapiMessageService } from "solapi";
+import { NextResponse } from "next/server";
 
-const SMS_API_ENDPOINT = "https://api-sms.cloud.toast.com";
-const SMS_APP_KEY = "IUkkigV5kNz62Gfs";
-const SMS_SECRET_KEY = "VOEnrLXa6rbms7FmO1EjohiTxknXcMd9";
+const SMS_API_KEY = `${process.env.SOLAPI_API_KEY}`;
+const SMS_SECRET_KEY = `${process.env.SOLAPI_API_SECRET}`;
+
+const messageService = new SolapiMessageService(SMS_API_KEY, SMS_SECRET_KEY);
 
 const redis = new Redis({
-  url: "https://apn1-engaged-basilisk-34307.upstash.io",
-  token: "deac63aeb0b6436f9fe7a064bfc17d3d",
+  url: `${process.env.UPSTASH_REDIS_URL}`,
+  token: `${process.env.UPSTASH_REDIS_TOKEN}`,
 });
-
-const prisma = new PrismaClientDbMain();
 
 export async function POST(request: Request) {
   const { phoneNumber } = await request.json();
 
   const code = Math.floor(100000 + Math.random() * 900000);
-  // await redis.set(phoneNumber, code, {
-  //   ex: 60 * 3,
-  // });
 
-  const result = await prisma.user.findMany();
+  await redis.set(phoneNumber, `${code}`, {
+    ex: 60 * 3,
+  });
 
-  console.log(result);
+  const res = await messageService.sendOne({
+    to: phoneNumber,
+    from: "07082331145",
+    text: `Your verification code is ${code}`,
+  });
 
-  const response = await fetch(
-    `${SMS_API_ENDPOINT}/sms/v3.0/appKeys/${SMS_APP_KEY}/sender/sms`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "X-Secret-Key": SMS_SECRET_KEY,
-      },
-      body: JSON.stringify({
-        body: `Your verification code is ${code}`,
-        sendNo: "01050553249",
-        recipientList: [
-          {
-            recipientNo: phoneNumber,
-          },
-        ],
-      }),
-    },
-  );
-
-  console.log(response);
-
-  return new Response(phoneNumber);
+  return NextResponse.json("ok", { status: 200 });
 }

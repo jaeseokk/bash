@@ -19,7 +19,11 @@ const Field = ({ label, labelIcon, children, message }: FieldProps) => {
         </div>
       )}
       {children}
-      {message && <div>{message}</div>}
+      {message && (
+        <div className="mt-1 text-[0.825rem] text-muted-foreground">
+          {message}
+        </div>
+      )}
     </label>
   );
 };

@@ -8,7 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import LoginForm from "../../../signin/components/LoginForm";
+import LoginForm from "../../../../(main)/signin/components/LoginForm";
 import BottomSheet from "@/components/BottomSheet";
 import { format } from "date-fns";
 import ViewField from "@/components/ViewField";
@@ -23,7 +23,7 @@ import Edit2Icon from "@/assets/edit2.svg";
 import NoticeIcon from "@/assets/notice.svg";
 import InviteIcon from "@/assets/invite.svg";
 import PosterIcon from "@/assets/poster.svg";
-import { useDisclosure } from "../../../../shared/hooks/useDisclosure";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { Sheet } from "@/components/ui/sheet";
 import BottomSheet2 from "@/components/BottomSheet2";
 import AttendForm from "@/components/AttendForm";
@@ -42,9 +42,6 @@ export interface EventViewProps {
 const EventView = ({ eventInfo }: EventViewProps) => {
   const session = useSession();
   const router = useRouter();
-  const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
-  const [cachedAttendanceStatus, setCachedAttendanceStatus] =
-    useState<PrismaDBMainTypes.AttendanceStatus>();
   const dateDisplay = useMemo(() => {
     if (eventInfo.startDate && eventInfo.endDate) {
       return `${format(eventInfo.startDate, "PPP")} ~ ${format(
@@ -81,27 +78,6 @@ const EventView = ({ eventInfo }: EventViewProps) => {
     }
 
     router.refresh();
-  };
-  const handleAttend = async (status: PrismaDBMainTypes.AttendanceStatus) => {
-    if (session.status !== "authenticated") {
-      setShowLoginBottomSheet(true);
-      setCachedAttendanceStatus(status);
-      return;
-    }
-
-    const res = await ky.put(`/api/attend-event`, {
-      json: {
-        id: eventInfo.id,
-        status,
-      },
-    });
-
-    if (!res.ok) {
-      return;
-    }
-
-    router.refresh();
-    setShowLoginBottomSheet(false);
   };
 
   return (
@@ -234,36 +210,6 @@ const EventView = ({ eventInfo }: EventViewProps) => {
           </BottomButton.Item>
         </BottomButton.Root>
       </FloatingArea>
-      <BottomSheet
-        snapPoints={[400, 0]}
-        isOpen={showLoginBottomSheet}
-        onClose={() => {
-          setShowLoginBottomSheet(false);
-        }}
-      >
-        <div className="px-4 pb-10 pt-10">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold">Sign In</h1>
-          </div>
-          <div className="mt-4">
-            <LoginForm
-              onSubmit={async (data) => {
-                return signIn("credentials", {
-                  redirect: false,
-                  ...data,
-                });
-              }}
-              onCallback={() => {
-                if (!cachedAttendanceStatus) {
-                  return;
-                }
-
-                return handleAttend(cachedAttendanceStatus);
-              }}
-            />
-          </div>
-        </div>
-      </BottomSheet>
       <BottomSheet2
         title={"참석여부 답하기"}
         open={showAttendDialog}
