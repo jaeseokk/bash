@@ -73,7 +73,7 @@ const AttendForm = ({ onSubmit, onCallback, onCancel }: AttendFormProps) => {
           />
         </div>
         <div className="space-y-[2.25rem]">
-          {!session && (
+          {session.status === "unauthenticated" && (
             <div className="space-y-2">
               <Field label="이름">
                 <Input
