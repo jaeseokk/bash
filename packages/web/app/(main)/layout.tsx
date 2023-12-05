@@ -56,7 +56,7 @@ export default async function RootLayout({
       <body
         className={cn(
           Pretendard.className,
-          "bg-[url('/images/main_background.png')] bg-cover bg-center bg-no-repeat",
+          "bg-[url('/images/main_background.png')] bg-cover bg-top bg-no-repeat",
         )}
       >
         <SessionProvider>
