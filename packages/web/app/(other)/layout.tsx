@@ -59,7 +59,7 @@ export default async function RootLayout({
               <div className="container flex h-[5.25rem] items-center justify-between">
                 <nav className="flex w-1/4 items-center space-x-6 text-sm font-medium">
                   <Button variant="ghost" size="no-horizontal-padding" asChild>
-                    <Link href="/(other)/events/new">Create Event</Link>
+                    <Link href="/events/new">Create Event</Link>
                   </Button>
                 </nav>
                 <div className="flex w-1/2 items-center justify-center">
