@@ -28,6 +28,7 @@ import Divider from "@/components/Divider";
 import AttendeesStatus from "./AttendeesStatus";
 import ActivityStatus from "./ActivityStatus";
 import LetsLogo from "@/assets/lets_logo.svg";
+import PosterShareLayer from "./PosterShareLayer";
 
 export interface EventViewProps {
   eventInfo: PrismaDBMainTypes.Event & {
@@ -201,9 +202,14 @@ const EventView = ({ eventInfo }: EventViewProps) => {
           <BottomButton.Divider />
           <BottomButton.Item icon={<InviteIcon />}>초대하기</BottomButton.Item>
           <BottomButton.Divider />
-          <BottomButton.Item icon={<PosterIcon />}>
-            포스터 공유
-          </BottomButton.Item>
+          <PosterShareLayer
+            trigger={
+              <BottomButton.Item icon={<PosterIcon />}>
+                포스터 공유
+              </BottomButton.Item>
+            }
+            eventInfo={eventInfo}
+          />
         </BottomButton.Root>
       </FloatingArea>
       <BottomSheet2

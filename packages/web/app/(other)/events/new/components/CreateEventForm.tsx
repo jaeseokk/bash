@@ -24,6 +24,8 @@ import CrownIcon from "@/assets/crown_gradient.svg";
 import LocationIcon from "@/assets/location_gradient.svg";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
+import Layer from "@/components/Layer";
+import BottomSheet2 from "@/components/BottomSheet2";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -264,17 +266,13 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
           ))}
         </div>
       </BottomSheet>
-      <BottomSheet
-        snapPoints={[400, 0]}
-        isOpen={showLoginBottomSheet}
+      <BottomSheet2
+        open={showLoginBottomSheet}
         onClose={() => {
           setShowLoginBottomSheet(false);
         }}
       >
         <div className="px-4 pb-10 pt-10">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold">Sign In</h1>
-          </div>
           <div className="mt-4">
             <LoginForm
               onSubmit={async (data) => {
@@ -289,7 +287,7 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
             />
           </div>
         </div>
-      </BottomSheet>
+      </BottomSheet2>
     </>
   );
 };
