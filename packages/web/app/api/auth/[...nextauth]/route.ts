@@ -31,7 +31,7 @@ const handler = NextAuth({
         const code = await redis.get<string>(credentials.phoneNumber);
 
         if (!code || `${code}` !== credentials.code) {
-          return null;
+          throw new Error("invalid code");
         }
 
         if (credentials.username) {

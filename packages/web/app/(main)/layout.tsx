@@ -8,6 +8,7 @@ import SignInButton from "../components/SignInButton";
 import LetsLogo from "@/assets/lets_logo.svg";
 import AppProviders from "../components/AppProviders";
 import { cn } from "@/utils";
+import AlertDialogProvider from "@/components/AlertDialogProvider/AlertDialogProvider";
 
 const Pretendard = localFont({
   src: [
@@ -60,28 +61,34 @@ export default async function RootLayout({
         )}
       >
         <SessionProvider>
-          <div className="relative flex min-h-screen flex-col">
-            <header className="w-full bg-transparent">
-              <div className="container flex h-[5.25rem] items-center justify-between">
-                <nav className="flex w-1/4 items-center space-x-6 text-sm font-medium">
-                  <Button variant="ghost" size="no-horizontal-padding" asChild>
-                    <Link href="/events/new">Create Event</Link>
-                  </Button>
-                </nav>
-                <div className="flex w-1/2 items-center justify-center">
-                  <Link href="/">
-                    <LetsLogo />
-                  </Link>
+          <AlertDialogProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <header className="w-full bg-transparent">
+                <div className="container flex h-[5.25rem] items-center justify-between">
+                  <nav className="flex w-1/4 items-center space-x-6 text-sm font-medium">
+                    <Button
+                      variant="ghost"
+                      size="no-horizontal-padding"
+                      asChild
+                    >
+                      <Link href="/events/new">Create Event</Link>
+                    </Button>
+                  </nav>
+                  <div className="flex w-1/2 items-center justify-center">
+                    <Link href="/">
+                      <LetsLogo />
+                    </Link>
+                  </div>
+                  <div className="flex w-1/4 items-center justify-end">
+                    <SignInButton />
+                  </div>
                 </div>
-                <div className="flex w-1/4 items-center justify-end">
-                  <SignInButton />
-                </div>
+              </header>
+              <div className="flex-1">
+                <AppProviders>{children}</AppProviders>
               </div>
-            </header>
-            <div className="flex-1">
-              <AppProviders>{children}</AppProviders>
             </div>
-          </div>
+          </AlertDialogProvider>
         </SessionProvider>
       </body>
     </html>

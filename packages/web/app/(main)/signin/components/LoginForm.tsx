@@ -14,6 +14,7 @@ import NameForSignUpDialog from "@/components/NameForSignUpDialog";
 import { useDialogControl } from "@/hooks/useDialogControl";
 import ky from "ky";
 import { flushSync } from "react-dom";
+import { useAlertDialog } from "@/components/AlertDialogProvider";
 
 interface LoginFormData {
   phoneNumber: string;
@@ -40,6 +41,7 @@ const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
     useForm<LoginFormData>();
   const { isSubmitting } = formState;
   const nameDialogControl = useDialogControl<never, { name: string }>();
+  const { openDialog } = useAlertDialog();
 
   const handleVerify = async ({ phoneNumber }: { phoneNumber: string }) => {
     await ky.post("/api/user/verify", {
@@ -76,6 +78,16 @@ const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
           }
 
           const res = await onSubmit(data);
+
+          console.log(res);
+
+          if (res?.error === "invalid code") {
+            openDialog({
+              title: "인증번호가 일치하지 않습니다.",
+              hideCancel: true,
+            });
+            return;
+          }
 
           if (res?.error === "need to register") {
             const nameResult = await nameDialogControl.start();
