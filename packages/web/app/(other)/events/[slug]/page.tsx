@@ -1,8 +1,8 @@
 import * as React from "react";
 import { getEventBy } from "@/server/events";
 import { notFound } from "next/navigation";
-import EventView from "./components/EventView";
-import AttendConfirmLayer from "./components/AttendConfirmLayer";
+import EventView from "../components/EventView";
+import AttendConfirmLayer from "../components/AttendConfirmLayer";
 import ProfileLayer from "@/components/ProfileLayer";
 
 export interface EventPageProps {

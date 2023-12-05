@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import CreateEventForm from "./components/CreateEventForm";
+import CreateEventForm from "../components/CreateEventForm";
 
 export interface EventNewPageProps {}
 

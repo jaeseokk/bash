@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import BottomSheet from "@/components/BottomSheet";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import LoginForm from "../../../../(main)/signin/components/LoginForm";
+import LoginForm from "../../../(main)/signin/components/LoginForm";
 import { PrismaDBMainTypes } from "@bash/db";
 import Field from "@/components/Field";
 import { Input } from "@/components/ui/input";
@@ -41,25 +41,27 @@ const COVER_IMAGE_LIST = [
 
 interface CreateEventFormData {
   title: string;
-  coverImage: string;
-  startDate: string;
-  endDate?: string;
-  authorName?: string;
-  location?: string;
-  description?: string;
+  coverImage?: string | null;
+  startDate: Date | null;
+  endDate?: Date | null;
+  authorName?: string | null;
+  location?: string | null;
+  description?: string | null;
 }
 
 export interface CreateEventFormProps {
+  initialData?: CreateEventFormData;
   onSubmit: (data: CreateEventFormData) => Promise<PrismaDBMainTypes.Event>;
 }
 
-const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
+const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   const session = useSession();
   const router = useRouter();
   const { control, register, setValue, handleSubmit, watch } =
     useForm<CreateEventFormData>({
       defaultValues: {
-        coverImage: COVER_IMAGE_LIST[0],
+        ...initialData,
+        coverImage: initialData?.coverImage ?? COVER_IMAGE_LIST[0],
       },
     });
   const coverImage = watch("coverImage");
@@ -146,21 +148,23 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
               setShowCoverImageBottomSheet(true);
             }}
           >
-            <Image
-              src={coverImage}
-              alt="Party main image"
-              width="200"
-              height="200"
-              style={{
-                width: "100%",
-                height: "auto",
-              }}
-              placeholder="blur"
-              blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                shimmer(1, 1),
-              )}`}
-              sizes="100vw"
-            />
+            {coverImage && (
+              <Image
+                src={coverImage}
+                alt="Party main image"
+                width="200"
+                height="200"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
+                placeholder="blur"
+                blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                  shimmer(1, 1),
+                )}`}
+                sizes="100vw"
+              />
+            )}
             <button className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full bg-[#000000cc]">
               <EditIcon />
             </button>
@@ -176,6 +180,8 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
               render={({ field: { value } }) => {
                 const date = value ? new Date(value) : undefined;
 
+                console.log(date);
+
                 return (
                   <DatePicker
                     placeholder="날짜를 선택해주세요"
@@ -185,10 +191,10 @@ const CreateEventForm = ({ onSubmit }: CreateEventFormProps) => {
                         return;
                       }
 
-                      setValue("startDate", value[0].toISOString());
+                      setValue("startDate", value[0]);
 
                       if (value[1]) {
-                        setValue("endDate", value[1].toISOString());
+                        setValue("endDate", value[1]);
                       }
                     }}
                   />

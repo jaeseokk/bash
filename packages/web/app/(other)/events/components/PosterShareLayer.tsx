@@ -113,7 +113,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
                   .split("@")
                   .join("\n")}
               </div>
-              <div>{eventInfo.location}</div>
+              <div className="whitespace-pre-wrap">{eventInfo.location}</div>
             </div>
           </div>
           <div className="mt-6 w-full space-y-[0.75rem]">

@@ -192,7 +192,12 @@ const EventView = ({ eventInfo }: EventViewProps) => {
         <BottomButton.Root>
           {isMyEvent && (
             <>
-              <BottomButton.Item icon={<Edit2Icon />}>
+              <BottomButton.Item
+                icon={<Edit2Icon />}
+                onClick={() => {
+                  router.push(`/events/${eventInfo.slug}/edit`);
+                }}
+              >
                 이벤트 수정
               </BottomButton.Item>
               <BottomButton.Divider />
