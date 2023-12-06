@@ -21,7 +21,17 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
       slug,
     },
     include: {
-      attendances: true,
+      attendances: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      },
+      activities: true,
     },
   });
 

@@ -26,6 +26,7 @@ import CalendarIcon from "@/assets/calendar_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
 import Layer from "@/components/Layer";
 import BottomSheet2 from "@/components/BottomSheet2";
+import Emoji from "@/components/Emoji";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",

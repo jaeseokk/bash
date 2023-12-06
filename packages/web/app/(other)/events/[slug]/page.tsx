@@ -14,8 +14,6 @@ export interface EventPageProps {
 const EventPage = async ({ params: { slug } }: EventPageProps) => {
   const eventData = await getEventBy({ slug });
 
-  const revalidate = () => {};
-
   if (!eventData) {
     return notFound();
   }

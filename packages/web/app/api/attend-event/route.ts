@@ -9,6 +9,8 @@ const prisma = getPrismaClientDbMain();
 const AttendEventInputSchema = z.object({
   id: z.number(),
   status: z.nativeEnum(PrismaDBMainConstants.AttendanceStatus),
+  message: z.optional(z.string()),
+  emoji: z.string(),
 });
 
 export async function PUT(request: NextRequest) {
@@ -31,9 +33,25 @@ export async function PUT(request: NextRequest) {
       userId: session.user.id,
       eventId: input.id,
       status: input.status,
+      activities: {
+        create: {
+          userId: session.user.id,
+          eventId: input.id,
+          message: input.message,
+          emoji: input.emoji,
+        },
+      },
     },
     update: {
       status: input.status,
+      activities: {
+        create: {
+          userId: session.user.id,
+          eventId: input.id,
+          message: input.message,
+          emoji: input.emoji,
+        },
+      },
     },
   });
 

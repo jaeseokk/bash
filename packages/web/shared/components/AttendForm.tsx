@@ -16,21 +16,29 @@ import ButtonGroup from "@/components/ButtonGroup";
 import VerifyCodeDialog from "@/components/VerifyCodeDialog";
 import { useDialogControl } from "../hooks/useDialogControl";
 import { PrismaDBMainConstants } from "@bash/db";
+import ky from "ky";
 
 interface AttendFormData {
   status: PrismaDBMainConstants.AttendanceStatus;
-  username: string;
-  phoneNumber: string;
-  comment?: string;
+  username?: string;
+  phoneNumber?: string;
+  message?: string;
+  emoji: string;
 }
 
 export interface AttendFormProps {
-  onSubmit: (data: AttendFormData & { code: string }) => void;
+  onSubmit: (data: AttendFormData) => void;
+  onSubmitWithSign: (data: AttendFormData & { code?: string }) => void;
   onCallback?: () => void;
   onCancel?: () => void;
 }
 
-const AttendForm = ({ onSubmit, onCallback, onCancel }: AttendFormProps) => {
+const AttendForm = ({
+  onSubmit,
+  onSubmitWithSign,
+  onCallback,
+  onCancel,
+}: AttendFormProps) => {
   const session = useSession();
   const { register, control, trigger, handleSubmit } =
     useForm<AttendFormData>();
@@ -40,25 +48,42 @@ const AttendForm = ({ onSubmit, onCallback, onCancel }: AttendFormProps) => {
     },
     { code: string }
   >();
+  const handleVerify = async ({ phoneNumber }: { phoneNumber: string }) => {
+    await ky.post("/api/user/verify", {
+      json: { phoneNumber },
+    });
+  };
 
   return (
     <>
       <form
         onSubmit={handleSubmit(async (data) => {
-          const codeResult = await verificationCodeDialogControl.start({
-            phoneNumber: data.phoneNumber,
-          });
+          if (
+            session.status === "unauthenticated" &&
+            data.phoneNumber &&
+            data.username
+          ) {
+            await handleVerify({
+              phoneNumber: data.phoneNumber,
+            });
+            const codeResult = await verificationCodeDialogControl.start({
+              phoneNumber: data.phoneNumber,
+            });
 
-          if (!codeResult) {
+            if (!codeResult) {
+              return;
+            }
+
+            onSubmitWithSign({
+              ...data,
+              code: codeResult.code,
+            });
             return;
           }
 
-          // onSubmit({
-          //   ...data,
-          //   code,
-          // });
-
-          console.log({ ...data, code: codeResult.code });
+          onSubmit({
+            ...data,
+          });
         })}
       >
         <div className="mb-[3.75rem]">
@@ -99,11 +124,23 @@ const AttendForm = ({ onSubmit, onCallback, onCancel }: AttendFormProps) => {
             <Field label="메시지 남기기">
               <Input
                 placeholder="너무너무 기대돼요!"
-                {...register("comment")}
+                {...register("message")}
               />
             </Field>
             <div className="mt-[1.125rem]">
-              <MessageEmojiRadioGroup defaultValue={"💗"} />
+              <Controller
+                name="emoji"
+                defaultValue={"1f497"}
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <MessageEmojiRadioGroup
+                      value={value}
+                      onValueChange={onChange}
+                    />
+                  );
+                }}
+              />
             </div>
           </div>
         </div>

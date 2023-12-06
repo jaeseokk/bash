@@ -66,9 +66,7 @@ const CodeForm = ({ phoneNumber, onSubmit }: CodeFormProps) => {
         <NumericInput maxLength={6} {...register("code", { required: true })} />
       </Field>
       <div>
-        <Button className="w-full" size="sm">
-          동의합니다
-        </Button>
+        <Button className="w-full">동의합니다</Button>
       </div>
     </form>
   );

@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { cn, shimmer, toBase64 } from "@/utils";
 import { PrismaDBMainTypes, PrismaDBMainConstants } from "@bash/db";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import ky from "ky";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -75,6 +75,23 @@ const EventView = ({ eventInfo }: EventViewProps) => {
     }
 
     router.refresh();
+  };
+  const handleAttend = async (data: {
+    status: PrismaDBMainConstants.AttendanceStatus;
+    message?: string;
+    emoji: string;
+  }) => {
+    console.log(eventInfo, data);
+    await ky.put("/api/attend-event", {
+      json: {
+        id: eventInfo.id,
+        status: data.status,
+        message: data.message,
+        emoji: data.emoji,
+      },
+    });
+    alert("완료");
+    handleCloseAttendDialog();
   };
 
   return (
@@ -222,7 +239,21 @@ const EventView = ({ eventInfo }: EventViewProps) => {
         open={showAttendDialog}
         onClose={handleCloseAttendDialog}
       >
-        <AttendForm onSubmit={() => {}} onCancel={handleCloseAttendDialog} />
+        <AttendForm
+          onSubmit={async (data) => {
+            await handleAttend(data);
+          }}
+          onSubmitWithSign={async (data) => {
+            await signIn("credentials", {
+              redirect: false,
+              username: data.username,
+              phoneNumber: data.phoneNumber,
+              code: data.code,
+            });
+            await handleAttend(data);
+          }}
+          onCancel={handleCloseAttendDialog}
+        />
       </BottomSheet2>
     </>
   );

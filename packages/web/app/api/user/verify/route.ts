@@ -17,15 +17,15 @@ export async function POST(request: Request) {
 
   const code = Math.floor(100000 + Math.random() * 900000);
 
-  await redis.set(phoneNumber, `${code}`, {
-    ex: 60 * 3,
-  });
-
-  const res = await messageService.sendOne({
-    to: phoneNumber,
-    from: "07082331145",
-    text: `Your verification code is ${code}`,
-  });
+  // await redis.set(phoneNumber, `${code}`, {
+  //   ex: 60 * 3,
+  // });
+  //
+  // const res = await messageService.sendOne({
+  //   to: phoneNumber,
+  //   from: "07082331145",
+  //   text: `Your verification code is ${code}`,
+  // });
 
   return NextResponse.json("ok", { status: 200 });
 }

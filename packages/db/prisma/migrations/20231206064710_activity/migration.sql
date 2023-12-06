@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE IF NOT EXIST TYPE "UserPermissionRole" AS ENUM ('admin', 'user');
+CREATE TYPE "UserPermissionRole" AS ENUM ('admin', 'user');
 
 -- CreateEnum
 CREATE TYPE "AttendanceStatus" AS ENUM ('attending', 'not_attending', 'maybe');
@@ -84,6 +84,19 @@ CREATE TABLE "event_attendees" (
     CONSTRAINT "event_attendees_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "event_activities" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "event_id" INTEGER NOT NULL,
+    "attendance_id" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "message" TEXT,
+    "emoji" VARCHAR(300),
+
+    CONSTRAINT "event_activities_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_phoneNumber_key" ON "users"("phoneNumber");
 
@@ -119,3 +132,12 @@ ALTER TABLE "event_attendees" ADD CONSTRAINT "event_attendees_user_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "event_attendees" ADD CONSTRAINT "event_attendees_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "event_activities" ADD CONSTRAINT "event_activities_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "event_activities" ADD CONSTRAINT "event_activities_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "event_activities" ADD CONSTRAINT "event_activities_attendance_id_fkey" FOREIGN KEY ("attendance_id") REFERENCES "event_attendees"("id") ON DELETE CASCADE ON UPDATE CASCADE;

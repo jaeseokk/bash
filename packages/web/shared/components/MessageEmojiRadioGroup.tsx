@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/utils";
+import Emoji from "@/components/Emoji";
 
-const DATA = ["💗", "🎉", "🎂", "🥳", "🎊", "💐"];
+const OPTIONS = ["1f497", "1f389", "1f382", "1f973", "1f38a", "1f490"] as const;
 
 export interface MessageEmojiRadioGroupProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {}
@@ -16,9 +17,11 @@ const MessageEmojiRadioGroup = ({ ...props }: MessageEmojiRadioGroupProps) => {
           props.disabled && "opacity-50",
         )}
       >
-        {DATA.map((data) => (
-          <RadioGroupPrimitive.Item className="group" value={data} key={data}>
-            <ItemContent>{data}</ItemContent>
+        {OPTIONS.map((code) => (
+          <RadioGroupPrimitive.Item className="group" value={code} key={code}>
+            <ItemContent>
+              <Emoji code={code} />
+            </ItemContent>
           </RadioGroupPrimitive.Item>
         ))}
       </div>
