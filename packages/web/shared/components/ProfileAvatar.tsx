@@ -4,9 +4,10 @@ import AvatarFallbackIcon from "@/assets/avatar.svg";
 
 export interface ProfileAvatarProps {
   size?: string | number;
+  name?: string;
 }
 
-const ProfileAvatar = ({ size }: ProfileAvatarProps) => {
+const ProfileAvatar = ({ size, name }: ProfileAvatarProps) => {
   return (
     <Avatar
       style={{
@@ -16,7 +17,13 @@ const ProfileAvatar = ({ size }: ProfileAvatarProps) => {
     >
       <AvatarImage />
       <AvatarFallback>
-        <AvatarFallbackIcon />
+        {name ? (
+          <span className="inline-flex h-full w-full items-center justify-center rounded-full border border-white">
+            {name[0].toUpperCase()}
+          </span>
+        ) : (
+          <AvatarFallbackIcon />
+        )}
       </AvatarFallback>
     </Avatar>
   );

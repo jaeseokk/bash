@@ -31,7 +31,19 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
           },
         },
       },
-      activities: true,
+      activities: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 

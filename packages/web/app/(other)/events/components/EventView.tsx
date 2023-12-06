@@ -29,11 +29,14 @@ import AttendeesStatus from "./AttendeesStatus";
 import ActivityStatus from "./ActivityStatus";
 import LetsLogo from "@/assets/lets_logo.svg";
 import PosterShareLayer from "./PosterShareLayer";
+import { EventDetail } from "@/types/events";
+import Link from "next/link";
 
 export interface EventViewProps {
-  eventInfo: PrismaDBMainTypes.Event & {
-    attendances: PrismaDBMainTypes.Attendance[];
-  };
+  eventInfo: EventDetail;
+  // onSignin: () => void;
+  // onAttend: () => void;
+  // onPublish: (eventId: number) => void;
 }
 
 const EventView = ({ eventInfo }: EventViewProps) => {
@@ -60,7 +63,6 @@ const EventView = ({ eventInfo }: EventViewProps) => {
     show: showAttendDialog,
     handleShow: handleShowAttendDialog,
     handleClose: handleCloseAttendDialog,
-    handleChange: handleChangeAttendDialog,
   } = useDisclosure();
 
   const handlePublish = async () => {
@@ -81,7 +83,6 @@ const EventView = ({ eventInfo }: EventViewProps) => {
     message?: string;
     emoji: string;
   }) => {
-    console.log(eventInfo, data);
     await ky.put("/api/attend-event", {
       json: {
         id: eventInfo.id,
@@ -168,14 +169,16 @@ const EventView = ({ eventInfo }: EventViewProps) => {
           <Divider />
         </Block>
         <div className="space-y-[2.5rem]">
-          <AttendeesStatus />
-          <ActivityStatus />
+          <AttendeesStatus attendances={eventInfo.attendances} />
+          <ActivityStatus activities={eventInfo.activities} />
         </div>
         <div className="mt-8 flex justify-center">
           <LetsLogo />
         </div>
         <Block2 className="mt-[1.5rem]">
-          <Button variant="outline">내 이벤트 직접 만들기</Button>
+          <Button variant="outline" asChild>
+            <Link href="/events/new">내 이벤트 직접 만들기</Link>
+          </Button>
         </Block2>
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
