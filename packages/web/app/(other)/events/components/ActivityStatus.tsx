@@ -1,10 +1,11 @@
+"use client";
+
 import * as React from "react";
-import Layer from "@/components/Layer";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import AvatarFallbackIcon from "@/assets/avatar.svg";
+import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { EventDetail } from "@/types/events";
+import { formatDistanceToNowInKorean } from "@/utils";
+import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
 
 export interface ActivityStatusProps {
   activities: EventDetail["activities"];
@@ -21,6 +22,7 @@ const ActivityStatus = ({ activities }: ActivityStatusProps) => {
             {activities.slice(0, 3).map((activity) => (
               <ActivityItem
                 key={activity.id}
+                status={activity.status}
                 name={activity.user.username}
                 message={activity.message}
                 date={activity.createdAt}
@@ -30,41 +32,62 @@ const ActivityStatus = ({ activities }: ActivityStatusProps) => {
         </div>
       }
     >
-      <ScrollArea className="h-full">
+      <LayerContentWithScrollArea>
         <div className="space-y-8 py-8">
           {activities.map((activity) => (
             <ActivityItem
               key={activity.id}
+              status={activity.status}
               name={activity.user.username}
               message={activity.message}
               date={activity.createdAt}
             />
           ))}
         </div>
-        <ScrollBar orientation="vertical" />
-      </ScrollArea>
+      </LayerContentWithScrollArea>
     </Layer>
   );
 };
 
+const getTitleMessage = (
+  status: PrismaDBMainConstants.AttendanceStatus,
+  name: string,
+) => {
+  switch (status) {
+    case PrismaDBMainConstants.AttendanceStatus.ATTENDING:
+      return `${name} 님이 참석해요`;
+    case PrismaDBMainConstants.AttendanceStatus.NOT_ATTENDING:
+      return `${name} 님이 불참해요`;
+    case PrismaDBMainConstants.AttendanceStatus.MAYBE:
+      return `${name} 님이 고민중`;
+    default:
+      return "";
+  }
+};
+
 interface ActivityItemProps {
-  name?: string;
+  status: PrismaDBMainConstants.AttendanceStatus;
+  name: string;
   message?: string | null;
-  date?: string | Date;
+  date: string | Date;
 }
 
-const ActivityItem = ({ name, message, date }: ActivityItemProps) => {
+const ActivityItem = ({ status, name, message, date }: ActivityItemProps) => {
   return (
     <div className="flex space-x-4">
       <ProfileAvatar size="3rem" name={name} />
       <div>
         <div className="text-[0.875rem] font-bold">
-          {name} 님이 이벤트에 참석해요
+          {getTitleMessage(status, name)}
         </div>
-        <div className="font-bold text-gray-400">3일 전</div>
-        <div className="mt-1 text-[1.125rem] font-bold">
-          &ldquo;{message}&rdquo;
+        <div className="text-[0.8125rem] font-bold text-gray-400">
+          {formatDistanceToNowInKorean(new Date(date))}
         </div>
+        {message && (
+          <div className="mt-1 text-[1.125rem] font-bold">
+            &ldquo;{message}&rdquo;
+          </div>
+        )}
       </div>
     </div>
   );

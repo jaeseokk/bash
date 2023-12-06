@@ -12,11 +12,11 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.cjs,.mjs --cache --cache-location ../../.cache/eslint/db-main-prisma.eslintcache",
     "codegen": "rimraf ./src/generated && prisma generate",
     "prisma-generate": "prisma generate",
-    "prisma-db-push": "dotenv-flow -- yarn prisma db push",
-    "prisma-db-seed": "dotenv-flow -- yarn prisma db seed",
-    "prisma-migrate": "dotenv-flow -- yarn prisma migrate",
-    "prisma-migrate-reset": "dotenv-flow -- yarn prisma migrate reset",
-    "prisma-studio": "dotenv-flow -- yarn prisma studio",
+    "prisma-db-push": "dotenv-flow -- prisma db push",
+    "prisma-db-seed": "dotenv-flow -- prisma db seed",
+    "prisma-migrate": "dotenv-flow -- prisma migrate",
+    "prisma-migrate-reset": "dotenv-flow -- pnpm run prisma migrate reset",
+    "prisma-studio": "dotenv-flow -- pnpm run prisma studio",
     "typecheck": "tsc --project ./tsconfig.json --noEmit"
   },
   "devDependencies": {

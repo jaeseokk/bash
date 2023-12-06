@@ -130,6 +130,7 @@ model Activity {
   createdAt   DateTime  @default(now()) @map(name: "created_at")
   message     String?   @db.Text
   emoji       String?   @db.VarChar(300)
+  status      AttendanceStatus?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)

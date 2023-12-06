@@ -1,22 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { SignInResponse, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import NumericInput from "@/components/NumericInput";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
 import Field from "@/components/Field";
 import MessageEmojiRadioGroup from "@/components/MessageEmojiRadioGroup";
 import ReplyRadioGroup from "@/components/ReplyRadioGroup";
 import ButtonGroup from "@/components/ButtonGroup";
 import VerifyCodeDialog from "@/components/VerifyCodeDialog";
-import { useDialogControl } from "../hooks/useDialogControl";
+import { useDialogControl } from "@/hooks/useDialogControl";
 import { PrismaDBMainConstants } from "@bash/db";
-import ky from "ky";
 
 interface AttendFormData {
   status: PrismaDBMainConstants.AttendanceStatus;
@@ -27,32 +23,41 @@ interface AttendFormData {
 }
 
 export interface AttendFormProps {
+  defaultStatus?: PrismaDBMainConstants.AttendanceStatus;
+  defaultEmoji?: string;
   onSubmit: (data: AttendFormData) => void;
   onSubmitWithSign: (data: AttendFormData & { code?: string }) => void;
-  onCallback?: () => void;
+  onVerify: (data: { phoneNumber: string }) => void;
   onCancel?: () => void;
 }
 
 const AttendForm = ({
+  defaultStatus,
+  defaultEmoji,
   onSubmit,
+  onVerify,
   onSubmitWithSign,
-  onCallback,
   onCancel,
 }: AttendFormProps) => {
   const session = useSession();
-  const { register, control, trigger, handleSubmit } =
-    useForm<AttendFormData>();
+  const { register, control, formState, handleSubmit } =
+    useForm<AttendFormData>({
+      values: {
+        status:
+          defaultStatus ?? PrismaDBMainConstants.AttendanceStatus.ATTENDING,
+        emoji: defaultEmoji ?? "1f497",
+      },
+      resetOptions: {
+        keepDirtyValues: true,
+      },
+    });
+  const { isSubmitting } = formState;
   const verificationCodeDialogControl = useDialogControl<
     {
       phoneNumber: string;
     },
     { code: string }
   >();
-  const handleVerify = async ({ phoneNumber }: { phoneNumber: string }) => {
-    await ky.post("/api/user/verify", {
-      json: { phoneNumber },
-    });
-  };
 
   return (
     <>
@@ -63,7 +68,7 @@ const AttendForm = ({
             data.phoneNumber &&
             data.username
           ) {
-            await handleVerify({
+            await onVerify({
               phoneNumber: data.phoneNumber,
             });
             const codeResult = await verificationCodeDialogControl.start({
@@ -74,14 +79,14 @@ const AttendForm = ({
               return;
             }
 
-            onSubmitWithSign({
+            await onSubmitWithSign({
               ...data,
               code: codeResult.code,
             });
             return;
           }
 
-          onSubmit({
+          await onSubmit({
             ...data,
           });
         })}
@@ -91,7 +96,6 @@ const AttendForm = ({
             name="status"
             control={control}
             rules={{ required: true }}
-            defaultValue={PrismaDBMainConstants.AttendanceStatus.ATTENDING}
             render={({ field: { value, onChange } }) => (
               <ReplyRadioGroup value={value} onValueChange={onChange} />
             )}
@@ -148,7 +152,7 @@ const AttendForm = ({
           <Button variant="secondary" type="button" onClick={onCancel}>
             취소
           </Button>
-          <Button>입력완료</Button>
+          <Button pending={isSubmitting}>입력완료</Button>
         </ButtonGroup>
       </form>
       <VerifyCodeDialog

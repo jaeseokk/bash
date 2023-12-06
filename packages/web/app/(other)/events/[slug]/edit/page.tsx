@@ -3,9 +3,9 @@
 import * as React from "react";
 import CreateEventForm from "../../components/CreateEventForm";
 import ky from "ky";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
+import { PrismaDBMainTypes } from "@bash/db";
 
 const kyInstance = ky.create({});
 
@@ -32,8 +32,7 @@ interface CreateEventFormContainerProps {
 }
 
 const CreateEventFormContainer = ({ slug }: CreateEventFormContainerProps) => {
-  const queryClient = useQueryClient();
-  const { data } = useSuspenseQuery<PrismaDBMainTypes.Event>({
+  const { data, refetch } = useSuspenseQuery<PrismaDBMainTypes.Event>({
     queryKey: ["event", slug],
     queryFn: async () => {
       const res = await kyInstance.get(`/api/events/${slug}`);
@@ -50,9 +49,7 @@ const CreateEventFormContainer = ({ slug }: CreateEventFormContainerProps) => {
           json: data,
         });
 
-        await queryClient.invalidateQueries({
-          queryKey: ["event", slug],
-        });
+        await refetch();
 
         return res.json();
       }}

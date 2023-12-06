@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Layer from "@/components/Layer";
+import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PrismaDBMainTypes } from "@bash/db";
@@ -40,6 +40,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
     link.href = dataURL;
     link.click();
   };
+  const isSupportedShareApi = "share" in navigator;
 
   const handleShare = async () => {
     const dataURL = await getDataURL();
@@ -48,7 +49,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
       return;
     }
 
-    if (!navigator.share) {
+    if (!isSupportedShareApi) {
       console.log("navigator.share is not supported");
       return;
     }
@@ -63,8 +64,8 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
 
   return (
     <Layer title="포스터 공유" {...props}>
-      <ScrollArea className="h-full">
-        <div className="flex h-full flex-col items-center justify-between pb-10 pt-6">
+      <LayerContentWithScrollArea>
+        <div className="flex flex-col items-center justify-between pt-6">
           <div
             className="relative h-[28.125rem] w-[17.5rem] flex-none overflow-hidden border border-[#AEFF5E]"
             ref={posterElementRef}
@@ -114,21 +115,23 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
               <div className="whitespace-pre-wrap">{eventInfo.location}</div>
             </div>
           </div>
-          <div className="mt-6 w-full space-y-[0.75rem]">
-            <Button type="button" className="w-full" onClick={handleShare}>
-              초대링크공유
-            </Button>
-            <Button
-              type="button"
-              className="w-full"
-              variant="outline"
-              onClick={handleSaveImage}
-            >
-              이미지 저장
-            </Button>
+          <div className="sticky bottom-9 mt-6 w-full space-y-[0.75rem]">
+            {isSupportedShareApi ? (
+              <Button type="button" className="w-full" onClick={handleShare}>
+                공유
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                className="w-full"
+                onClick={handleSaveImage}
+              >
+                저장
+              </Button>
+            )}
           </div>
         </div>
-      </ScrollArea>
+      </LayerContentWithScrollArea>
     </Layer>
   );
 };

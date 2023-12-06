@@ -6,24 +6,28 @@ import {
   SheetHeader,
   SheetOverlay,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 
 export interface BottomSheet2Props
   extends React.ComponentPropsWithoutRef<typeof Sheet> {
+  trigger?: React.ReactNode;
   title?: React.ReactNode;
   onClose?: () => void;
 }
 
 const BottomSheet2 = ({
   children,
+  trigger,
   title,
   onClose,
   ...props
 }: BottomSheet2Props) => {
   return (
     <Sheet {...props}>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
       <SheetContent
         side="bottom"
         onInteractOutside={(e) => {

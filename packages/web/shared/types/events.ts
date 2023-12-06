@@ -18,6 +18,7 @@ export interface EventDetail extends PrismaDBMainTypes.Event {
     createdAt: Date | string;
     message: string | null;
     emoji: string;
+    status: PrismaDBMainTypes.AttendanceStatus;
     user: {
       username: string;
     };

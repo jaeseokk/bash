@@ -5,7 +5,7 @@ import EventView from "./EventView";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import ky from "ky";
 import { EventDetail } from "@/types/events";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 
 export interface EventViewContainerProps {
@@ -14,8 +14,7 @@ export interface EventViewContainerProps {
 
 const EventViewContainer = ({ slug }: EventViewContainerProps) => {
   const session = useSession();
-  const queryClient = useQueryClient();
-  const { data, error } = useQuery<EventDetail>({
+  const { data, error, refetch } = useQuery<EventDetail>({
     queryKey: ["event", slug],
     queryFn: async () => {
       const res = await ky.get(`/api/events/${slug}`);
@@ -24,8 +23,6 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
     },
     enabled: session.status !== "loading",
   });
-
-  console.log(error);
 
   if (error) {
     return notFound();
@@ -39,10 +36,28 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
     <>
       <EventView
         eventInfo={data}
-        onRevalidate={() => {
-          return queryClient.invalidateQueries({
-            queryKey: ["event", slug],
+        onPublish={async (eventId) => {
+          await ky.post(`/api/events/${eventId}/publish`);
+          await refetch();
+        }}
+        onVerify={async ({ phoneNumber }) => {
+          await ky.post(`/api/events/${slug}/verify`, {
+            json: {
+              phoneNumber,
+            },
           });
+        }}
+        onSignin={async (data) => {
+          await signIn("credentials", {
+            redirect: false,
+            ...data,
+          });
+        }}
+        onAttend={async (data) => {
+          await ky.put("/api/attend-event", {
+            json: data,
+          });
+          await refetch();
         }}
       />
     </>

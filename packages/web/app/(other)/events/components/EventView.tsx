@@ -3,11 +3,10 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn, shimmer, toBase64 } from "@/utils";
-import { PrismaDBMainTypes, PrismaDBMainConstants } from "@bash/db";
-import { signIn, useSession } from "next-auth/react";
-import ky from "ky";
+import { PrismaDBMainConstants } from "@bash/db";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { format } from "date-fns";
 import ViewField from "@/components/ViewField";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
@@ -31,16 +30,34 @@ import LetsLogo from "@/assets/lets_logo.svg";
 import PosterShareLayer from "./PosterShareLayer";
 import { EventDetail } from "@/types/events";
 import Link from "next/link";
+import { useLoading } from "@/hooks/useLoading";
+import InviteBottomSheet from "./InviteBottomSheet";
 
 export interface EventViewProps {
   eventInfo: EventDetail;
-  onRevalidate: () => void;
-  // onSignin: () => void;
-  // onAttend: () => void;
-  // onPublish: (eventId: number) => void;
+  onSignin: (data: {
+    username?: string;
+    phoneNumber?: string;
+    code?: string;
+  }) => void;
+  onAttend: (data: {
+    id: number;
+    status: PrismaDBMainConstants.AttendanceStatus;
+    message?: string;
+    emoji: string;
+  }) => void;
+  onVerify: (data: { phoneNumber: string }) => void;
+  onPublish: (eventId: number) => void;
 }
 
-const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
+const EventView = ({
+  eventInfo,
+  onSignin,
+  onAttend,
+  onVerify,
+  onPublish,
+}: EventViewProps) => {
+  const [loading, startLoading] = useLoading();
   const session = useSession();
   const router = useRouter();
   const dateDisplay = useMemo(() => {
@@ -57,9 +74,12 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
   }, [eventInfo.endDate, eventInfo.startDate]);
   const isMyEvent = session.data?.user.id === eventInfo.authorId;
   const isPublished = !!eventInfo.publishedAt;
-  const attendanceStatus = eventInfo.attendances.find(
+  const myAttendance = eventInfo.attendances.find(
     (attendance) => attendance.userId === session.data?.user.id,
-  )?.status;
+  );
+  const myLatestActivity = eventInfo.activities.find(
+    (activity) => activity.userId === session.data?.user.id,
+  );
   const {
     show: showAttendDialog,
     handleShow: handleShowAttendDialog,
@@ -67,32 +87,23 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
   } = useDisclosure();
 
   const handlePublish = async () => {
-    const res = await ky.put(`/api/publish-event`, {
-      json: {
-        id: eventInfo.id,
-      },
+    return startLoading(async () => {
+      await onPublish(eventInfo.id);
     });
-
-    if (!res.ok) {
-      return;
-    }
-
-    await onRevalidate();
   };
+
   const handleAttend = async (data: {
     status: PrismaDBMainConstants.AttendanceStatus;
     message?: string;
     emoji: string;
   }) => {
-    await ky.put("/api/attend-event", {
-      json: {
-        id: eventInfo.id,
-        status: data.status,
-        message: data.message,
-        emoji: data.emoji,
-      },
+    await onAttend({
+      id: eventInfo.id,
+      status: data.status,
+      message: data.message,
+      emoji: data.emoji,
     });
-    await onRevalidate();
+
     handleCloseAttendDialog();
   };
 
@@ -184,7 +195,7 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
             <ReplyRadioGroup
-              value={""}
+              value={myAttendance?.status}
               disabled={isMyEvent}
               onClick={() => {
                 if (isMyEvent) {
@@ -203,6 +214,7 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
               variant="highlight"
               className="w-full"
               onClick={handlePublish}
+              pending={loading}
             >
               이벤트 오픈하기
             </Button>
@@ -224,9 +236,22 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
               <BottomButton.Divider />
             </>
           )}
-          <BottomButton.Item icon={<NoticeIcon />}>공지하기</BottomButton.Item>
-          <BottomButton.Divider />
-          <BottomButton.Item icon={<InviteIcon />}>초대하기</BottomButton.Item>
+          {isMyEvent && (
+            <>
+              <BottomButton.Item icon={<NoticeIcon />}>
+                공지하기
+              </BottomButton.Item>
+              <BottomButton.Divider />
+            </>
+          )}
+          <InviteBottomSheet
+            url={`https://lets.run/events/${eventInfo.slug}`}
+            trigger={
+              <BottomButton.Item icon={<InviteIcon />}>
+                초대하기
+              </BottomButton.Item>
+            }
+          />
           <BottomButton.Divider />
           <PosterShareLayer
             trigger={
@@ -244,18 +269,18 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
         onClose={handleCloseAttendDialog}
       >
         <AttendForm
-          onSubmit={async (data) => {
-            await handleAttend(data);
-          }}
+          defaultStatus={myAttendance?.status}
+          defaultEmoji={myLatestActivity?.emoji}
+          onSubmit={handleAttend}
           onSubmitWithSign={async (data) => {
-            await signIn("credentials", {
-              redirect: false,
+            await onSignin({
               username: data.username,
               phoneNumber: data.phoneNumber,
               code: data.code,
             });
             await handleAttend(data);
           }}
+          onVerify={onVerify}
           onCancel={handleCloseAttendDialog}
         />
       </BottomSheet2>

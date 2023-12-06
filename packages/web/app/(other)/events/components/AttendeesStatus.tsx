@@ -1,5 +1,5 @@
 import * as React from "react";
-import Layer from "@/components/Layer";
+import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AvatarFallbackIcon from "@/assets/avatar.svg";
@@ -31,15 +31,17 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
         </div>
       }
     >
-      <Divider />
-      <div>
-        <div className="mb-4 font-bold">갈게요 ({attendances.length}명)</div>
-        <ul className="grid grid-cols-4 gap-4">
-          {attendances.map((attendance) => (
-            <UserItem key={attendance.id} name={attendance.user.username} />
-          ))}
-        </ul>
-      </div>
+      <LayerContentWithScrollArea>
+        <Divider />
+        <div>
+          <div className="mb-4 font-bold">갈게요 ({attendances.length}명)</div>
+          <ul className="grid grid-cols-4 gap-4">
+            {attendances.map((attendance) => (
+              <UserItem key={attendance.id} name={attendance.user.username} />
+            ))}
+          </ul>
+        </div>
+      </LayerContentWithScrollArea>
     </Layer>
   );
 };

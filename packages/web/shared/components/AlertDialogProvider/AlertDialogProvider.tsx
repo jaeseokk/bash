@@ -5,11 +5,9 @@ import { AlertDialogContextProvider } from "@/components/AlertDialogProvider/con
 import { useRef, useState } from "react";
 import MessageDialog, { MessageDialogProps } from "@/components/MessageDialog";
 
-export interface AlertDialogProviderProps {
-  children: React.ReactNode;
-}
+export interface AlertDialogProviderProps {}
 
-const AlertDialogProvider = ({ children }: AlertDialogProviderProps) => {
+const AlertDialogProvider = ({}: AlertDialogProviderProps) => {
   const dialogKeyRef = useRef(0);
   const [dialogs, setDialogs] = useState<
     (MessageDialogProps & { dialogId: number })[]
@@ -47,7 +45,6 @@ const AlertDialogProvider = ({ children }: AlertDialogProviderProps) => {
         removeDialog,
       }}
     >
-      {children}
       {dialogs.map(({ dialogId, ...dialogProps }) => {
         return (
           <MessageDialog
