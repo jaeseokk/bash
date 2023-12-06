@@ -169,7 +169,7 @@ const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
         <Block>
           <Divider />
         </Block>
-        <div className="space-y-[2.5rem]">
+        <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
           <AttendeesStatus attendances={eventInfo.attendances} />
           <ActivityStatus activities={eventInfo.activities} />
         </div>
