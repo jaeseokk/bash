@@ -166,7 +166,10 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
                 sizes="100vw"
               />
             )}
-            <button className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full bg-[#000000cc]">
+            <button
+              type="button"
+              className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full bg-[#000000cc]"
+            >
               <EditIcon />
             </button>
           </div>
