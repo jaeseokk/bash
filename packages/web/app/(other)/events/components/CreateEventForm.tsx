@@ -58,13 +58,14 @@ export interface CreateEventFormProps {
 const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   const session = useSession();
   const router = useRouter();
-  const { control, register, setValue, handleSubmit, watch } =
+  const { control, register, setValue, handleSubmit, watch, formState } =
     useForm<CreateEventFormData>({
       defaultValues: {
         ...initialData,
         coverImage: initialData?.coverImage ?? COVER_IMAGE_LIST[0],
       },
     });
+  const { isSubmitting } = formState;
   const coverImage = watch("coverImage");
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
@@ -231,7 +232,9 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           />
         </Block>
         <Block className="mb-[2.7rem] mt-[2.625rem]">
-          <Button className="w-full">저장하기</Button>
+          <Button className="w-full" pending={isSubmitting}>
+            저장하기
+          </Button>
         </Block>
       </form>
       <FloatingArea>
