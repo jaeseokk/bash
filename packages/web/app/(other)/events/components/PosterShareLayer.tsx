@@ -56,9 +56,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
     const blob = await (await fetch(dataURL)).blob();
     const file = new File([blob], "fileName.png", { type: blob.type });
 
-    navigator.share({
-      title: eventInfo.title,
-      text: eventInfo.description ?? undefined,
+    await navigator.share({
       files: [file],
     });
   };
