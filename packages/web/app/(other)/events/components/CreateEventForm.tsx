@@ -52,7 +52,7 @@ interface CreateEventFormData {
 
 export interface CreateEventFormProps {
   initialData?: CreateEventFormData;
-  onSubmit: (data: CreateEventFormData) => Promise<PrismaDBMainTypes.Event>;
+  onSubmit: (data: CreateEventFormData) => Promise<void>;
 }
 
 const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
@@ -71,8 +71,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
     useState(false);
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
   const submit = async (data: CreateEventFormData) => {
-    const res = await onSubmit(data);
-    router.push(`/events/${res.slug}`);
+    await onSubmit(data);
   };
 
   return (

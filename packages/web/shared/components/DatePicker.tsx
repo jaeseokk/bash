@@ -114,15 +114,16 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
         <Input placeholder={placeholder} value={display} readOnly />
       </button>
       <BottomSheet2
+        title="날짜 선택"
         open={showCalendar}
         onClose={() => {
           setShowCalendar(false);
         }}
       >
-        <div className="pb-10">
+        <div>
           <div className="flex h-10 items-center justify-center">
-            {startDateState && (
-              <div className="flex w-[20rem] items-center justify-between">
+            {startDateState ? (
+              <div className="flex w-[20rem] items-center justify-center">
                 <div className="flex items-center justify-between">
                   <span className="flex-1 text-center">
                     {format(startDateState, "yyyy-MM-dd HH:mm")}
@@ -136,6 +137,8 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
                   />
                 </div>
               </div>
+            ) : (
+              "-"
             )}
           </div>
           <Calendar
@@ -177,15 +180,9 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
               </div>
             }
           />
-          <div>
+          <div className="mt-4">
             <div className="mx-auto max-w-[750px]">
-              <Button
-                className="w-full"
-                type="button"
-                size="sm"
-                variant="secondary"
-                onClick={handleConfirm}
-              >
+              <Button className="w-full" type="button" onClick={handleConfirm}>
                 확인
               </Button>
             </div>

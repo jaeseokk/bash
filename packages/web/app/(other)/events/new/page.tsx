@@ -2,10 +2,13 @@
 
 import * as React from "react";
 import CreateEventForm from "../components/CreateEventForm";
+import { useRouter } from "next/navigation";
 
 export interface EventNewPageProps {}
 
 const EventNewPage = ({}: EventNewPageProps) => {
+  const router = useRouter();
+
   return (
     <main className="pt-4">
       <CreateEventForm
@@ -15,7 +18,8 @@ const EventNewPage = ({}: EventNewPageProps) => {
             body: JSON.stringify(data),
           });
 
-          return res.json();
+          const { slug } = (await res.json()) as { slug: string };
+          router.push(`/events/${slug}`);
         }}
       />
     </main>
