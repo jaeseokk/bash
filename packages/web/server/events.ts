@@ -49,7 +49,7 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
 
   const isPublished = event?.publishedAt !== null;
 
-  if (event?.authorId !== session?.user.id && !isPublished) {
+  if (!isPublished && event?.authorId !== session?.user.id) {
     throw new Error("Event not found");
   }
 

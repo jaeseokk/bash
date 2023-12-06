@@ -34,22 +34,23 @@ import Link from "next/link";
 
 export interface EventViewProps {
   eventInfo: EventDetail;
+  onRevalidate: () => void;
   // onSignin: () => void;
   // onAttend: () => void;
   // onPublish: (eventId: number) => void;
 }
 
-const EventView = ({ eventInfo }: EventViewProps) => {
+const EventView = ({ eventInfo, onRevalidate }: EventViewProps) => {
   const session = useSession();
   const router = useRouter();
   const dateDisplay = useMemo(() => {
     if (eventInfo.startDate && eventInfo.endDate) {
-      return `${format(eventInfo.startDate, "PPP")} ~ ${format(
-        eventInfo.endDate,
+      return `${format(new Date(eventInfo.startDate), "PPP")} ~ ${format(
+        new Date(eventInfo.endDate),
         "PPP",
       )}`;
     } else if (eventInfo.startDate) {
-      return format(eventInfo.startDate, "PPP");
+      return format(new Date(eventInfo.startDate), "PPP");
     }
 
     return undefined;
@@ -76,7 +77,7 @@ const EventView = ({ eventInfo }: EventViewProps) => {
       return;
     }
 
-    router.refresh();
+    await onRevalidate();
   };
   const handleAttend = async (data: {
     status: PrismaDBMainConstants.AttendanceStatus;
@@ -91,7 +92,7 @@ const EventView = ({ eventInfo }: EventViewProps) => {
         emoji: data.emoji,
       },
     });
-    alert("완료");
+    await onRevalidate();
     handleCloseAttendDialog();
   };
 

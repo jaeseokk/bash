@@ -109,7 +109,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
             </div>
             <div className="absolute bottom-4 left-4 w-[12.8125rem] space-y-[1.35rem] text-[1.25rem] font-bold leading-[130%] [text-shadow:_0_1px_10px_rgb(0_0_0_/_25%)]">
               <div className="whitespace-pre-wrap">
-                {format(eventInfo.startDate, "MMMM@do@a h:mm")
+                {format(new Date(eventInfo.startDate), "MMMM@do@a h:mm")
                   .split("@")
                   .join("\n")}
               </div>

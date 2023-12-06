@@ -34,6 +34,8 @@ const handler = NextAuth({
         //   throw new Error("invalid code");
         // }
 
+        console.log("!!!", credentials);
+
         if (credentials.username) {
           const newUser = await prisma.user.upsert({
             where: {
@@ -101,7 +103,6 @@ const handler = NextAuth({
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser, trigger }) {
-      console.log(user);
       if (user) {
         // @ts-ignore
         token.id = user.id;

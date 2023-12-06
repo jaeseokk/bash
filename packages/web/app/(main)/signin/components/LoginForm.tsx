@@ -79,8 +79,6 @@ const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
 
           const res = await onSubmit(data);
 
-          console.log(res);
-
           if (res?.error === "invalid code") {
             openDialog({
               title: "인증번호가 일치하지 않습니다.",

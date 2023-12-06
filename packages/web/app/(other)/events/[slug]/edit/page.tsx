@@ -3,12 +3,7 @@
 import * as React from "react";
 import CreateEventForm from "../../components/CreateEventForm";
 import ky from "ky";
-import {
-  useQuery,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
 
