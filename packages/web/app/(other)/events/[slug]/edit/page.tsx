@@ -36,9 +36,7 @@ const CreateEventFormContainer = ({ slug }: CreateEventFormContainerProps) => {
   const { data } = useSuspenseQuery<PrismaDBMainTypes.Event>({
     queryKey: ["event", slug],
     queryFn: async () => {
-      const res = await kyInstance.get(
-        `http://localhost:3001/api/events/${slug}`,
-      );
+      const res = await kyInstance.get(`/api/events/${slug}`);
 
       return res.json();
     },

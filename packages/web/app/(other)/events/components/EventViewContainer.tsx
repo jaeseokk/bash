@@ -18,7 +18,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
   const { data, error } = useQuery<EventDetail>({
     queryKey: ["event", slug],
     queryFn: async () => {
-      const res = await ky.get(`http://localhost:3001/api/events/${slug}`);
+      const res = await ky.get(`/api/events/${slug}`);
 
       return res.json();
     },
