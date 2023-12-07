@@ -32,6 +32,7 @@ import { EventDetail, PreviewEventDetail } from "@/types/events";
 import Link from "next/link";
 import { useLoading } from "@/hooks/useLoading";
 import InviteBottomSheet from "./InviteBottomSheet";
+import Sticker from "@/components/Sticker";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -146,6 +147,17 @@ const EventView = ({
 
   return (
     <>
+      <div className="absolute inset-0 h-full overflow-hidden">
+        <Sticker index={1} />
+        <Sticker index={2} />
+        <Sticker index={3} />
+        <Sticker index={4} />
+        <Sticker index={5} />
+        <Sticker index={6} />
+        <Sticker index={7} />
+        <Sticker index={8} />
+        <Sticker index={9} />
+      </div>
       <div>
         {eventInfo.coverImage && (
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">
