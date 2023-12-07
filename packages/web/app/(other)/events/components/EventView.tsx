@@ -28,13 +28,12 @@ import AttendeesStatus from "./AttendeesStatus";
 import ActivityStatus from "./ActivityStatus";
 import LetsLogo from "@/assets/lets_logo.svg";
 import PosterShareLayer from "./PosterShareLayer";
-import { EventDetail } from "@/types/events";
+import { EventDetail, PreviewEventDetail } from "@/types/events";
 import Link from "next/link";
 import { useLoading } from "@/hooks/useLoading";
 import InviteBottomSheet from "./InviteBottomSheet";
 
-export interface EventViewProps {
-  eventInfo: EventDetail;
+export interface CommonEventViewProps {
   preview?: boolean;
   onSignin?: (data: {
     username?: string;
@@ -50,10 +49,34 @@ export interface EventViewProps {
   onVerify?: (data: { phoneNumber: string }) => void;
   onPublish?: (eventId: number) => void;
 }
+export interface PreviewEventViewProps extends CommonEventViewProps {
+  preview: true;
+  eventInfo: PreviewEventDetail;
+}
+
+export interface GeneralEventViewProps extends CommonEventViewProps {
+  preview?: false;
+  eventInfo: EventDetail;
+  onSignin: (data: {
+    username?: string;
+    phoneNumber?: string;
+    code?: string;
+  }) => void;
+  onAttend: (data: {
+    id: number;
+    status: PrismaDBMainConstants.AttendanceStatus;
+    message?: string;
+    emoji: string;
+  }) => void;
+  onVerify: (data: { phoneNumber: string }) => void;
+  onPublish: (eventId: number) => void;
+}
+
+export type EventViewProps = PreviewEventViewProps | GeneralEventViewProps;
 
 const EventView = ({
-  eventInfo,
   preview,
+  eventInfo,
   onSignin,
   onAttend,
   onVerify,
@@ -74,14 +97,18 @@ const EventView = ({
 
     return undefined;
   }, [eventInfo.endDate, eventInfo.startDate]);
-  const isMyEvent = session.data?.user.id === eventInfo.authorId;
-  const isPublished = !!eventInfo.publishedAt;
-  const myAttendance = eventInfo.attendances.find(
-    (attendance) => attendance.userId === session.data?.user.id,
-  );
-  const myLatestActivity = eventInfo.activities.find(
-    (activity) => activity.userId === session.data?.user.id,
-  );
+  const isMyEvent = !preview && session.data?.user.id === eventInfo.authorId;
+  const isPublished = !preview && !!eventInfo.publishedAt;
+  const myAttendance = preview
+    ? undefined
+    : eventInfo.attendances.find(
+        (attendance) => attendance.userId === session.data?.user.id,
+      );
+  const myLatestActivity = preview
+    ? undefined
+    : eventInfo.activities.find(
+        (activity) => activity.userId === session.data?.user.id,
+      );
   const {
     show: showAttendDialog,
     handleShow: handleShowAttendDialog,
@@ -89,8 +116,12 @@ const EventView = ({
   } = useDisclosure();
 
   const handlePublish = async () => {
+    if (preview) {
+      return;
+    }
+
     return startLoading(async () => {
-      await onPublish?.(eventInfo.id);
+      await onPublish(eventInfo.id);
     });
   };
 
@@ -99,6 +130,10 @@ const EventView = ({
     message?: string;
     emoji: string;
   }) => {
+    if (preview) {
+      return;
+    }
+
     await onAttend?.({
       id: eventInfo.id,
       status: data.status,

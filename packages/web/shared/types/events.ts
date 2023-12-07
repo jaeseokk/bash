@@ -24,3 +24,14 @@ export interface EventDetail extends PrismaDBMainTypes.Event {
     };
   }[];
 }
+
+export type PreviewEventDetail = Pick<
+  EventDetail,
+  | "title"
+  | "coverImage"
+  | "startDate"
+  | "endDate"
+  | "authorName"
+  | "location"
+  | "description"
+>;

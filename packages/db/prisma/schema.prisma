@@ -93,7 +93,7 @@ model Event {
   endDate          DateTime? @map("end_date")
   location   String?    @db.VarChar(300)
   description     String?    @db.Text
-  coverImage       String?   @db.VarChar(300) @map(name: "cover_image")
+  coverImage       String   @db.VarChar(300) @map(name: "cover_image")
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int      @map(name: "author_id")
   authorName  String?   @map(name: "author_name")

@@ -12,7 +12,6 @@ import BottomSheet from "@/components/BottomSheet";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoginForm from "../../../(main)/signin/components/LoginForm";
-import { PrismaDBMainTypes } from "@bash/db";
 import Field from "@/components/Field";
 import { Input } from "@/components/ui/input";
 import { EventTitleInput } from "@/components/EventTitleInput";
@@ -24,9 +23,7 @@ import CrownIcon from "@/assets/crown_gradient.svg";
 import LocationIcon from "@/assets/location_gradient.svg";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
-import Layer from "@/components/Layer";
 import BottomSheet2 from "@/components/BottomSheet2";
-import Emoji from "@/components/Emoji";
 import PreviewLayer from "./PreviewLayer";
 
 const COVER_IMAGE_LIST = [
@@ -43,12 +40,12 @@ const COVER_IMAGE_LIST = [
 
 interface CreateEventFormData {
   title: string;
-  coverImage?: string | null;
-  startDate: Date | null;
-  endDate?: Date | null;
-  authorName?: string | null;
-  location?: string | null;
-  description?: string | null;
+  coverImage: string;
+  startDate: Date;
+  endDate: Date | null;
+  authorName: string | null;
+  location: string | null;
+  description: string | null;
 }
 
 export interface CreateEventFormProps {
@@ -321,11 +318,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
         onClose={() => {
           setCachedFormData(undefined);
         }}
-        eventInfo={{
-          ...cachedFormData,
-          attendances: [],
-          activities: [],
-        }}
+        eventInfo={cachedFormData}
       />
     </>
   );

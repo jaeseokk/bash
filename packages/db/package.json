@@ -15,7 +15,7 @@
     "prisma-db-push": "dotenv-flow -- prisma db push",
     "prisma-db-seed": "dotenv-flow -- prisma db seed",
     "prisma-migrate": "dotenv-flow -- prisma migrate",
-    "prisma-migrate-reset": "dotenv-flow -- pnpm run prisma migrate reset",
+    "prisma-migrate-reset": "dotenv-flow -- prisma migrate reset",
     "prisma-studio": "dotenv-flow -- pnpm run prisma studio",
     "typecheck": "tsc --project ./tsconfig.json --noEmit"
   },
