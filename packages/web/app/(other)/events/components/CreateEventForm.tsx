@@ -27,6 +27,7 @@ import FloatingArea from "@/components/FloatingArea";
 import Layer from "@/components/Layer";
 import BottomSheet2 from "@/components/BottomSheet2";
 import Emoji from "@/components/Emoji";
+import PreviewLayer from "./PreviewLayer";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -58,18 +59,26 @@ export interface CreateEventFormProps {
 const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   const session = useSession();
   const router = useRouter();
-  const { control, register, setValue, handleSubmit, watch, formState } =
-    useForm<CreateEventFormData>({
-      defaultValues: {
-        ...initialData,
-        coverImage: initialData?.coverImage ?? COVER_IMAGE_LIST[0],
-      },
-    });
+  const {
+    control,
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    watch,
+    formState,
+  } = useForm<CreateEventFormData>({
+    defaultValues: {
+      ...initialData,
+      coverImage: initialData?.coverImage ?? COVER_IMAGE_LIST[0],
+    },
+  });
   const { isSubmitting } = formState;
   const coverImage = watch("coverImage");
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
+  const [cachedFormData, setCachedFormData] = useState<CreateEventFormData>();
   const submit = async (data: CreateEventFormData) => {
     await onSubmit(data);
   };
@@ -240,7 +249,14 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
         <BottomButton.Root>
           <BottomButton.Item icon={<EffectIcon />}>꾸미기</BottomButton.Item>
           <BottomButton.Divider />
-          <BottomButton.Item icon={<PreviewIcon />}>미리보기</BottomButton.Item>
+          <BottomButton.Item
+            icon={<PreviewIcon />}
+            onClick={() => {
+              setCachedFormData(getValues());
+            }}
+          >
+            미리보기
+          </BottomButton.Item>
         </BottomButton.Root>
       </FloatingArea>
       <BottomSheet
@@ -300,6 +316,17 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           </div>
         </div>
       </BottomSheet2>
+      <PreviewLayer
+        open={!!cachedFormData}
+        onClose={() => {
+          setCachedFormData(undefined);
+        }}
+        eventInfo={{
+          ...cachedFormData,
+          attendances: [],
+          activities: [],
+        }}
+      />
     </>
   );
 };

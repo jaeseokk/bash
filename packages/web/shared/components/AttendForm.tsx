@@ -27,7 +27,7 @@ export interface AttendFormProps {
   defaultEmoji?: string;
   onSubmit: (data: AttendFormData) => void;
   onSubmitWithSign: (data: AttendFormData & { code?: string }) => void;
-  onVerify: (data: { phoneNumber: string }) => void;
+  onVerify?: (data: { phoneNumber: string }) => void;
   onCancel?: () => void;
 }
 
@@ -68,7 +68,7 @@ const AttendForm = ({
             data.phoneNumber &&
             data.username
           ) {
-            await onVerify({
+            await onVerify?.({
               phoneNumber: data.phoneNumber,
             });
             const codeResult = await verificationCodeDialogControl.start({

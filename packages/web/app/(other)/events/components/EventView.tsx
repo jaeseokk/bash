@@ -35,23 +35,25 @@ import InviteBottomSheet from "./InviteBottomSheet";
 
 export interface EventViewProps {
   eventInfo: EventDetail;
-  onSignin: (data: {
+  preview?: boolean;
+  onSignin?: (data: {
     username?: string;
     phoneNumber?: string;
     code?: string;
   }) => void;
-  onAttend: (data: {
+  onAttend?: (data: {
     id: number;
     status: PrismaDBMainConstants.AttendanceStatus;
     message?: string;
     emoji: string;
   }) => void;
-  onVerify: (data: { phoneNumber: string }) => void;
-  onPublish: (eventId: number) => void;
+  onVerify?: (data: { phoneNumber: string }) => void;
+  onPublish?: (eventId: number) => void;
 }
 
 const EventView = ({
   eventInfo,
+  preview,
   onSignin,
   onAttend,
   onVerify,
@@ -88,7 +90,7 @@ const EventView = ({
 
   const handlePublish = async () => {
     return startLoading(async () => {
-      await onPublish(eventInfo.id);
+      await onPublish?.(eventInfo.id);
     });
   };
 
@@ -97,7 +99,7 @@ const EventView = ({
     message?: string;
     emoji: string;
   }) => {
-    await onAttend({
+    await onAttend?.({
       id: eventInfo.id,
       status: data.status,
       message: data.message,
@@ -177,26 +179,32 @@ const EventView = ({
             <div className="text-[1.5rem]">{eventInfo.description}</div>
           </Block>
         )}
-        <Block>
-          <Divider />
-        </Block>
-        <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
-          <AttendeesStatus attendances={eventInfo.attendances} />
-          <ActivityStatus activities={eventInfo.activities} />
-        </div>
+        {!preview && (
+          <>
+            <Block>
+              <Divider />
+            </Block>
+            <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
+              <AttendeesStatus attendances={eventInfo.attendances} />
+              <ActivityStatus activities={eventInfo.activities} />
+            </div>
+          </>
+        )}
         <div className="mt-8 flex justify-center">
           <LetsLogo />
         </div>
-        <Block2 className="mt-[1.5rem]">
-          <Button variant="outline" asChild>
-            <Link href="/events/new">내 이벤트 직접 만들기</Link>
-          </Button>
-        </Block2>
+        {!preview && (
+          <Block2 className="mt-[1.5rem]">
+            <Button variant="outline" asChild>
+              <Link href="/events/new">내 이벤트 직접 만들기</Link>
+            </Button>
+          </Block2>
+        )}
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
             <ReplyRadioGroup
               value={myAttendance?.status}
-              disabled={isMyEvent}
+              disabled={isMyEvent || preview}
               onClick={() => {
                 if (isMyEvent) {
                   return;
@@ -207,7 +215,7 @@ const EventView = ({
             />
           </div>
         </Block2>
-        {isMyEvent && !isPublished && (
+        {isMyEvent && !isPublished && !preview && (
           <Block2 className="mb-[1.75rem]">
             <Button
               type="button"
@@ -221,48 +229,50 @@ const EventView = ({
           </Block2>
         )}
       </div>
-      <FloatingArea>
-        <BottomButton.Root>
-          {isMyEvent && (
-            <>
-              <BottomButton.Item
-                icon={<Edit2Icon />}
-                onClick={() => {
-                  router.push(`/events/${eventInfo.slug}/edit`);
-                }}
-              >
-                이벤트 수정
-              </BottomButton.Item>
-              <BottomButton.Divider />
-            </>
-          )}
-          {isMyEvent && (
-            <>
-              <BottomButton.Item icon={<NoticeIcon />}>
-                공지하기
-              </BottomButton.Item>
-              <BottomButton.Divider />
-            </>
-          )}
-          <InviteBottomSheet
-            url={`https://lets.run/events/${eventInfo.slug}`}
-            trigger={
-              <BottomButton.Item icon={<InviteIcon />}>
-                초대하기
-              </BottomButton.Item>
-            }
-          />
-          <BottomButton.Divider />
-          <PosterShareLayer
-            trigger={
-              <BottomButton.Item icon={<PosterIcon />}>
-                포스터 공유
-              </BottomButton.Item>
-            }
-            eventInfo={eventInfo}
-          />
-        </BottomButton.Root>
-      </FloatingArea>
+      {!preview && (
+        <FloatingArea>
+          <BottomButton.Root>
+            {isMyEvent && (
+              <>
+                <BottomButton.Item
+                  icon={<Edit2Icon />}
+                  onClick={() => {
+                    router.push(`/events/${eventInfo.slug}/edit`);
+                  }}
+                >
+                  이벤트 수정
+                </BottomButton.Item>
+                <BottomButton.Divider />
+              </>
+            )}
+            {isMyEvent && (
+              <>
+                <BottomButton.Item icon={<NoticeIcon />}>
+                  공지하기
+                </BottomButton.Item>
+                <BottomButton.Divider />
+              </>
+            )}
+            <InviteBottomSheet
+              url={`https://lets.run/events/${eventInfo.slug}`}
+              trigger={
+                <BottomButton.Item icon={<InviteIcon />}>
+                  초대하기
+                </BottomButton.Item>
+              }
+            />
+            <BottomButton.Divider />
+            <PosterShareLayer
+              trigger={
+                <BottomButton.Item icon={<PosterIcon />}>
+                  포스터 공유
+                </BottomButton.Item>
+              }
+              eventInfo={eventInfo}
+            />
+          </BottomButton.Root>
+        </FloatingArea>
+      )}
       <BottomSheet2
         title={"참석여부 답하기"}
         open={showAttendDialog}
@@ -273,7 +283,7 @@ const EventView = ({
           defaultEmoji={myLatestActivity?.emoji}
           onSubmit={handleAttend}
           onSubmitWithSign={async (data) => {
-            await onSignin({
+            await onSignin?.({
               username: data.username,
               phoneNumber: data.phoneNumber,
               code: data.code,
