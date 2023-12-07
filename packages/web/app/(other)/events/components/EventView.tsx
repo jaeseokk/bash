@@ -250,19 +250,6 @@ const EventView = ({
             />
           </div>
         </Block2>
-        {isMyEvent && !isPublished && !preview && (
-          <Block2 className="mb-[1.75rem]">
-            <Button
-              type="button"
-              variant="highlight"
-              className="w-full"
-              onClick={handlePublish}
-              pending={loading}
-            >
-              이벤트 오픈하기
-            </Button>
-          </Block2>
-        )}
       </div>
       {!preview && (
         <FloatingArea>
@@ -306,6 +293,17 @@ const EventView = ({
               eventInfo={eventInfo}
             />
           </BottomButton.Root>
+          {isMyEvent && !isPublished && !preview && (
+            <Button
+              type="button"
+              variant="highlight"
+              className="w-full rounded-none"
+              onClick={handlePublish}
+              pending={loading}
+            >
+              이벤트 오픈하기
+            </Button>
+          )}
         </FloatingArea>
       )}
       <BottomSheet2

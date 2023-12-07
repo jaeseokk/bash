@@ -241,26 +241,24 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
             {...register("description")}
           />
         </Block>
-        <Block className="mb-[2.7rem] mt-[2.625rem]">
-          <Button className="w-full" pending={isSubmitting}>
+        <FloatingArea className="mt-9">
+          <BottomButton.Root>
+            <BottomButton.Item icon={<EffectIcon />}>꾸미기</BottomButton.Item>
+            <BottomButton.Divider />
+            <BottomButton.Item
+              icon={<PreviewIcon />}
+              onClick={() => {
+                setCachedFormData(getValues());
+              }}
+            >
+              미리보기
+            </BottomButton.Item>
+          </BottomButton.Root>
+          <Button className="w-full rounded-none" pending={isSubmitting}>
             저장하기
           </Button>
-        </Block>
+        </FloatingArea>
       </form>
-      <FloatingArea>
-        <BottomButton.Root>
-          <BottomButton.Item icon={<EffectIcon />}>꾸미기</BottomButton.Item>
-          <BottomButton.Divider />
-          <BottomButton.Item
-            icon={<PreviewIcon />}
-            onClick={() => {
-              setCachedFormData(getValues());
-            }}
-          >
-            미리보기
-          </BottomButton.Item>
-        </BottomButton.Root>
-      </FloatingArea>
       <BottomSheet
         isOpen={showCoverImageBottomSheet}
         onClose={() => {

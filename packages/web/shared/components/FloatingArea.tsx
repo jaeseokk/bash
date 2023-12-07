@@ -1,11 +1,17 @@
+import { cn } from "@/lib/utils";
 import * as React from "react";
 
 interface FloatingAreaProps {
+  className?: string;
   children: React.ReactNode;
 }
 
-const FloatingArea = ({ children }: FloatingAreaProps) => {
-  return <div className="sticky bottom-0 left-0 right-0">{children}</div>;
+const FloatingArea = ({ className, children }: FloatingAreaProps) => {
+  return (
+    <div className={cn("sticky bottom-0 left-0 right-0", className)}>
+      {children}
+    </div>
+  );
 };
 
 export default FloatingArea;

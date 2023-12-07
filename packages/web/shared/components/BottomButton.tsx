@@ -20,6 +20,7 @@ const BottomButtonItem = ({
 }: BottomButtonItemProps) => {
   return (
     <button
+      type="button"
       className="flex h-[4.25rem] flex-1 flex-col items-center justify-between bg-transparent py-3.5 font-bold"
       {...props}
     >
