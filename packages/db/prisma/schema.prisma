@@ -16,75 +16,6 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
-enum UserPermissionRole {
-  ADMIN @map("admin")
-  USER  @map("user")
-}
-
-enum AttendanceStatus {
-  ATTENDING @map("attending")
-  NOT_ATTENDING @map("not_attending")
-  MAYBE @map("maybe")
-}
-
-model User {
-  id          Int                @id @default(autoincrement())
-  phoneNumber String             @unique @db.Text
-  username    String             @db.Text
-  role        UserPermissionRole @default(USER)
-  password    String?            @db.Text
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  accounts    Account[]
-  sessions    Session[]
-
-  attendances Attendance[]
-  events Event[]
-  activities Activity[]
-
-  @@map("users")
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            Int
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("auth_accounts")
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique @db.Text
-  userId       Int
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("auth_sessions")
-}
-
-model VerificationToken {
-  id         Int      @id @default(autoincrement())
-  identifier String   @db.Text
-  token      String   @unique @db.Text
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("auth_verification_tokens")
-}
-
 model Event {
   id          Int       @id @default(autoincrement())
   slug        String    @unique
@@ -137,4 +68,75 @@ model Activity {
   attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
 
   @@map(name: "event_activities")
+}
+
+enum UserPermissionRole {
+  ADMIN @map("admin")
+  USER  @map("user")
+}
+
+enum AttendanceStatus {
+  ATTENDING @map("attending")
+  NOT_ATTENDING @map("not_attending")
+  MAYBE @map("maybe")
+}
+
+model User {
+  id          Int                @id @default(autoincrement())
+  phoneNumber String             @unique @db.Text
+  username    String             @db.Text
+  role        UserPermissionRole @default(USER)
+  password    String?            @db.Text
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  instagram   String?            @db.Text
+  twitter   String?            @db.Text
+
+  accounts    Account[]
+  sessions    Session[]
+  attendances Attendance[]
+  events Event[]
+  activities Activity[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("auth_accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @db.Text
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_sessions")
+}
+
+model VerificationToken {
+  id         Int      @id @default(autoincrement())
+  identifier String   @db.Text
+  token      String   @unique @db.Text
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("auth_verification_tokens")
 }
