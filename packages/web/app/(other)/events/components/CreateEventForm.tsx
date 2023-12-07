@@ -25,6 +25,8 @@ import CalendarIcon from "@/assets/calendar_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
 import BottomSheet2 from "@/components/BottomSheet2";
 import PreviewLayer from "./PreviewLayer";
+import { Player } from "@lottiefiles/react-lottie-player";
+import heart from "@/assets/heart.json";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -106,6 +108,9 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           />
         </div>
       )}
+      {/*<div className="fixed inset-0">*/}
+      {/*  <Player src={heart} autoplay loop />*/}
+      {/*</div>*/}
       <form
         className=""
         onSubmit={handleSubmit(

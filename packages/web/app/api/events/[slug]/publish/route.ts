@@ -5,22 +5,19 @@ import { getPrismaClientDbMain } from "@/server/prisma";
 
 const prisma = getPrismaClientDbMain();
 
-const PublishEventInputSchema = z.object({
-  id: z.number(),
-});
-
-export async function PUT(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+  { params: { slug } }: { params: { slug: string } },
+) {
   const session = await getServerSession();
 
   if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const input = PublishEventInputSchema.parse(await request.json());
-
   const res = await prisma.event.update({
     where: {
-      id: input.id,
+      slug,
     },
     data: {
       publishedAt: new Date(),

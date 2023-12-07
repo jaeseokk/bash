@@ -34,6 +34,7 @@ export default function LoginPage({
             });
           }}
           onCallback={() => {
+            console.log("?");
             router.replace(callbackUrl ?? "/");
           }}
         />

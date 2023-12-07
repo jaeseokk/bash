@@ -37,7 +37,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
       <EventView
         eventInfo={data}
         onPublish={async (eventId) => {
-          await ky.post(`/api/events/${eventId}/publish`);
+          await ky.put(`/api/events/${eventId}/publish`);
           await refetch();
         }}
         onVerify={async ({ phoneNumber }) => {

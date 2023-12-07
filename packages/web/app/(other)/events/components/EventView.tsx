@@ -47,7 +47,7 @@ export interface CommonEventViewProps {
     emoji: string;
   }) => void;
   onVerify?: (data: { phoneNumber: string }) => void;
-  onPublish?: (eventId: number) => void;
+  onPublish?: (slug: string) => void;
 }
 export interface PreviewEventViewProps extends CommonEventViewProps {
   preview: true;
@@ -69,7 +69,7 @@ export interface GeneralEventViewProps extends CommonEventViewProps {
     emoji: string;
   }) => void;
   onVerify: (data: { phoneNumber: string }) => void;
-  onPublish: (eventId: number) => void;
+  onPublish: (slug: string) => void;
 }
 
 export type EventViewProps = PreviewEventViewProps | GeneralEventViewProps;
@@ -121,7 +121,7 @@ const EventView = ({
     }
 
     return startLoading(async () => {
-      await onPublish(eventInfo.id);
+      await onPublish(eventInfo.slug);
     });
   };
 
