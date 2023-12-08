@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { PrismaDBMainTypes } from "@bash/db";
 import { useRouter } from "next/navigation";
+import LoadingLayer from "@/components/LoadingLayer";
 
 const kyInstance = ky.create({});
 
@@ -21,7 +22,7 @@ const EventNewPage = ({ params: { slug } }: EventNewPageProps) => {
 
   return (
     <main className="pt-4">
-      <Suspense fallback={null}>
+      <Suspense fallback={<LoadingLayer />}>
         <CreateEventFormContainer slug={slug} />
       </Suspense>
     </main>
