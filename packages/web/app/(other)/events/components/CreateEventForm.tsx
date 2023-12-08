@@ -128,22 +128,12 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
         )}
       >
         <Block className="mb-[3.125rem]">
-          <Controller
-            name="title"
-            control={control}
-            rules={{
+          <EventTitleInput
+            placeholder="이벤트 이름을 적어주세요"
+            minRows={1}
+            {...register("title", {
               required: true,
-            }}
-            render={({ field: { value, onChange, ref } }) => (
-              <EventTitleInput
-                placeholder="이벤트 이름을 적어주세요"
-                value={value}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-                ref={ref}
-              />
-            )}
+            })}
           />
         </Block>
         <Block className="mb-[3.125rem]">
@@ -228,6 +218,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           </Field>
           <Field labelIcon={<LocationIcon />} label="장소 위치 & 주소">
             <AutosizeTextarea
+              className="resize-none"
               placeholder="장소 위치, 주소, 링크"
               minRows={1}
               {...register("location")}
