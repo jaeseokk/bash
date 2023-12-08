@@ -25,7 +25,7 @@ const MainFeed = ({}: MainFeedProps) => {
   return (
     <div>
       <div className="mx-auto max-w-[750px]">
-        <h2 className="mb-4 px-8 text-[2.8125rem] text-xl font-bold leading-[1.2]">
+        <h2 className="mb-4 px-8 text-[2.8125rem] font-bold leading-[1.2]">
           Welcome back {session.data?.user?.name}!
         </h2>
         <Suspense fallback={<MyEventsSkeleton />}>

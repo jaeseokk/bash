@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import ky from "ky";
 import { EventItem } from "@/types/events";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface MyEventsProps {}
 
@@ -23,8 +24,8 @@ const MyEvents = ({}: MyEventsProps) => {
       <div className="px-8">
         <strong>{data.length}개</strong>의 이벤트가 있습니다.
       </div>
-      <div className="mt-4 w-full overflow-x-auto">
-        <ul className="flex items-center space-x-4 px-8 pb-2 after:block after:h-full after:w-8 after:flex-none after:opacity-0 after:content-['.']">
+      <ScrollArea className="mt-4 w-full">
+        <ul className="flex items-center space-x-4 px-8 pb-4 after:block after:h-full after:w-8 after:flex-none after:opacity-0 after:content-['.']">
           {data.map((event) => (
             <li key={event.id} className="flex-none">
               <Link href={`/events/${event.slug}`}>
@@ -78,7 +79,8 @@ const MyEvents = ({}: MyEventsProps) => {
             </li>
           ))}
         </ul>
-      </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 };
