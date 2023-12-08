@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { cn, shimmer, toBase64 } from "@/utils";
+import { cn, formatDate, shimmer, toBase64 } from "@/utils";
 import { PrismaDBMainConstants } from "@bash/db";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -88,12 +88,11 @@ const EventView = ({
   const router = useRouter();
   const dateDisplay = useMemo(() => {
     if (eventInfo.startDate && eventInfo.endDate) {
-      return `${format(new Date(eventInfo.startDate), "PPP")} ~ ${format(
-        new Date(eventInfo.endDate),
-        "PPP",
+      return `${formatDate(eventInfo.startDate)} ~ ${formatDate(
+        eventInfo.endDate,
       )}`;
     } else if (eventInfo.startDate) {
-      return format(new Date(eventInfo.startDate), "PPP");
+      return formatDate(eventInfo.startDate);
     }
 
     return undefined;
