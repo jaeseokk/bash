@@ -122,12 +122,14 @@ const LoginForm = ({
           <h1 className="text-3xl font-bold">Sign In</h1>
         </div>
         <div className="space-y-2">
-          <Field label="이름">
-            <Input
-              placeholder="홍길동"
-              {...register("username", { required: true })}
-            />
-          </Field>
+          {showNameFieldForInitial && (
+            <Field label="이름">
+              <Input
+                placeholder="홍길동"
+                {...register("username", { required: true })}
+              />
+            </Field>
+          )}
           <Field label="전화번호">
             <NumericInput
               placeholder="010-0000-0000"

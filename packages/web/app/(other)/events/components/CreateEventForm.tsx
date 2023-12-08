@@ -272,6 +272,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
         <div className="px-4 pb-10 pt-10">
           <div className="mt-4">
             <LoginForm
+              showNameFieldForInitial
               onSubmit={async (data) => {
                 return signIn("credentials", {
                   redirect: false,
