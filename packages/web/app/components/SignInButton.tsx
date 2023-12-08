@@ -18,7 +18,7 @@ const SignInButton = ({}: SignInButtonProps) => {
   }
 
   if (session.status === "authenticated") {
-    return <AvatarButton />;
+    return <AvatarButton user={session.data.user} />;
   }
 
   return (

@@ -15,10 +15,18 @@ import { signOut } from "next-auth/react";
 import MyProfileLayer from "@/components/MyProfileLayer";
 import { useState } from "react";
 import { useDisclosure } from "@/hooks/useDisclosure";
+import ProfileAvatar from "@/components/ProfileAvatar";
 
-export interface AvatarButtonProps {}
+export interface AvatarButtonProps {
+  user: {
+    id: number;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+}
 
-const AvatarButton = ({}: AvatarButtonProps) => {
+const AvatarButton = ({ user }: AvatarButtonProps) => {
   const {
     show: showProfileLayer,
     handleShow: handleShowProfileLayer,
@@ -29,12 +37,7 @@ const AvatarButton = ({}: AvatarButtonProps) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage />
-            <AvatarFallback>
-              <AvatarFallbackIcon />
-            </AvatarFallback>
-          </Avatar>
+          <ProfileAvatar size="2rem" name={user?.name} />
         </DropdownMenuTrigger>
         <DropdownMenuContent avoidCollisions>
           <DropdownMenuItem onClick={handleShowProfileLayer}>

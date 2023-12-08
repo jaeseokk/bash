@@ -4,6 +4,22 @@ import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { getServerSession } from "@/server/auth";
 import { getPrismaClientDbMain } from "@/server/prisma";
+import { getMyEvents } from "@/server/events";
+
+const prisma = getPrismaClientDbMain();
+
+export async function GET(request: NextRequest) {
+  try {
+    const res = await getMyEvents();
+
+    return NextResponse.json(res, { status: 200 });
+  } catch (e) {
+    if ((e as Error).message === "Unauthorized") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    throw e;
+  }
+}
 
 const CreateEventInputSchema = z.object({
   title: z.string(),
@@ -16,8 +32,6 @@ const CreateEventInputSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const prisma = getPrismaClientDbMain();
-
   const input = CreateEventInputSchema.parse(await request.json());
 
   const session = await getServerSession();

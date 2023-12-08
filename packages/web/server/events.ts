@@ -80,7 +80,26 @@ export const getMyEvents = async () => {
 
   const events = await prisma.event.findMany({
     where: {
-      authorId: session.user.id,
+      OR: [
+        {
+          authorId: session.user.id,
+        },
+        {
+          attendances: {
+            some: {
+              userId: session.user.id,
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+        },
+      },
     },
   });
 

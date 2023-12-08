@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -119,4 +120,19 @@ export const formatDistanceToNowInKorean = (date: Date) => {
   }
 
   return `${Math.floor(betweenTimeDay / 365)}년전`;
+};
+
+export const formatDate = (date: Date | string | null | undefined) => {
+  if (!date) {
+    return "";
+  }
+
+  const dateObj = date instanceof Date ? date : new Date(date);
+  const now = new Date();
+
+  if (now.getFullYear() === dateObj.getFullYear()) {
+    return format(dateObj, "M월d일 H:mm a");
+  }
+
+  return format(dateObj, "yyyy년 M월d일 H:mm a");
 };

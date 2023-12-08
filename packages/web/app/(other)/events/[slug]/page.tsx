@@ -13,9 +13,7 @@ export interface EventPageProps {
 const EventPage = async ({ params: { slug } }: EventPageProps) => {
   return (
     <main className="pt-4">
-      <Suspense fallback={null}>
-        <EventViewContainer slug={slug} />
-      </Suspense>
+      <EventViewContainer slug={slug} />
       <AttendConfirmLayer />
       <MyProfileLayer />
     </main>

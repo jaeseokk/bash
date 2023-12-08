@@ -7,6 +7,7 @@ import ky from "ky";
 import { EventDetail } from "@/types/events";
 import { signIn, useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
+import LoadingLayer from "@/components/LoadingLayer";
 
 export interface EventViewContainerProps {
   slug: string;
@@ -29,7 +30,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
   }
 
   if (!data) {
-    return null;
+    return <LoadingLayer />;
   }
 
   return (

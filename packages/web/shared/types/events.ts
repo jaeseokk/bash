@@ -1,5 +1,12 @@
 import { PrismaDBMainTypes } from "@bash/db";
 
+export interface EventItem extends PrismaDBMainTypes.Event {
+  author: {
+    id: number;
+    username: string;
+  };
+}
+
 export interface EventDetail extends PrismaDBMainTypes.Event {
   attendances: {
     id: number;
