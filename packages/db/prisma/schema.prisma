@@ -91,6 +91,7 @@ model User {
   updatedAt   DateTime           @updatedAt
   instagram   String?            @db.Text
   twitter   String?            @db.Text
+  description String?            @db.Text
 
   accounts    Account[]
   sessions    Session[]

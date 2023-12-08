@@ -62,15 +62,15 @@ export interface GeneralEventViewProps extends CommonEventViewProps {
     username?: string;
     phoneNumber?: string;
     code?: string;
-  }) => void;
+  }) => Promise<void>;
   onAttend: (data: {
     id: number;
     status: PrismaDBMainConstants.AttendanceStatus;
     message?: string;
     emoji: string;
-  }) => void;
-  onVerify: (data: { phoneNumber: string }) => void;
-  onPublish: (slug: string) => void;
+  }) => Promise<void>;
+  onVerify: (data: { phoneNumber: string }) => Promise<void>;
+  onPublish: (slug: string) => Promise<void>;
 }
 
 export type EventViewProps = PreviewEventViewProps | GeneralEventViewProps;
@@ -147,17 +147,17 @@ const EventView = ({
 
   return (
     <>
-      <div className="absolute inset-0 h-full overflow-hidden">
-        <Sticker index={1} />
-        <Sticker index={2} />
-        <Sticker index={3} />
-        <Sticker index={4} />
-        <Sticker index={5} />
-        <Sticker index={6} />
-        <Sticker index={7} />
-        <Sticker index={8} />
-        <Sticker index={9} />
-      </div>
+      {/*<div className="absolute inset-0 h-full overflow-hidden">*/}
+      {/*  <Sticker index={1} />*/}
+      {/*  <Sticker index={2} />*/}
+      {/*  <Sticker index={3} />*/}
+      {/*  <Sticker index={4} />*/}
+      {/*  <Sticker index={5} />*/}
+      {/*  <Sticker index={6} />*/}
+      {/*  <Sticker index={7} />*/}
+      {/*  <Sticker index={8} />*/}
+      {/*  <Sticker index={9} />*/}
+      {/*</div>*/}
       <div>
         {eventInfo.coverImage && (
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">

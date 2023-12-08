@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 export interface LayerProps
   extends React.ComponentPropsWithoutRef<typeof Sheet> {
@@ -60,11 +61,12 @@ const Layer = ({
 };
 
 interface LayerContentProps {
+  className?: string;
   children?: React.ReactNode;
 }
 
-export const LayerContent = ({ children }: LayerContentProps) => {
-  return <div className="px-9 pb-9">{children}</div>;
+export const LayerContent = ({ className, children }: LayerContentProps) => {
+  return <div className={cn("px-9 pb-9", className)}>{children}</div>;
 };
 
 interface LayerContentWithScrollAreaProps {

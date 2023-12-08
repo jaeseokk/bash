@@ -1,6 +1,6 @@
 import * as React from "react";
 import AttendConfirmLayer from "../components/AttendConfirmLayer";
-import ProfileLayer from "@/components/ProfileLayer";
+import MyProfileLayer from "@/components/MyProfileLayer";
 import EventViewContainer from "../components/EventViewContainer";
 import { Suspense } from "react";
 
@@ -17,7 +17,7 @@ const EventPage = async ({ params: { slug } }: EventPageProps) => {
         <EventViewContainer slug={slug} />
       </Suspense>
       <AttendConfirmLayer />
-      <ProfileLayer />
+      <MyProfileLayer />
     </main>
   );
 };
