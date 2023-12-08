@@ -34,6 +34,7 @@ import { useLoading } from "@/hooks/useLoading";
 import InviteBottomSheet from "./InviteBottomSheet";
 import Sticker from "@/components/Sticker";
 import EventBackground from "@/components/EventBackground";
+import { useAlertDialog } from "@/components/AlertDialogProvider";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -85,6 +86,7 @@ const EventView = ({
   onPublish,
 }: EventViewProps) => {
   const [loading, startLoading] = useLoading();
+  const { openDialog } = useAlertDialog();
   const session = useSession();
   const router = useRouter();
   const dateDisplay = useMemo(() => {
@@ -261,7 +263,18 @@ const EventView = ({
             )}
             {isMyEvent && (
               <>
-                <BottomButton.Item icon={<NoticeIcon />}>
+                <BottomButton.Item
+                  icon={<NoticeIcon />}
+                  onClick={(e) => {
+                    if (!isPublished) {
+                      openDialog({
+                        title: "이벤트를 오픈하면 사용할 수 있는 기능이에요.",
+                        hideCancel: true,
+                      });
+                      e.preventDefault();
+                    }
+                  }}
+                >
                   공지하기
                 </BottomButton.Item>
                 <BottomButton.Divider />
@@ -270,7 +283,18 @@ const EventView = ({
             <InviteBottomSheet
               url={`https://lets.run/events/${eventInfo.slug}`}
               trigger={
-                <BottomButton.Item icon={<InviteIcon />}>
+                <BottomButton.Item
+                  icon={<InviteIcon />}
+                  onClick={(e) => {
+                    if (!isPublished) {
+                      openDialog({
+                        title: "이벤트를 오픈하면 사용할 수 있는 기능이에요.",
+                        hideCancel: true,
+                      });
+                      e.preventDefault();
+                    }
+                  }}
+                >
                   초대하기
                 </BottomButton.Item>
               }
@@ -278,7 +302,18 @@ const EventView = ({
             <BottomButton.Divider />
             <PosterShareLayer
               trigger={
-                <BottomButton.Item icon={<PosterIcon />}>
+                <BottomButton.Item
+                  icon={<PosterIcon />}
+                  onClick={(e) => {
+                    if (!isPublished) {
+                      openDialog({
+                        title: "이벤트를 오픈하면 사용할 수 있는 기능이에요.",
+                        hideCancel: true,
+                      });
+                      e.preventDefault();
+                    }
+                  }}
+                >
                   포스터 공유
                 </BottomButton.Item>
               }
