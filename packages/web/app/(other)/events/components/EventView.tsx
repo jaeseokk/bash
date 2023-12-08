@@ -35,6 +35,7 @@ import InviteBottomSheet from "./InviteBottomSheet";
 import Sticker from "@/components/Sticker";
 import EventBackground from "@/components/EventBackground";
 import { useAlertDialog } from "@/components/AlertDialogProvider";
+import Linkify from "linkify-react";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -214,12 +215,14 @@ const EventView = ({
           </div>
         </Block>
         <Block className="mb-6 space-y-2">
-          <ViewField icon={<LocationIcon />}>{eventInfo.location}</ViewField>
+          <ViewField icon={<LocationIcon />}>
+            <Linkify>{eventInfo.location}</Linkify>
+          </ViewField>
         </Block>
         {eventInfo.description && (
           <Block>
-            <div className="whitespace-pre-wrap text-[1.5rem]">
-              {eventInfo.description}
+            <div className="whitespace-pre-wrap text-[1.5rem] [&_a]:underline">
+              <Linkify>{eventInfo.description}</Linkify>
             </div>
           </Block>
         )}

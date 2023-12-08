@@ -11,7 +11,7 @@ const ViewField = ({ icon, children, size = "sm" }: ViewFieldProps) => {
   return (
     <div
       className={cn(
-        `inline-flex items-center text-base`,
+        `inline-flex items-center text-base [&_a]:underline`,
         size === "lg" && "text-[1.75rem]",
       )}
     >
