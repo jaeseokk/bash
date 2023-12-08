@@ -44,7 +44,7 @@ const MyProfileLayer = ({ ...props }: MyProfileLayerProps) => {
   const { isSubmitting, isDirty } = formState;
 
   return (
-    <Layer title="프로필" {...props}>
+    <Layer title="프로필" disableAutoFocus {...props}>
       <LayerContent className="h-full overflow-auto">
         <form
           className="flex h-full flex-col justify-between"

@@ -15,8 +15,10 @@ export interface LayerProps
   extends React.ComponentPropsWithoutRef<typeof Sheet> {
   title?: React.ReactNode;
   hideCloseButton?: boolean;
+  disableAutoFocus?: boolean;
   trigger?: React.ReactNode;
   onClose?: () => void;
+  autoFocus?: boolean;
 }
 
 const Layer = ({
@@ -25,6 +27,7 @@ const Layer = ({
   hideCloseButton,
   trigger,
   onClose,
+  disableAutoFocus,
   ...props
 }: LayerProps) => {
   return (
@@ -33,6 +36,11 @@ const Layer = ({
       <SheetContent
         className="flex h-full flex-col"
         side="bottom"
+        onOpenAutoFocus={(e) => {
+          if (disableAutoFocus) {
+            e.preventDefault();
+          }
+        }}
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
