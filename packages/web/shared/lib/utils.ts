@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -122,6 +123,10 @@ export const formatDistanceToNowInKorean = (date: Date) => {
   return `${Math.floor(betweenTimeDay / 365)}년전`;
 };
 
+export const replaceToAMPM = (dateStr: string) => {
+  return dateStr.replace("오전", "AM").replace("오후", "PM");
+};
+
 export const formatDate = (date: Date | string | null | undefined) => {
   if (!date) {
     return "";
@@ -131,10 +136,10 @@ export const formatDate = (date: Date | string | null | undefined) => {
   const now = new Date();
 
   if (now.getFullYear() === dateObj.getFullYear()) {
-    return format(dateObj, "M월d일 H:mm a");
+    return replaceToAMPM(format(dateObj, "M월 d일(E) hh:mm a", { locale: ko }));
   }
 
-  return format(dateObj, "yyyy년 M월d일 H:mm a");
+  return replaceToAMPM(format(dateObj, "yyyy년 M월 d일(E) hh:mm a"));
 };
 
 export const getFullUrl = (pathProp: string) => {

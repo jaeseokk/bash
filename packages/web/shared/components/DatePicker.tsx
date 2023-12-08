@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import RemoveButton from "@/components/RemoveButton";
 import { set } from "date-fns";
 import BottomSheet2 from "@/components/BottomSheet2";
+import { formatDate } from "@/utils";
 
 const TIME_OPTIONS = [
   ...Array.from({ length: 24 })
@@ -58,9 +59,8 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
       return undefined;
     }
 
-    return format(startDateState, "PPP");
+    return formatDate(startDateState);
   }, [startDateState]);
-  const [openTimeSelect, setOpenTimeSelect] = useState(false);
   const handleChangeSingleDate = (date: Date | undefined) => {
     if (!date) {
       return;
@@ -68,7 +68,11 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
 
     setStartDateState((prev) => {
       if (!prev) {
-        return date;
+        return set(date, {
+          hours: 19,
+          minutes: 0,
+          seconds: 0,
+        });
       }
 
       return set(prev, {
@@ -78,7 +82,6 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
       });
     });
     setIsRange(false);
-    setOpenTimeSelect(true);
   };
   const calendarProps = {
     mode: "single" as const,
@@ -123,10 +126,10 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
         <div>
           <div className="flex h-10 items-center justify-center">
             {startDateState ? (
-              <div className="flex w-[20rem] items-center justify-center">
+              <div className="flex items-center justify-center">
                 <div className="flex items-center justify-between">
                   <span className="flex-1 text-center">
-                    {format(startDateState, "yyyy-MM-dd HH:mm")}
+                    {formatDate(startDateState)}
                   </span>
                   <RemoveButton
                     className="ml-4 flex-none"
@@ -145,38 +148,41 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
             {...calendarProps}
             initialFocus
             footer={
-              <div className="mt-4">
-                <Select
-                  value={timeValue}
-                  onValueChange={(value) => {
-                    if (!value) {
-                      return;
-                    }
+              <div className="mt-4 h-9">
+                {startDateState && (
+                  <Select
+                    defaultValue={"19:00:00"}
+                    value={timeValue}
+                    onValueChange={(value) => {
+                      if (!value) {
+                        return;
+                      }
 
-                    const [hour, minute, second] = value.split(":");
+                      const [hour, minute, second] = value.split(":");
 
-                    if (startDateState) {
-                      setStartDateState(
-                        set(startDateState, {
-                          hours: Number(hour),
-                          minutes: Number(minute),
-                          seconds: Number(second),
-                        }),
-                      );
-                    }
-                  }}
-                >
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="시간을 선택하세요" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    {TIME_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                      if (startDateState) {
+                        setStartDateState(
+                          set(startDateState, {
+                            hours: Number(hour),
+                            minutes: Number(minute),
+                            seconds: Number(second),
+                          }),
+                        );
+                      }
+                    }}
+                  >
+                    <SelectTrigger id="framework">
+                      <SelectValue placeholder="시간을 선택하세요" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      {TIME_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             }
           />
