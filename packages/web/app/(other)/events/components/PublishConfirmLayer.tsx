@@ -34,7 +34,13 @@ const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
         <div className="flex h-full flex-col justify-between">
           <div className="flex h-full flex-col items-center justify-center space-y-8 pb-20">
             <div>
-              <Image src={confirmImage} height={164} width={164} alt="" />
+              <Image
+                src={confirmImage}
+                height={164}
+                width={164}
+                alt=""
+                placeholder="blur"
+              />
             </div>
             <div className="text-center text-[1.625rem] font-bold">
               <p>이벤트가 오픈되었어요!</p>

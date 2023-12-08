@@ -11,6 +11,9 @@ import LoadingLayer from "@/components/LoadingLayer";
 import PublishConfirmLayer from "./PublishConfirmLayer";
 import { getFullUrl } from "@/utils";
 import { useDialogControl } from "@/hooks/useDialogControl";
+import AttendConfirmLayer from "./AttendConfirmLayer";
+import { useState } from "react";
+import MyProfileLayer from "@/components/MyProfileLayer";
 
 export interface EventViewContainerProps {
   slug: string;
@@ -27,7 +30,9 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
     },
     enabled: session.status !== "loading",
   });
-  const confirmDialogControl = useDialogControl();
+  const publishConfirmDialogControl = useDialogControl();
+  const attendConfirmDialogControl = useDialogControl();
+  const profileDialogControl = useDialogControl();
 
   if (error) {
     return notFound();
@@ -44,10 +49,10 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
         onPublish={async (eventId) => {
           await ky.put(`/api/events/${eventId}/publish`);
           await refetch();
-          await confirmDialogControl.start();
+          await publishConfirmDialogControl.start();
         }}
         onVerify={async ({ phoneNumber }) => {
-          await ky.post(`/api/events/${slug}/verify`, {
+          await ky.post(`/api/user/verify`, {
             json: {
               phoneNumber,
             },
@@ -65,11 +70,28 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
           });
           await refetch();
         }}
+        onAttendCallback={async (data) => {
+          if (data.isFirst) {
+            await attendConfirmDialogControl.start();
+
+            if (data.withSignUp) {
+              await profileDialogControl.start();
+            }
+          }
+        }}
       />
       <PublishConfirmLayer
-        open={confirmDialogControl.show}
+        open={publishConfirmDialogControl.show}
         url={getFullUrl(`/events/${data.slug}`)}
-        onClose={confirmDialogControl.onCancel}
+        onClose={publishConfirmDialogControl.onCancel}
+      />
+      <AttendConfirmLayer
+        open={attendConfirmDialogControl.show}
+        onClose={attendConfirmDialogControl.onCancel}
+      />
+      <MyProfileLayer
+        open={profileDialogControl.show}
+        onClose={profileDialogControl.onCancel}
       />
     </>
   );

@@ -6,7 +6,7 @@ import { cn, formatDate, shimmer, toBase64 } from "@/utils";
 import { PrismaDBMainConstants } from "@bash/db";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import ViewField from "@/components/ViewField";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
@@ -51,6 +51,10 @@ export interface CommonEventViewProps {
   }) => void;
   onVerify?: (data: { phoneNumber: string }) => void;
   onPublish?: (slug: string) => void;
+  onAttendCallback?: (data: {
+    isFirst?: boolean;
+    withSignUp?: boolean;
+  }) => void;
 }
 export interface PreviewEventViewProps extends CommonEventViewProps {
   preview: true;
@@ -73,6 +77,10 @@ export interface GeneralEventViewProps extends CommonEventViewProps {
   }) => Promise<void>;
   onVerify: (data: { phoneNumber: string }) => Promise<void>;
   onPublish: (slug: string) => Promise<void>;
+  onAttendCallback: (data: {
+    isFirst?: boolean;
+    withSignUp?: boolean;
+  }) => Promise<void>;
 }
 
 export type EventViewProps = PreviewEventViewProps | GeneralEventViewProps;
@@ -84,6 +92,7 @@ const EventView = ({
   onAttend,
   onVerify,
   onPublish,
+  onAttendCallback,
 }: EventViewProps) => {
   const [loading, startLoading] = useLoading();
   const { openDialog } = useAlertDialog();
@@ -132,6 +141,7 @@ const EventView = ({
     status: PrismaDBMainConstants.AttendanceStatus;
     message?: string;
     emoji: string;
+    withSignUp?: boolean;
   }) => {
     if (preview) {
       return;
@@ -142,6 +152,11 @@ const EventView = ({
       status: data.status,
       message: data.message,
       emoji: data.emoji,
+    });
+
+    await onAttendCallback({
+      withSignUp: data.withSignUp,
+      isFirst: !myAttendance,
     });
 
     handleCloseAttendDialog();
@@ -348,7 +363,10 @@ const EventView = ({
               phoneNumber: data.phoneNumber,
               code: data.code,
             });
-            await handleAttend(data);
+            await handleAttend({
+              ...data,
+              withSignUp: true,
+            });
           }}
           onVerify={onVerify}
           onCancel={handleCloseAttendDialog}

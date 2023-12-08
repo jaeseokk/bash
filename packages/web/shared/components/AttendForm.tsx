@@ -13,6 +13,7 @@ import ButtonGroup from "@/components/ButtonGroup";
 import VerifyCodeDialog from "@/components/VerifyCodeDialog";
 import { useDialogControl } from "@/hooks/useDialogControl";
 import { PrismaDBMainConstants } from "@bash/db";
+import { useState } from "react";
 
 interface AttendFormData {
   status: PrismaDBMainConstants.AttendanceStatus;
@@ -58,6 +59,7 @@ const AttendForm = ({
     },
     { code: string }
   >();
+  const [needPreserveSignFields, setNeedPreserveSignFields] = useState(false);
 
   return (
     <>
@@ -79,6 +81,7 @@ const AttendForm = ({
               return;
             }
 
+            setNeedPreserveSignFields(true);
             await onSubmitWithSign({
               ...data,
               code: codeResult.code,
@@ -102,7 +105,7 @@ const AttendForm = ({
           />
         </div>
         <div className="space-y-[2.25rem]">
-          {session.status === "unauthenticated" && (
+          {(session.status === "unauthenticated" || needPreserveSignFields) && (
             <div className="space-y-2">
               <Field label="이름">
                 <Input
