@@ -22,6 +22,7 @@ model Event {
   title       String    @db.VarChar(300)
   startDate        DateTime @map("start_date")
   endDate          DateTime? @map("end_date")
+  spots       Int?
   location   String?    @db.VarChar(300)
   description     String?    @db.Text
   coverImage       String   @db.VarChar(300) @map(name: "cover_image")
