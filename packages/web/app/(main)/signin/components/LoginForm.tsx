@@ -29,11 +29,16 @@ enum Step {
 }
 
 export interface LoginFormProps {
+  showNameFieldForInitial?: boolean;
   onSubmit: (data: LoginFormData) => Promise<SignInResponse | undefined>;
   onCallback?: () => void;
 }
 
-const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
+const LoginForm = ({
+  showNameFieldForInitial,
+  onSubmit,
+  onCallback,
+}: LoginFormProps) => {
   const [step, setStep] = useState<Step>(Step.PHONE_NUMBER);
 
   const router = useRouter();
@@ -117,6 +122,12 @@ const LoginForm = ({ onSubmit, onCallback }: LoginFormProps) => {
           <h1 className="text-3xl font-bold">Sign In</h1>
         </div>
         <div className="space-y-2">
+          <Field label="이름">
+            <Input
+              placeholder="홍길동"
+              {...register("username", { required: true })}
+            />
+          </Field>
           <Field label="전화번호">
             <NumericInput
               placeholder="010-0000-0000"
