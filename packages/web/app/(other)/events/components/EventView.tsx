@@ -223,7 +223,9 @@ const EventView = ({
         </Block>
         {eventInfo.description && (
           <Block>
-            <div className="text-[1.5rem]">{eventInfo.description}</div>
+            <div className="whitespace-pre-wrap text-[1.5rem]">
+              {eventInfo.description}
+            </div>
           </Block>
         )}
         {!preview && (
