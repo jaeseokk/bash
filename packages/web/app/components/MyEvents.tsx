@@ -25,7 +25,7 @@ const MyEvents = ({}: MyEventsProps) => {
         <strong>{data.length}개</strong>의 이벤트가 있습니다.
       </div>
       <ScrollArea className="mt-4 w-full">
-        <ul className="flex items-center space-x-4 px-8 pb-4 after:block after:h-full after:w-8 after:flex-none after:opacity-0 after:content-['.']">
+        <ul className="flex items-center space-x-4 px-8 pb-4 after:block after:h-full after:w-0 after:flex-none after:content-['']">
           {data.map((event) => (
             <li key={event.id} className="flex-none">
               <Link href={`/events/${event.slug}`}>

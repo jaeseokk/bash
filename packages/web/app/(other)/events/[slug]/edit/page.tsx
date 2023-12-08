@@ -18,8 +18,6 @@ export interface EventNewPageProps {
 }
 
 const EventNewPage = ({ params: { slug } }: EventNewPageProps) => {
-  console.log(slug);
-
   return (
     <main className="pt-4">
       <Suspense fallback={<LoadingLayer />}>
