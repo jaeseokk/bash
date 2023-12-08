@@ -27,6 +27,7 @@ import BottomSheet2 from "@/components/BottomSheet2";
 import PreviewLayer from "./PreviewLayer";
 import { Player } from "@lottiefiles/react-lottie-player";
 import heart from "@/assets/heart.json";
+import EventBackground from "@/components/EventBackground";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -84,30 +85,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
 
   return (
     <>
-      {coverImage && (
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">
-          <div
-            className="absolute bottom-0 left-0 right-0 top-0 backdrop-blur-[25px]"
-            style={{
-              background:
-                "linear-gradient(0deg, #000 27.08%, rgba(0, 0, 0, 0.50) 100%)",
-            }}
-          ></div>
-          <Image
-            src={coverImage}
-            alt=""
-            width="200"
-            height="200"
-            style={{
-              width: "auto",
-              height: "120%",
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-            sizes="100vw"
-          />
-        </div>
-      )}
+      <EventBackground coverImage={coverImage} />
       {/*<div className="fixed inset-0">*/}
       {/*  <Player src={heart} autoplay loop />*/}
       {/*</div>*/}

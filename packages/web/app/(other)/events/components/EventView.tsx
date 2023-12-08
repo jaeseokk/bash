@@ -33,6 +33,7 @@ import Link from "next/link";
 import { useLoading } from "@/hooks/useLoading";
 import InviteBottomSheet from "./InviteBottomSheet";
 import Sticker from "@/components/Sticker";
+import EventBackground from "@/components/EventBackground";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -158,29 +159,7 @@ const EventView = ({
       {/*  <Sticker index={9} />*/}
       {/*</div>*/}
       <div>
-        {eventInfo.coverImage && (
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-[-3.5rem] z-[-1] overflow-hidden">
-            <div
-              className="absolute bottom-0 left-0 right-0 top-0 backdrop-blur-[25px]"
-              style={{
-                background:
-                  "linear-gradient(0deg, #000 27.08%, rgba(0, 0, 0, 0.50) 100%)",
-              }}
-            ></div>
-            <Image
-              src={eventInfo.coverImage}
-              alt=""
-              width="200"
-              height="200"
-              style={{
-                width: "auto",
-                height: "120%",
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-            />
-          </div>
-        )}
+        <EventBackground coverImage={eventInfo.coverImage} />
         <Block className="mb-[3.125rem]">
           <div className="whitespace-pre-wrap text-center text-[1.75rem] font-bold">
             {eventInfo.title}
