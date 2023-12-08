@@ -8,6 +8,9 @@ import { EventDetail } from "@/types/events";
 import { signIn, useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import LoadingLayer from "@/components/LoadingLayer";
+import PublishConfirmLayer from "./PublishConfirmLayer";
+import { getFullUrl } from "@/utils";
+import { useDialogControl } from "@/hooks/useDialogControl";
 
 export interface EventViewContainerProps {
   slug: string;
@@ -24,6 +27,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
     },
     enabled: session.status !== "loading",
   });
+  const confirmDialogControl = useDialogControl();
 
   if (error) {
     return notFound();
@@ -40,6 +44,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
         onPublish={async (eventId) => {
           await ky.put(`/api/events/${eventId}/publish`);
           await refetch();
+          await confirmDialogControl.start();
         }}
         onVerify={async ({ phoneNumber }) => {
           await ky.post(`/api/events/${slug}/verify`, {
@@ -60,6 +65,11 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
           });
           await refetch();
         }}
+      />
+      <PublishConfirmLayer
+        open={confirmDialogControl.show}
+        url={getFullUrl(`/events/${data.slug}`)}
+        onClose={confirmDialogControl.onCancel}
       />
     </>
   );

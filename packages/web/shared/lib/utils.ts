@@ -136,3 +136,9 @@ export const formatDate = (date: Date | string | null | undefined) => {
 
   return format(dateObj, "yyyy년 M월d일 H:mm a");
 };
+
+export const getFullUrl = (pathProp: string) => {
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const path = pathProp.startsWith("/") ? pathProp : `/${pathProp}`;
+  return `${origin}${path}`;
+};
