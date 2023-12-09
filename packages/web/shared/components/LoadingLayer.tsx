@@ -5,7 +5,7 @@ export interface LoadingLayerProps {}
 const LoadingLayer = ({}: LoadingLayerProps) => {
   return (
     <div
-      className="fixed inset-0 z-20 flex items-center justify-center"
+      className="pointer-events-none fixed inset-0 z-20 flex items-center justify-center"
       aria-label="Loading"
     >
       <img

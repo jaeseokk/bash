@@ -351,30 +351,32 @@ const EventView = ({
           )}
         </FloatingArea>
       )}
-      <BottomSheet2
-        title={"참석여부 답하기"}
-        open={showAttendDialog}
-        onClose={handleCloseAttendDialog}
-      >
-        <AttendForm
-          defaultStatus={myAttendance?.status}
-          defaultEmoji={myLatestActivity?.emoji}
-          onSubmit={handleAttend}
-          onSubmitWithSign={async (data) => {
-            await onSignin?.({
-              username: data.username,
-              phoneNumber: data.phoneNumber,
-              code: data.code,
-            });
-            await handleAttend({
-              ...data,
-              withSignUp: true,
-            });
-          }}
-          onVerify={onVerify}
-          onCancel={handleCloseAttendDialog}
-        />
-      </BottomSheet2>
+      {!preview && (
+        <BottomSheet2
+          title={"참석여부 답하기"}
+          open={showAttendDialog}
+          onClose={handleCloseAttendDialog}
+        >
+          <AttendForm
+            defaultStatus={myAttendance?.status}
+            defaultEmoji={myLatestActivity?.emoji}
+            onSubmit={handleAttend}
+            onSubmitWithSign={async (data) => {
+              await onSignin?.({
+                username: data.username,
+                phoneNumber: data.phoneNumber,
+                code: data.code,
+              });
+              await handleAttend({
+                ...data,
+                withSignUp: true,
+              });
+            }}
+            onVerify={onVerify}
+            onCancel={handleCloseAttendDialog}
+          />
+        </BottomSheet2>
+      )}
     </>
   );
 };

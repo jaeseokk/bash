@@ -28,6 +28,7 @@ import PreviewLayer from "./PreviewLayer";
 import { Player } from "@lottiefiles/react-lottie-player";
 import heart from "@/assets/heart.json";
 import EventBackground from "@/components/EventBackground";
+import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -263,15 +264,24 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           ))}
         </div>
       </BottomSheet>
-      <BottomSheet2
+      <Layer
         open={showLoginBottomSheet}
         onClose={() => {
           setShowLoginBottomSheet(false);
         }}
       >
-        <div className="px-4 pb-10 pt-10">
-          <div className="mt-4">
+        <LayerContentWithScrollArea>
+          <div className="pt-20">
             <LoginForm
+              title="저장 및 가입"
+              description={
+                <>
+                  <p>저장 전에 전화번호를 인증해주세요</p>
+                  <p className="text-[0.875rem] text-[#ffffff99]">
+                    참가자가 생일 때마다 문자메시지로 알려드릴게요
+                  </p>
+                </>
+              }
               showNameFieldForInitial
               onSubmit={async (data) => {
                 return signIn("credentials", {
@@ -284,8 +294,8 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
               }}
             />
           </div>
-        </div>
-      </BottomSheet2>
+        </LayerContentWithScrollArea>
+      </Layer>
       <PreviewLayer
         open={!!cachedFormData}
         onClose={() => {

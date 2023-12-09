@@ -28,8 +28,8 @@ export interface AttendFormProps {
   defaultEmoji?: string;
   onSubmit: (data: AttendFormData) => void;
   onSubmitWithSign: (data: AttendFormData & { code?: string }) => void;
-  onVerify?: (data: { phoneNumber: string }) => void;
-  onCancel?: () => void;
+  onVerify: (data: { phoneNumber: string }) => void;
+  onCancel: () => void;
 }
 
 const AttendForm = ({
@@ -162,7 +162,8 @@ const AttendForm = ({
         open={verificationCodeDialogControl.show}
         phoneNumber={verificationCodeDialogControl.data?.phoneNumber}
         onSubmit={verificationCodeDialogControl.onConfirm}
-        onClose={verificationCodeDialogControl.close}
+        onClose={verificationCodeDialogControl.onCancel}
+        onVerify={onVerify}
       />
     </>
   );

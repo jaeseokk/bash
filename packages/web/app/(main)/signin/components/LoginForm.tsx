@@ -29,12 +29,16 @@ enum Step {
 }
 
 export interface LoginFormProps {
+  title?: string;
+  description?: React.ReactNode;
   showNameFieldForInitial?: boolean;
   onSubmit: (data: LoginFormData) => Promise<SignInResponse | undefined>;
   onCallback?: () => void;
 }
 
 const LoginForm = ({
+  title,
+  description,
   showNameFieldForInitial,
   onSubmit,
   onCallback,
@@ -42,11 +46,12 @@ const LoginForm = ({
   const [step, setStep] = useState<Step>(Step.PHONE_NUMBER);
 
   const router = useRouter();
-  const { register, setFocus, handleSubmit, formState } =
+  const { getValues, register, setFocus, handleSubmit, formState } =
     useForm<LoginFormData>();
   const { isSubmitting } = formState;
   const nameDialogControl = useDialogControl<never, { name: string }>();
   const { openDialog } = useAlertDialog();
+  const [retried, setRetried] = useState(false);
 
   const handleVerify = async ({ phoneNumber }: { phoneNumber: string }) => {
     await ky.post("/api/user/verify", {
@@ -69,7 +74,6 @@ const LoginForm = ({
   return (
     <>
       <form
-        className="space-y-4"
         onSubmit={handleSubmit(async (data, e) => {
           if (step === Step.PHONE_NUMBER) {
             await handleVerify({
@@ -119,7 +123,10 @@ const LoginForm = ({
         })}
       >
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold">Sign In</h1>
+          <h1 className="text-3xl font-bold">{title ?? "Sign In"}</h1>
+          {description && (
+            <div className="mt-10 text-[1.125rem] font-bold">{description}</div>
+          )}
         </div>
         <div className="space-y-2">
           {showNameFieldForInitial && (
@@ -143,11 +150,22 @@ const LoginForm = ({
           </Field>
           {step > Step.PHONE_NUMBER && (
             <Field
-              label="안증번호"
+              label="인증번호"
               message={
                 <>
                   위 번호로 인증번호를 보내드려요{" "}
-                  <button type="button" className="text-[#AEFF5E] underline">
+                  <button
+                    type="button"
+                    disabled={retried}
+                    className="text-[#AEFF5E] underline disabled:cursor-not-allowed disabled:opacity-50"
+                    onClick={async () => {
+                      setRetried(true);
+                      const phoneNumber = getValues("phoneNumber");
+                      await handleVerify({
+                        phoneNumber,
+                      });
+                    }}
+                  >
                     재발송 요청
                   </button>
                 </>
@@ -166,21 +184,31 @@ const LoginForm = ({
             </Field>
           )}
         </div>
-        {step < Step.VERIFYING ? (
-          <Button className="w-full" type="submit" pending={isSubmitting}>
-            인증하기
-          </Button>
-        ) : (
-          <div>
-            <div className="mb-1 text-[0.825rem] text-muted-foreground">
-              아래 동의합니다 를 클릭하여 <a>이용약관·개인정보방침</a>을
-              동의하고 가입 및 저장을 완료합니다.
-            </div>
+        <div className="mt-8">
+          {step < Step.VERIFYING ? (
             <Button className="w-full" type="submit" pending={isSubmitting}>
-              동의합니다.
+              인증하기
             </Button>
-          </div>
-        )}
+          ) : (
+            <div>
+              <div className="mb-1 text-[0.825rem] text-muted-foreground">
+                아래 동의합니다 를 클릭하여{" "}
+                <a
+                  className="underline"
+                  href="https://letscompany.notion.site/63b35667626344748c1b84b5fa11ff48"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  이용약관·개인정보방침
+                </a>
+                을 동의하고 가입 및 저장을 완료합니다.
+              </div>
+              <Button className="w-full" type="submit" pending={isSubmitting}>
+                동의합니다.
+              </Button>
+            </div>
+          )}
+        </div>
       </form>
       <NameForSignUpDialog
         open={nameDialogControl.show}
