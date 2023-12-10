@@ -4,6 +4,7 @@ import { cn } from "@/utils";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { STICKERS } from "../constants/sticker";
 import Image from "next/image";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const OPTIONS = Object.keys(STICKERS) as (keyof typeof STICKERS)[];
 
@@ -31,28 +32,34 @@ const EffectBottomSheet = ({
           onChange(value || null);
         }}
       >
-        <div className={cn("flex w-full space-x-[0.625rem]")}>
-          <RadioGroupPrimitive.Item className="group" value={""}>
-            <div className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
-              ❌
-            </div>
-          </RadioGroupPrimitive.Item>
-          {OPTIONS.map((effectId) => {
-            const src = STICKERS[effectId][0];
-
-            return (
-              <RadioGroupPrimitive.Item
-                className="group"
-                value={effectId}
-                key={effectId}
-              >
-                <div className="flex h-[4rem] w-[4rem] items-center justify-center overflow-hidden rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
-                  <Image src={src} alt="" width={64} height={64} />
+        <div className="absolute left-0 right-0 h-[5rem]">
+          <ScrollArea>
+            <div className={cn("flex space-x-[0.625rem] px-9 pb-4")}>
+              <RadioGroupPrimitive.Item className="group" value={""}>
+                <div className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
+                  ❌
                 </div>
               </RadioGroupPrimitive.Item>
-            );
-          })}
+              {OPTIONS.map((effectId) => {
+                const src = STICKERS[effectId][0];
+
+                return (
+                  <RadioGroupPrimitive.Item
+                    className="group"
+                    value={effectId}
+                    key={effectId}
+                  >
+                    <div className="flex h-[4rem] w-[4rem] items-center justify-center overflow-hidden rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
+                      <Image src={src} alt="" width={64} height={64} />
+                    </div>
+                  </RadioGroupPrimitive.Item>
+                );
+              })}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
+        <div className="h-[5rem]"></div>
       </RadioGroupPrimitive.Root>
     </BottomSheet2>
   );

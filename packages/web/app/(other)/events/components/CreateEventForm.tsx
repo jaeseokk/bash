@@ -32,17 +32,80 @@ import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 import EffectBottomSheet from "@/components/EffectBottomSheet";
 import StickerContainer from "@/components/StickerContainer";
 import { STICKERS } from "@/constants/sticker";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const COVER_IMAGE_LIST = [
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood02.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood03.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood04.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood05.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood06.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/xmas00.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/xmas01.png",
-  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/xmas02.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/01_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/02_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/03_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/04_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/05_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/06_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/07.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/08.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/09_music.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/10_music.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/11_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/12_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/13_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/14_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/15_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/16_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/17_mood.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/18_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/19_birthday.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/20_birthday.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/21_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/22_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/23_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/24_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/25_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/26_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/27_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/28_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/29_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/30_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/31_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/32_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/33_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/34_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/35_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/36_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/37_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/38_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/39_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/40_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/41_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/42_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/43_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/44_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/45_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/46_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/47_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/48_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/49_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/50_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/51_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/52_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/53_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/54_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/55_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/56.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/57_yearand.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/58.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/59.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/60_birthday.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/61_birthday.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/62.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/63.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/64_christmas.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/65_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/66_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/67_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/68_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/69_birthday.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/70_yearend.png",
+  "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/71.png",
 ];
 
 interface CreateEventFormData {
@@ -250,41 +313,46 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
           </Button>
         </FloatingArea>
       </form>
-      <BottomSheet
-        isOpen={showCoverImageBottomSheet}
+      <Layer
+        open={showCoverImageBottomSheet}
         onClose={() => {
           setShowCoverImageBottomSheet(false);
         }}
       >
-        <div className="grid grid-cols-2 gap-4 px-4 pb-4 md:grid-cols-3">
-          {COVER_IMAGE_LIST.map((url) => (
-            <div
-              key={url}
-              role="button"
-              onClick={() => {
-                setValue("coverImage", url);
-                setShowCoverImageBottomSheet(false);
-              }}
-            >
-              <Image
-                src={url}
-                alt="Party main image"
-                width="200"
-                height="200"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                placeholder="blur"
-                blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                  shimmer(1, 1),
-                )}`}
-                sizes="100vw"
-              />
+        <ScrollArea className="h-full">
+          <div className="px-[1.5rem] pb-9">
+            <div className="grid grid-cols-2 gap-4 pb-4 pt-20 md:grid-cols-3">
+              {COVER_IMAGE_LIST.map((url) => (
+                <div
+                  key={url}
+                  className="overflow-hidden rounded-2xl border border-[#343434]"
+                  role="button"
+                  onClick={() => {
+                    setValue("coverImage", url);
+                    setShowCoverImageBottomSheet(false);
+                  }}
+                >
+                  <Image
+                    src={url}
+                    alt="Party main image"
+                    width="200"
+                    height="200"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                    }}
+                    placeholder="blur"
+                    blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                      shimmer(1, 1),
+                    )}`}
+                    sizes="100vw"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </BottomSheet>
+          </div>
+        </ScrollArea>
+      </Layer>
       <Layer
         open={showLoginBottomSheet}
         onClose={() => {
