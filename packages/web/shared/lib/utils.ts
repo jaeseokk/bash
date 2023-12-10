@@ -147,3 +147,41 @@ export const getFullUrl = (pathProp: string) => {
   const path = pathProp.startsWith("/") ? pathProp : `/${pathProp}`;
   return `${origin}${path}`;
 };
+
+export const generateRandomPoints = (w: number, h: number, count: number) => {
+  const points: { x: number; y: number }[] = [];
+  // generate random points with similar distance
+  const r = Math.min(w, h) / 2;
+  const cx = w / 2;
+  const cy = h / 2;
+  const minDist = r / Math.sqrt(count);
+  let tries = 1000;
+  let i = 0;
+  while (i < count && tries > 0) {
+    const p = {
+      x: Math.random() * w,
+      y: Math.random() * h,
+    };
+    const dist = Math.sqrt(Math.pow(p.x - cx, 2) + Math.pow(p.y - cy, 2));
+    if (dist > r - minDist && dist < r + minDist) {
+      let valid = true;
+      for (let j = 0; j < points.length; j++) {
+        const p2 = points[j];
+        const dist2 = Math.sqrt(
+          Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2),
+        );
+        if (dist2 < minDist) {
+          valid = false;
+          break;
+        }
+      }
+      if (valid) {
+        points.push(p);
+        i++;
+      }
+    }
+    tries--;
+  }
+
+  return points;
+};

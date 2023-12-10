@@ -25,6 +25,7 @@ model Event {
   spots       Int?
   location   String?    @db.VarChar(300)
   description     String?    @db.Text
+  effect     String?    @db.Text
   coverImage       String   @db.VarChar(300) @map(name: "cover_image")
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int      @map(name: "author_id")

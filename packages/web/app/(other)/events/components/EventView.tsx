@@ -36,6 +36,7 @@ import Sticker from "@/components/Sticker";
 import EventBackground from "@/components/EventBackground";
 import { useAlertDialog } from "@/components/AlertDialogProvider";
 import Linkify from "linkify-react";
+import StickerContainer from "@/components/StickerContainer";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -165,6 +166,7 @@ const EventView = ({
 
   return (
     <>
+      <StickerContainer effect={"effect1"} />
       {/*<div className="absolute inset-0 h-full overflow-hidden">*/}
       {/*  <Sticker index={1} />*/}
       {/*  <Sticker index={2} />*/}

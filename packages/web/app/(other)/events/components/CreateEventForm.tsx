@@ -29,6 +29,9 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import heart from "@/assets/heart.json";
 import EventBackground from "@/components/EventBackground";
 import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
+import EffectBottomSheet from "@/components/EffectBottomSheet";
+import StickerContainer from "@/components/StickerContainer";
+import { STICKERS } from "@/constants/sticker";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/mood01.png",
@@ -50,6 +53,7 @@ interface CreateEventFormData {
   authorName: string | null;
   location: string | null;
   description: string | null;
+  effect: string | null;
 }
 
 export interface CreateEventFormProps {
@@ -76,6 +80,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   });
   const { isSubmitting } = formState;
   const coverImage = watch("coverImage");
+  const effect = watch("effect") as keyof typeof STICKERS | null;
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
@@ -87,6 +92,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   return (
     <>
       <EventBackground coverImage={coverImage} />
+      {effect && <StickerContainer effect={effect} />}
       {/*<div className="fixed inset-0">*/}
       {/*  <Player src={heart} autoplay loop />*/}
       {/*</div>*/}
@@ -164,8 +170,6 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
               render={({ field: { value } }) => {
                 const date = value ? new Date(value) : undefined;
 
-                console.log(date);
-
                 return (
                   <DatePicker
                     placeholder="날짜를 선택해주세요"
@@ -213,7 +217,24 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
         </Block>
         <FloatingArea className="mt-9">
           <BottomButton.Root>
-            <BottomButton.Item icon={<EffectIcon />}>꾸미기</BottomButton.Item>
+            <Controller
+              name="effect"
+              control={control}
+              render={({ field: { value, onChange } }) => {
+                return (
+                  <EffectBottomSheet
+                    value={value}
+                    onChange={onChange}
+                    trigger={
+                      <BottomButton.Item icon={<EffectIcon />}>
+                        꾸미기
+                      </BottomButton.Item>
+                    }
+                  />
+                );
+              }}
+            />
+
             <BottomButton.Divider />
             <BottomButton.Item
               icon={<PreviewIcon />}

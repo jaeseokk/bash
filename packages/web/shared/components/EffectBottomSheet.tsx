@@ -1,0 +1,61 @@
+import * as React from "react";
+import BottomSheet2 from "@/components/BottomSheet2";
+import { cn } from "@/utils";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { STICKERS } from "../constants/sticker";
+import Image from "next/image";
+
+const OPTIONS = Object.keys(STICKERS) as (keyof typeof STICKERS)[];
+
+export interface EffectBottomSheetProps
+  extends React.ComponentPropsWithoutRef<typeof BottomSheet2> {
+  value?: string | null;
+  onChange: (value?: string | null) => void;
+}
+
+const EffectBottomSheet = ({
+  value = "",
+  onChange,
+  ...props
+}: EffectBottomSheetProps) => {
+  return (
+    <BottomSheet2
+      title="꾸미기"
+      disabledOverlay
+      disableInteractOutside
+      {...props}
+    >
+      <RadioGroupPrimitive.Root
+        value={value ?? ""}
+        onValueChange={(value) => {
+          onChange(value || null);
+        }}
+      >
+        <div className={cn("flex w-full space-x-[0.625rem]")}>
+          <RadioGroupPrimitive.Item className="group" value={""}>
+            <div className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
+              ❌
+            </div>
+          </RadioGroupPrimitive.Item>
+          {OPTIONS.map((effectId) => {
+            const src = STICKERS[effectId][0];
+
+            return (
+              <RadioGroupPrimitive.Item
+                className="group"
+                value={effectId}
+                key={effectId}
+              >
+                <div className="flex h-[4rem] w-[4rem] items-center justify-center overflow-hidden rounded-full border border-[#343434] text-[1.375rem] transition-colors group-data-[state=checked]:border-[#AEFF5E]">
+                  <Image src={src} alt="" width={64} height={64} />
+                </div>
+              </RadioGroupPrimitive.Item>
+            );
+          })}
+        </div>
+      </RadioGroupPrimitive.Root>
+    </BottomSheet2>
+  );
+};
+
+export default EffectBottomSheet;

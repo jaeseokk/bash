@@ -15,6 +15,8 @@ export interface BottomSheet2Props
   extends React.ComponentPropsWithoutRef<typeof Sheet> {
   trigger?: React.ReactNode;
   title?: React.ReactNode;
+  disabledOverlay?: boolean;
+  disableInteractOutside?: boolean;
   onClose?: () => void;
 }
 
@@ -22,6 +24,8 @@ const BottomSheet2 = ({
   children,
   trigger,
   title,
+  disabledOverlay,
+  disableInteractOutside,
   onClose,
   ...props
 }: BottomSheet2Props) => {
@@ -30,7 +34,12 @@ const BottomSheet2 = ({
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
       <SheetContent
         side="bottom"
+        disableOverlay={disabledOverlay}
         onInteractOutside={(e) => {
+          if (disableInteractOutside) {
+            e.preventDefault();
+            return;
+          }
           onClose?.();
         }}
         onEscapeKeyDown={(e) => {

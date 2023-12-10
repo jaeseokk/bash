@@ -1,24 +1,37 @@
 import * as React from "react";
 import Moveable, { OnDrag } from "react-moveable";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { flushSync } from "react-dom";
 
 export interface StickerProps {
-  index: number;
+  src: string;
+  initialPosition?: {
+    x: number;
+    y: number;
+  };
 }
 
-const Sticker = ({ index }: StickerProps) => {
+const Sticker = ({ src, initialPosition }: StickerProps) => {
   const [target, setTarget] = useState<HTMLElement | null>();
+  const [transform, setTransform] = useState<string | undefined>(() => {
+    if (!initialPosition) {
+      return undefined;
+    }
+
+    return `translate(${initialPosition.x}px, ${initialPosition.y}px)`;
+  });
+
   return (
     <>
-      <span ref={setTarget} className="absolute z-10 h-[90px] w-[90px]">
-        <Image
-          src={`https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/effects/effect${index}.png`}
-          alt=""
-          width={90}
-          height={90}
-        />
+      <span
+        ref={setTarget}
+        className="pointer-events-auto absolute z-10 h-[90px] w-[90px]"
+        style={{
+          transform,
+        }}
+      >
+        <Image src={src} alt="" width={90} height={90} />
       </span>
       <Moveable
         draggable={true}
@@ -38,11 +51,11 @@ const Sticker = ({ index }: StickerProps) => {
           clientX,
           clientY,
         }: OnDrag) => {
-          console.log("onDrag left, top", left, top);
-          // target!.style.left = `${left}px`;
-          // target!.style.top = `${top}px`;
-          console.log("onDrag translate", dist);
-          target!.style.transform = transform;
+          // console.log("onDrag left, top", left, top);
+          // // target!.style.left = `${left}px`;
+          // // target!.style.top = `${top}px`;
+          // console.log("onDrag translate", dist);
+          setTransform(transform);
         }}
         onDragEnd={({ target, isDrag, clientX, clientY }) => {
           console.log("onDragEnd", target, isDrag);
