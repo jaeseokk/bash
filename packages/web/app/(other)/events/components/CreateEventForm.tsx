@@ -131,7 +131,6 @@ const CreateEventForm = ({
   onSubmit,
 }: CreateEventFormProps) => {
   const session = useSession();
-  const router = useRouter();
   const {
     control,
     register,
@@ -148,11 +147,16 @@ const CreateEventForm = ({
   });
   const { isSubmitting } = formState;
   const coverImage = watch("coverImage");
-  const effect = watch("effect") as keyof typeof STICKERS | null;
+  const effectWatch = watch("effect") as keyof typeof STICKERS | null;
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
   const [showLoginBottomSheet, setShowLoginBottomSheet] = useState(false);
   const [cachedFormData, setCachedFormData] = useState<CreateEventFormData>();
+  const [showEffectSheet, setShowEffectSheet] = useState(false);
+  const [selectingEffect, setSelectingEffect] = useState<string | null>();
+  const effect = (selectingEffect ?? effectWatch) as
+    | keyof typeof STICKERS
+    | null;
   const submit = async (data: CreateEventFormData) => {
     await onSubmit(data);
   };
@@ -161,9 +165,6 @@ const CreateEventForm = ({
     <>
       <EventBackground coverImage={coverImage} />
       {effect && <StickerContainer effect={effect} eventKey={slug} />}
-      {/*<div className="fixed inset-0">*/}
-      {/*  <Player src={heart} autoplay loop />*/}
-      {/*</div>*/}
       <form
         className=""
         onSubmit={handleSubmit(
@@ -288,11 +289,23 @@ const CreateEventForm = ({
             <Controller
               name="effect"
               control={control}
-              render={({ field: { value, onChange } }) => {
+              render={({ field: { onChange } }) => {
                 return (
                   <EffectBottomSheet
-                    value={value}
-                    onChange={onChange}
+                    open={showEffectSheet}
+                    onOpenChange={(open) => {
+                      setShowEffectSheet(open);
+
+                      if (!open) {
+                        setSelectingEffect(undefined);
+                      }
+                    }}
+                    value={effect}
+                    onChange={setSelectingEffect}
+                    onSubmit={(value) => {
+                      onChange(value);
+                      setShowEffectSheet(false);
+                    }}
                     trigger={
                       <BottomButton.Item icon={<EffectIcon />}>
                         꾸미기
