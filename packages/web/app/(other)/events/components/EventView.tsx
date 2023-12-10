@@ -286,7 +286,15 @@ const EventView = ({
                         hideCancel: true,
                       });
                       e.preventDefault();
+                      return;
                     }
+
+                    openDialog({
+                      title:
+                        "공지하기 기능은 곧 출시 예정입니다. 조금만 기다려주세요!",
+                      hideCancel: true,
+                    });
+                    e.preventDefault();
                   }}
                 >
                   공지하기

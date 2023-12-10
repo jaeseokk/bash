@@ -67,11 +67,11 @@ export async function PUT(request: NextRequest) {
               phoneNumber: true,
             },
           },
-        },
-      },
-      activities: {
-        where: {
-          status: "ATTENDING",
+          activities: {
+            where: {
+              status: "ATTENDING",
+            },
+          },
         },
       },
     },
@@ -84,7 +84,7 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  const isFirstAttendance = res.activities.length === 1;
+  const isFirstAttendance = res.event.activities.length === 1;
 
   if (isFirstAttendance) {
     await sendMessage(
