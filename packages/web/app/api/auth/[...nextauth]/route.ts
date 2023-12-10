@@ -28,13 +28,11 @@ const handler = NextAuth({
           return null;
         }
 
-        // const code = await redis.get<string>(credentials.phoneNumber);
-        //
-        // if (!code || `${code}` !== credentials.code) {
-        //   throw new Error("invalid code");
-        // }
+        const code = await redis.get<string>(credentials.phoneNumber);
 
-        console.log("!!!", credentials);
+        if (!code || `${code}` !== credentials.code) {
+          throw new Error("invalid code");
+        }
 
         if (credentials.username) {
           const newUser = await prisma.user.upsert({
@@ -98,6 +96,7 @@ const handler = NextAuth({
           ...session.user,
           id: token.id,
           name: token.name,
+          phoneNumber: token.phoneNumber,
         };
       }
       return session;
@@ -107,6 +106,7 @@ const handler = NextAuth({
         // @ts-ignore
         token.id = user.id;
         token.name = user.username;
+        token.phoneNumber = user.phoneNumber;
       }
       return token;
     },

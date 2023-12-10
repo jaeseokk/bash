@@ -8,6 +8,7 @@ const authOptions: Parameters<typeof _getServerSession>[0] = {
           ...session.user,
           id: token.id,
           name: token.name,
+          phoneNumber: token.phoneNumber,
         };
       }
       return session;
