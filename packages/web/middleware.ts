@@ -2,10 +2,20 @@ import { NextResponse } from "next/server";
 import { withAuth } from "next-auth/middleware";
 
 export default withAuth(
-  function middleware(request) {
+  async function middleware(request) {
     if (!request.nextauth.token) {
-      return NextResponse.rewrite(
-        new URL("/", "https://officiallets.webflow.io"),
+      const res = await fetch("https://officiallets.webflow.io");
+      const html = await res.text();
+
+      return new Response(
+        html.replace(
+          /<\/body>/,
+          `<style>.w-webflow-badge {display: none !important;}</style></body>`,
+        ),
+        {
+          status: 200,
+          headers: { "content-type": "text/html" },
+        },
       );
     }
 
