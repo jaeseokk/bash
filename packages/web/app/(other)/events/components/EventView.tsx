@@ -166,18 +166,12 @@ const EventView = ({
 
   return (
     <>
-      <StickerContainer effect={"effect1"} />
-      {/*<div className="absolute inset-0 h-full overflow-hidden">*/}
-      {/*  <Sticker index={1} />*/}
-      {/*  <Sticker index={2} />*/}
-      {/*  <Sticker index={3} />*/}
-      {/*  <Sticker index={4} />*/}
-      {/*  <Sticker index={5} />*/}
-      {/*  <Sticker index={6} />*/}
-      {/*  <Sticker index={7} />*/}
-      {/*  <Sticker index={8} />*/}
-      {/*  <Sticker index={9} />*/}
-      {/*</div>*/}
+      {eventInfo.effect && (
+        <StickerContainer
+          effect={eventInfo.effect as any}
+          eventKey={preview ? undefined : eventInfo.slug}
+        />
+      )}
       <div>
         <EventBackground coverImage={eventInfo.coverImage} />
         <Block className="mb-[3.125rem]">

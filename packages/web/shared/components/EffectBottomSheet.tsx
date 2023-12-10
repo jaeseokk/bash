@@ -2,7 +2,7 @@ import * as React from "react";
 import BottomSheet2 from "@/components/BottomSheet2";
 import { cn } from "@/utils";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { STICKERS } from "../constants/sticker";
+import { STICKERS } from "@/constants/sticker";
 import Image from "next/image";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 

@@ -120,11 +120,16 @@ interface CreateEventFormData {
 }
 
 export interface CreateEventFormProps {
+  slug?: string;
   initialData?: CreateEventFormData;
   onSubmit: (data: CreateEventFormData) => Promise<void>;
 }
 
-const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
+const CreateEventForm = ({
+  slug,
+  initialData,
+  onSubmit,
+}: CreateEventFormProps) => {
   const session = useSession();
   const router = useRouter();
   const {
@@ -155,7 +160,7 @@ const CreateEventForm = ({ initialData, onSubmit }: CreateEventFormProps) => {
   return (
     <>
       <EventBackground coverImage={coverImage} />
-      {effect && <StickerContainer effect={effect} />}
+      {effect && <StickerContainer effect={effect} eventKey={slug} />}
       {/*<div className="fixed inset-0">*/}
       {/*  <Player src={heart} autoplay loop />*/}
       {/*</div>*/}

@@ -45,6 +45,7 @@ const CreateEventFormContainer = ({ slug }: CreateEventFormContainerProps) => {
   return (
     <CreateEventForm
       initialData={data}
+      slug={slug}
       onSubmit={async (data) => {
         await ky.put(`/api/events/${slug}`, {
           json: data,

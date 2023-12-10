@@ -41,4 +41,5 @@ export type PreviewEventDetail = Pick<
   | "authorName"
   | "location"
   | "description"
+  | "effect"
 >;

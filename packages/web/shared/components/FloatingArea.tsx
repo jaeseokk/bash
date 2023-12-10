@@ -8,7 +8,7 @@ interface FloatingAreaProps {
 
 const FloatingArea = ({ className, children }: FloatingAreaProps) => {
   return (
-    <div className={cn("sticky bottom-0 left-0 right-0", className)}>
+    <div className={cn("sticky bottom-0 left-0 right-0 z-20", className)}>
       {children}
     </div>
   );
