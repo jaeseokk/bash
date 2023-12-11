@@ -21,6 +21,7 @@ import CrownIcon from "@/assets/crown_gradient.svg";
 import LocationIcon from "@/assets/location_gradient.svg";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
 import PeopleIcon from "@/assets/people_gradient.svg";
+import SmileIcon from "@/assets/smile_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
 import PreviewLayer from "./PreviewLayer";
 import EventBackground from "@/components/EventBackground";
@@ -30,6 +31,7 @@ import StickerContainer from "@/components/StickerContainer";
 import { STICKERS } from "@/constants/sticker";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NumericInput from "@/components/NumericInput";
+import ReplyRadioGroup from "@/components/ReplyRadioGroup";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/cover1.png",
@@ -268,6 +270,17 @@ const CreateEventForm = ({
             {...register("description")}
           />
         </Block>
+        <Block className="mb-[1.75rem] mt-8">
+          <Field
+            labelIcon={<SmileIcon />}
+            label="참석자 응답"
+            topMessage="게스트가 이 중에 답변을 고를 수 있어요!"
+          >
+            <div className="rounded-xl border border-input p-8">
+              <ReplyRadioGroup disabled={true} />
+            </div>
+          </Field>
+        </Block>
         <FloatingArea className="mt-9">
           <BottomButton.Root>
             <Controller
@@ -304,7 +317,11 @@ const CreateEventForm = ({
               미리보기
             </BottomButton.Item>
           </BottomButton.Root>
-          <Button className="w-full rounded-none" pending={isSubmitting}>
+          <Button
+            className="w-full rounded-none"
+            variant="highlight"
+            pending={isSubmitting}
+          >
             저장하기
           </Button>
         </FloatingArea>
