@@ -10,12 +10,12 @@ import { ReloadIcon } from "@radix-ui/react-icons";
  * background: linear-gradient(180deg, #E1FF27 0%, #01F9CC 100%);
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-md font-bold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 font-inherit",
+  "inline-flex items-center justify-center whitespace-nowrap text-md font-bold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none font-inherit",
   {
     variants: {
       variant: {
         default:
-          "bg-[#AEFF5E] text-primary-foreground shadow hover:bg-[#CBFF96]",
+          "bg-[#AEFF5E] text-primary-foreground shadow hover:bg-[#CBFF96] disabled:bg-[#689938]",
         highlight:
           "bg-gradient-to-b from-[#E1FF27] to-[#01F9CC] text-primary-foreground shadow",
         destructive:
