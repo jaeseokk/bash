@@ -8,6 +8,7 @@ import ky from "ky";
 import { EventItem } from "@/types/events";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import CrownIcon from "@/assets/crown_gradient.svg";
 
 interface MyEventsProps {}
 
@@ -69,11 +70,9 @@ const MyEvents = ({}: MyEventsProps) => {
                       </span>
                     </div>
                   </div>
-                  {!event.publishedAt && (
-                    <div className="absolute right-0 top-0 bg-white px-2">
-                      Draft
-                    </div>
-                  )}
+                  <div className="pointer-events-none absolute left-4 top-4 flex h-[1.75rem] w-[1.75rem] items-center justify-center rounded-full bg-black/70 [&_svg]:w-4">
+                    <CrownIcon />
+                  </div>
                 </div>
               </Link>
             </li>

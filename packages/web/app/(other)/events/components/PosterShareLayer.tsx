@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PrismaDBMainTypes } from "@bash/db";
 import { formatDate } from "@/utils";
+import { useLoading } from "@/hooks/useLoading";
 
 export interface PosterShareLayerProps
   extends React.ComponentPropsWithoutRef<typeof Layer> {
@@ -19,28 +20,32 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
     startDate: formatDate(eventInfo.startDate).replace(") ", ")\n") ?? "",
     location: eventInfo.location ?? "",
   });
-  const getImageUrl = () =>
-    `${
-      typeof window === "undefined" ? "" : location.origin
-    }/api/poster?${searchParams.toString()}`;
+  const imageUrl = `${
+    typeof window === "undefined" || process.env.NODE_ENV !== "production"
+      ? ""
+      : location.origin
+  }/api/poster?${searchParams.toString()}`;
+  const [isLoading, startLoading] = useLoading();
 
   const handleSaveImage = async () => {
     const link = document.createElement("a");
     link.download = `${eventInfo.title}.png`;
-    link.href = getImageUrl();
+    link.href = imageUrl;
     link.click();
   };
   const isSupportedShareApi =
     typeof navigator !== "undefined" && "share" in navigator;
 
-  const handleShare = async () => {
-    const blob = await (await fetch(getImageUrl())).blob();
-    const file = new File([blob], `${eventInfo.title}.png`, {
-      type: blob.type,
-    });
+  const handleShare = () => {
+    return startLoading(async () => {
+      const blob = await (await fetch(imageUrl)).blob();
+      const file = new File([blob], `${eventInfo.title}.png`, {
+        type: blob.type,
+      });
 
-    await navigator.share({
-      files: [file],
+      await navigator.share({
+        files: [file],
+      });
     });
   };
 
@@ -49,16 +54,21 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
       <LayerContentWithScrollArea>
         <div className="flex flex-col items-center justify-between pt-6">
           <div className="border border-[#AEFF5E]">
-            <Image
-              src={`/api/poster?${searchParams.toString()}`}
-              alt=""
+            <img
+              src={imageUrl}
               width={280}
               height={450}
+              alt={eventInfo.title ?? ""}
             />
           </div>
           <div className="sticky bottom-9 mt-6 w-full space-y-[0.75rem]">
             {isSupportedShareApi ? (
-              <Button type="button" className="w-full" onClick={handleShare}>
+              <Button
+                type="button"
+                className="w-full"
+                onClick={handleShare}
+                pending={isLoading}
+              >
                 공유
               </Button>
             ) : (

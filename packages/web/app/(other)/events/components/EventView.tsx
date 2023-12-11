@@ -360,15 +360,17 @@ const EventView = ({
             </Block>
             <FloatingArea disabledFloating={isMyEvent || !!myAttendance}>
               <div className="relative px-8 py-[2.5rem] " ref={intersectionRef}>
-                <div
-                  className={cn(
-                    "pointer-events-none absolute inset-0 z-[-1] opacity-0 transition-opacity",
-                    isReplySectionPinned && "opacity-100",
-                  )}
-                  style={{
-                    background: `linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 53.65%)`,
-                  }}
-                />
+                {!isMyEvent && !myAttendance && (
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute inset-0 z-[-1] opacity-0 transition-opacity",
+                      isReplySectionPinned && "opacity-100",
+                    )}
+                    style={{
+                      background: `linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 53.65%)`,
+                    }}
+                  />
+                )}
                 <ReplyRadioGroup
                   value={myAttendance?.status ?? ""}
                   disabled={preview}
