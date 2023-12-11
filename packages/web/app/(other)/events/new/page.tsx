@@ -41,8 +41,8 @@ const EventNewPage = ({}: EventNewPageProps) => {
       <PublishConfirmLayer
         open={publishConfirmDialogControl.show}
         url={getFullUrl(`/events/${publishConfirmDialogControl.data?.slug}`)}
-        onClose={() => {
-          publishConfirmDialogControl.onCancel();
+        onClose={publishConfirmDialogControl.onCancel}
+        onMoveEventPage={() => {
           router.push(`/events/${publishConfirmDialogControl.data?.slug}`);
         }}
       />

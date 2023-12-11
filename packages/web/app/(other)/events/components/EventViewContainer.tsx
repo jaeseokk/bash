@@ -84,6 +84,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
         open={publishConfirmDialogControl.show}
         url={getFullUrl(`/events/${data.slug}`)}
         onClose={publishConfirmDialogControl.onCancel}
+        onMoveEventPage={publishConfirmDialogControl.onCancel}
       />
       <AttendConfirmLayer
         open={attendConfirmDialogControl.show}

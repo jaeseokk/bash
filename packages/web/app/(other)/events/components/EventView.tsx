@@ -34,6 +34,7 @@ import EventBackground from "@/components/EventBackground";
 import { useAlertDialog } from "@/components/AlertDialogProvider";
 import Linkify from "linkify-react";
 import StickerContainer from "@/components/StickerContainer";
+import ShareLayer from "./ShareLayer";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -334,7 +335,7 @@ const EventView = ({
                 <BottomButton.Divider />
               </>
             )}
-            <InviteBottomSheet
+            <ShareLayer
               url={`https://lets.run/events/${eventInfo.slug}`}
               trigger={
                 <BottomButton.Item

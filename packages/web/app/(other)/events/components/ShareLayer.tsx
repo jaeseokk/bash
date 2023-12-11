@@ -9,14 +9,9 @@ import { Button } from "@/components/ui/button";
 export interface PublishConfirmLayerProps
   extends React.ComponentPropsWithoutRef<typeof Layer> {
   url?: string;
-  onMoveEventPage: () => void;
 }
 
-const PublishConfirmLayer = ({
-  url,
-  onMoveEventPage,
-  ...props
-}: PublishConfirmLayerProps) => {
+const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
   const isSupportedShareApi =
     typeof navigator !== "undefined" && "share" in navigator;
   const handleShare = async () => {
@@ -35,7 +30,7 @@ const PublishConfirmLayer = ({
   };
 
   return (
-    <Layer hideCloseButton {...props}>
+    <Layer {...props}>
       <LayerContent className="h-full overflow-auto">
         <div className="flex h-full flex-col justify-between">
           <div className="flex h-full flex-col items-center justify-center space-y-8 pb-20">
@@ -56,7 +51,7 @@ const PublishConfirmLayer = ({
               </p>
             </div>
           </div>
-          <div className="space-y-2">
+          <div>
             <Button
               variant="highlight"
               className="w-full"
@@ -64,14 +59,6 @@ const PublishConfirmLayer = ({
               onClick={handleShare}
             >
               초대링크 공유하기
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              type="button"
-              onClick={onMoveEventPage}
-            >
-              이벤트 페이지로
             </Button>
           </div>
         </div>
