@@ -2,13 +2,20 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css";
 import SessionProvider from "../components/SessionProvider";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import SignInButton from "../components/SignInButton";
 import LetsLogo from "@/assets/lets_logo.svg";
 import AppProviders from "../components/AppProviders";
 import AlertDialogProvider from "@/components/AlertDialogProvider/AlertDialogProvider";
 import { Toaster } from "@/components/ui/toaster";
+
+export const metadata: Metadata = {
+  title: "렛츠 LET'S",
+  description: "파티 누구나 쉽게, 누구나 멋지게",
+  openGraph: {
+    images: "https://lets.fyi/default_og.png",
+  },
+};
 
 const Pretendard = localFont({
   src: [
@@ -41,11 +48,6 @@ const Pretendard = localFont({
   adjustFontFallback: false,
   display: "optional",
 });
-
-export const metadata: Metadata = {
-  title: "Bash",
-  description: "...",
-};
 
 export default async function RootLayout({
   children,

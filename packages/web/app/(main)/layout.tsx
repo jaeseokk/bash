@@ -10,6 +10,14 @@ import { cn } from "@/utils";
 import AlertDialogProvider from "@/components/AlertDialogProvider/AlertDialogProvider";
 import { Toaster } from "@/components/ui/toaster";
 
+export const metadata: Metadata = {
+  title: "렛츠 LET'S",
+  description: "파티 누구나 쉽게, 누구나 멋지게",
+  openGraph: {
+    images: "https://lets.fyi/default_og2.png",
+  },
+};
+
 const Pretendard = localFont({
   src: [
     {
@@ -41,11 +49,6 @@ const Pretendard = localFont({
   adjustFontFallback: false,
   display: "optional",
 });
-
-export const metadata: Metadata = {
-  title: "Bash",
-  description: "...",
-};
 
 export default async function RootLayout({
   children,
