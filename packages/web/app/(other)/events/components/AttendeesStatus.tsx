@@ -12,6 +12,10 @@ export interface AttendeesStatusProps {
 }
 
 const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
+  if (attendances.length === 0) {
+    return null;
+  }
+
   return (
     <Layer
       title="참석자 리스트"

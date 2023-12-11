@@ -12,7 +12,8 @@ export interface PublishConfirmLayerProps
 }
 
 const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
-  const isSupportedShareApi = "share" in navigator;
+  const isSupportedShareApi =
+    typeof navigator !== "undefined" && "share" in navigator;
   const handleShare = async () => {
     if (!url) {
       return;

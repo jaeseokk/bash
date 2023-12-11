@@ -40,7 +40,8 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
     link.href = dataURL;
     link.click();
   };
-  const isSupportedShareApi = "share" in navigator;
+  const isSupportedShareApi =
+    typeof navigator !== "undefined" && "share" in navigator;
 
   const handleShare = async () => {
     const dataURL = await getDataURL();

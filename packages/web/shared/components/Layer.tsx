@@ -37,9 +37,7 @@ const Layer = ({
         className="flex h-full flex-col"
         side="bottom"
         onOpenAutoFocus={(e) => {
-          if (disableAutoFocus) {
-            e.preventDefault();
-          }
+          e.preventDefault();
         }}
         onInteractOutside={(e) => {
           e.preventDefault();

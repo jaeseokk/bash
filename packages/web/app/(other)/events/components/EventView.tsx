@@ -274,14 +274,11 @@ const EventView = ({
               <Divider />
             </Block>
             <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
-              <AttendeesStatus attendances={eventInfo.attendances} />
+              <AttendeesStatus attendances={attendancesThatSayYes} />
               <ActivityStatus activities={eventInfo.activities} />
             </div>
           </>
         )}
-        <div className="mt-8 flex justify-center">
-          <LetsLogo />
-        </div>
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
             <ReplyRadioGroup

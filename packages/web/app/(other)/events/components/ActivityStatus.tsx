@@ -12,6 +12,10 @@ export interface ActivityStatusProps {
 }
 
 const ActivityStatus = ({ activities }: ActivityStatusProps) => {
+  if (activities.length) {
+    return null
+  }
+
   return (
     <Layer
       title="이벤트 활동"
