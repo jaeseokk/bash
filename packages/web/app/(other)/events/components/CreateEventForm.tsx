@@ -375,12 +375,12 @@ const CreateEventForm = ({
         <LayerContentWithScrollArea>
           <div className="pt-20">
             <LoginForm
-              title="저장 및 가입"
+              title="초대장 오픈"
               description={
                 <>
-                  <p>저장 전에 전화번호를 인증해주세요</p>
-                  <p className="text-[0.875rem] text-[#ffffff99]">
-                    참가자가 생일 때마다 문자메시지로 알려드릴게요
+                  <p>오픈을 위해 전화번호를 인증해주세요</p>
+                  <p className="text-[0.875rem] text-[#AEFF5E]">
+                    참가자가 생길 때마다 문자메시지로 알려드려요
                   </p>
                 </>
               }

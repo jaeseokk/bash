@@ -26,17 +26,13 @@ const Field = ({
             {label}
           </div>
           {topMessage && (
-            <div className="text-[0.75rem] text-muted-foreground">
-              {topMessage}
-            </div>
+            <div className="text-[0.75rem] text-[#ffffffb3]">{topMessage}</div>
           )}
         </div>
       )}
       {children}
       {message && (
-        <div className="mt-1 text-[0.825rem] text-muted-foreground">
-          {message}
-        </div>
+        <div className="mt-1 text-[0.825rem] text-[#ffffffb3]">{message}</div>
       )}
     </label>
   );

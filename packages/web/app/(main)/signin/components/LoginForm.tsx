@@ -137,7 +137,32 @@ const LoginForm = ({
               />
             </Field>
           )}
-          <Field label="전화번호">
+          <Field
+            label="전화번호"
+            message={
+              step === Step.PHONE_NUMBER ? (
+                "전화번호는 이벤트 안내를 위해서만 활용되니 안심하세요."
+              ) : step > Step.PHONE_NUMBER ? (
+                <>
+                  위 번호로 인증번호를 보내드렸어요.
+                  <button
+                    type="button"
+                    disabled={retried}
+                    className="text-[#AEFF5E] underline disabled:cursor-not-allowed disabled:opacity-50"
+                    onClick={async () => {
+                      setRetried(true);
+                      const phoneNumber = getValues("phoneNumber");
+                      await handleVerify({
+                        phoneNumber,
+                      });
+                    }}
+                  >
+                    재발송 요청
+                  </button>
+                </>
+              ) : null
+            }
+          >
             <NumericInput
               placeholder="010-0000-0000"
               maxLength={11}
@@ -153,21 +178,16 @@ const LoginForm = ({
               label="인증번호"
               message={
                 <>
-                  위 번호로 인증번호를 보내드려요{" "}
-                  <button
-                    type="button"
-                    disabled={retried}
-                    className="text-[#AEFF5E] underline disabled:cursor-not-allowed disabled:opacity-50"
-                    onClick={async () => {
-                      setRetried(true);
-                      const phoneNumber = getValues("phoneNumber");
-                      await handleVerify({
-                        phoneNumber,
-                      });
-                    }}
+                  아래 동의합니다 를 클릭하여{" "}
+                  <a
+                    className="underline"
+                    href="https://letscompany.notion.site/63b35667626344748c1b84b5fa11ff48"
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    재발송 요청
-                  </button>
+                    이용약관·개인정보방침
+                  </a>
+                  을 동의하고 가입 및 오픈을 완료합니다.
                 </>
               }
             >
@@ -190,23 +210,9 @@ const LoginForm = ({
               인증하기
             </Button>
           ) : (
-            <div>
-              <div className="mb-1 text-[0.825rem] text-muted-foreground">
-                아래 동의합니다 를 클릭하여{" "}
-                <a
-                  className="underline"
-                  href="https://letscompany.notion.site/63b35667626344748c1b84b5fa11ff48"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  이용약관·개인정보방침
-                </a>
-                을 동의하고 가입 및 저장을 완료합니다.
-              </div>
-              <Button className="w-full" type="submit" pending={isSubmitting}>
-                동의합니다.
-              </Button>
-            </div>
+            <Button className="w-full" type="submit" pending={isSubmitting}>
+              동의합니다.
+            </Button>
           )}
         </div>
       </form>
