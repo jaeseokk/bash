@@ -9,11 +9,13 @@ import { EventItem } from "@/types/events";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import CrownIcon from "@/assets/crown_gradient.svg";
+import { useSession } from "next-auth/react";
 
 interface MyEventsProps {}
 
 const MyEvents = ({}: MyEventsProps) => {
-  const { data, isLoading } = useSuspenseQuery<EventItem[]>({
+  const session = useSession();
+  const { data } = useSuspenseQuery<EventItem[]>({
     queryKey: ["events"],
     queryFn: () => {
       return ky.get("/api/events").json();
@@ -70,9 +72,11 @@ const MyEvents = ({}: MyEventsProps) => {
                       </span>
                     </div>
                   </div>
-                  <div className="pointer-events-none absolute left-4 top-4 flex h-[1.75rem] w-[1.75rem] items-center justify-center rounded-full bg-black/70 [&_svg]:w-4">
-                    <CrownIcon />
-                  </div>
+                  {session.data?.user.id === event.authorId && (
+                    <div className="pointer-events-none absolute left-4 top-4 flex h-[1.75rem] w-[1.75rem] items-center justify-center rounded-full bg-black/70 [&_svg]:w-4">
+                      <CrownIcon />
+                    </div>
+                  )}
                 </div>
               </Link>
             </li>

@@ -40,7 +40,10 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
     (attendance) => attendance.status,
   );
 
-  if (attendancesByStatus["ATTENDING"].length === 0) {
+  if (
+    !attendancesByStatus["ATTENDING"] ||
+    attendancesByStatus["ATTENDING"].length === 0
+  ) {
     return null;
   }
 
