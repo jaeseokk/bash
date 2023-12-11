@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/utils";
-import { useImperativeHandle, useRef } from "react";
+import { useImperativeHandle, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
 export interface EventTitleInputProps
@@ -15,7 +15,7 @@ const EventTitleInput = React.forwardRef<
   return (
     <TextareaAutosize
       className={cn(
-        "h-[4.625rem] w-full resize-none bg-transparent px-4 py-4 text-center text-[1.75rem] font-bold text-[#FFFEFE] transition-colors placeholder:text-muted-foreground hover:border-[#ffffff99] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "h-[4.625rem] w-full resize-none bg-transparent px-4 py-4 text-center text-[2.375rem] font-bold text-[#FFFEFE] transition-colors placeholder:text-muted-foreground hover:border-[#ffffff99] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       onKeyDown={(e) => {

@@ -155,7 +155,7 @@ const CreateEventForm = ({
           },
         )}
       >
-        <Block className="mb-[3.125rem]">
+        <Block className="mb-[3rem]">
           <EventTitleInput
             placeholder="이벤트 이름을 적어주세요"
             minRows={1}

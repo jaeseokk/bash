@@ -298,8 +298,8 @@ const EventView = ({
       )}
       <div>
         <EventBackground coverImage={eventInfo.coverImage} />
-        <Block className="mb-[3.125rem]">
-          <div className="whitespace-pre-wrap text-center text-[1.75rem] font-bold">
+        <Block className="mb-[3rem]">
+          <div className="whitespace-pre-wrap text-center text-[2.375rem] font-bold">
             {eventInfo.title}
           </div>
         </Block>
