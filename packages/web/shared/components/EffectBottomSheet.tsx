@@ -42,7 +42,7 @@ const EffectBottomSheet = ({
                   </div>
                 </RadioGroupPrimitive.Item>
                 {OPTIONS.map((effectId) => {
-                  const src = STICKERS[effectId][0];
+                  const src = STICKERS[effectId].data[0].src;
 
                   return (
                     <RadioGroupPrimitive.Item

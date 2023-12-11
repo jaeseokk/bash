@@ -28,9 +28,7 @@ const StickerContainer = ({ eventKey, effect }: StickerContainerProps) => {
     },
   });
 
-  const stickerUrls = STICKERS[effect];
-
-  const points = generateRandomPoints(90, 90, stickerUrls.length);
+  const stickers = STICKERS[effect].data;
 
   const handleSaveStickerPosition =
     (effect: keyof typeof STICKERS, index: number) =>
@@ -53,23 +51,29 @@ const StickerContainer = ({ eventKey, effect }: StickerContainerProps) => {
     const stickerPosition = localStorage.getItem(key);
 
     if (!stickerPosition) {
-      localStorage.setItem(key, JSON.stringify(points[index]));
-      return {
-        x: points[index].x,
-        y: points[index].y,
+      const initialPosition = {
+        x: STICKERS[effect].data[index].initialPosition.x,
+        y: STICKERS[effect].data[index].initialPosition.y,
       };
+
+      localStorage.setItem(key, JSON.stringify(initialPosition));
+      return initialPosition;
     }
 
     return JSON.parse(stickerPosition);
   };
 
+  if (!STICKERS[effect]) {
+    return null;
+  }
+
   return (
     <div className="pointer-events-none absolute inset-0 h-full overflow-hidden [&_.moveable-control-box]:opacity-0">
-      {stickerUrls.map((src, index) => {
+      {stickers.map((sticker, index) => {
         return (
           <Sticker
-            key={`${src}_${index}_${containerInfo.scrollHeight}_${containerInfo.scrollWidth}`}
-            src={src}
+            key={`${sticker.src}_${index}_${containerInfo.scrollHeight}_${containerInfo.scrollWidth}`}
+            src={sticker.src}
             containerInfo={containerInfo}
             initialPosition={getInitialPosition(effect, index)}
             onSavePosition={handleSaveStickerPosition(effect, index)}
