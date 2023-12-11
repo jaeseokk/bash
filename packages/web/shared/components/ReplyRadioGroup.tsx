@@ -35,7 +35,7 @@ const ReplyRadioGroup = ({
     <RadioGroupPrimitive.Root className="flex justify-center" {...props}>
       <div
         className={cn(
-          "flex w-full max-w-[20rem] justify-between",
+          "flex w-full max-w-[20rem] justify-around",
           props.disabled && "opacity-50",
         )}
       >

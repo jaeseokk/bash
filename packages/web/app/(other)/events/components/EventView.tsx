@@ -6,7 +6,7 @@ import { cn, formatDate, shimmer, toBase64 } from "@/utils";
 import { PrismaDBMainConstants } from "@bash/db";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ViewField from "@/components/ViewField";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
 import CrownIcon from "@/assets/crown_gradient.svg";
@@ -37,6 +37,85 @@ import Linkify from "linkify-react";
 import StickerContainer from "@/components/StickerContainer";
 import ShareLayer from "./ShareLayer";
 import { useIntersection } from "@/hooks/useIntersection";
+
+const DUMMY = {
+  activities: [
+    {
+      id: 1,
+      userId: 49,
+      eventId: 70,
+      attendanceId: 20,
+      createdAt: "2023-12-11T17:08:24.362Z",
+      message: "😁기대가 됩니다 어서 만나요",
+      emoji: "1f973",
+      status: "ATTENDING" as const,
+      user: {
+        id: 49,
+        username: "강강",
+      },
+    },
+    {
+      id: 2,
+      userId: 9,
+      eventId: 70,
+      attendanceId: 19,
+      createdAt: "2023-12-11T17:03:42.136Z",
+      message: null,
+      emoji: "1f497",
+      status: "ATTENDING" as const,
+      user: {
+        id: 9,
+        username: "재재",
+      },
+    },
+    {
+      id: 3,
+      userId: 9,
+      eventId: 70,
+      attendanceId: 19,
+      createdAt: "2023-12-11T17:02:49.383Z",
+      message: "조만간 만나요",
+      emoji: "1f497",
+      status: "ATTENDING" as const,
+      user: {
+        id: 9,
+        username: "석석",
+      },
+    },
+  ],
+  attendees: [
+    {
+      id: 1,
+      userId: 1,
+      eventId: 70,
+      status: "ATTENDING" as const,
+      user: {
+        id: 1,
+        username: "강강",
+      },
+    },
+    {
+      id: 2,
+      userId: 2,
+      eventId: 70,
+      status: "ATTENDING" as const,
+      user: {
+        id: 2,
+        username: "재재",
+      },
+    },
+    {
+      id: 3,
+      userId: 3,
+      eventId: 70,
+      status: "ATTENDING" as const,
+      user: {
+        id: 3,
+        username: "석석",
+      },
+    },
+  ],
+};
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -102,8 +181,6 @@ const EventView = ({
     rootMargin: "0px",
     threshold: 1,
   });
-
-  console.log(intersection);
   const [loading, startLoading] = useLoading();
   const { openDialog } = useAlertDialog();
   const session = useSession();
@@ -302,9 +379,44 @@ const EventView = ({
                 />
               </div>
             </FloatingArea>
-            <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
-              <AttendeesStatus attendances={eventInfo.attendances} />
-              <ActivityStatus activities={eventInfo.activities} />
+            <div className="relative mx-auto max-w-[750px] py-4">
+              {!myAttendance ? (
+                <>
+                  <div className="space-y-[2.5rem]">
+                    <AttendeesStatus attendances={DUMMY.attendees} />
+                    <ActivityStatus activities={DUMMY.activities} />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[5px]">
+                    <div className="mx-8 rounded-2xl border border-[#AEFF5E] bg-[#131313] p-[1.875rem] text-center">
+                      <div className="font-bold">
+                        아직은 볼 수 없는 영역입니다
+                      </div>
+                      <div className="mt-[1.25rem] text-[0.875rem]">
+                        참석여부를 알려주시면,
+                        <br />
+                        다른 참석자들의 이름과 활동을 확인할 수 있어요
+                      </div>
+                      <div className="mt-[1.25rem]">
+                        <Button
+                          size="sm"
+                          type="button"
+                          onClick={handleShowAttendDialog}
+                        >
+                          참석여부 답하기
+                        </Button>
+                      </div>
+                      <div className="mt-[0.5rem] text-[0.75rem] text-muted-foreground">
+                        아직 잘 모르겠다면 &#39; 아마도&#39;라고 답해도 돼요
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-[2.5rem]">
+                  <AttendeesStatus attendances={eventInfo.attendances} />
+                  <ActivityStatus activities={eventInfo.activities} />
+                </div>
+              )}
             </div>
           </>
         )}
