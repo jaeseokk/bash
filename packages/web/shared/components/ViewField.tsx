@@ -11,15 +11,15 @@ const ViewField = ({ icon, children, size = "sm" }: ViewFieldProps) => {
   return (
     <div
       className={cn(
-        `inline-flex items-center text-base [&_a]:underline`,
+        `inline-flex text-base [&_a]:underline`,
         size === "lg" && "text-[1.75rem]",
       )}
     >
       {icon && (
         <span
           className={cn(
-            "mr-2 [&>*]:w-[1.125rem]",
-            size === "lg" && "[&>*]:w-[1.375rem]",
+            "mr-2 inline-flex h-[1.5rem] items-center [&_svg]:h-auto [&_svg]:w-[1.375rem]",
+            size === "lg" && "h-[2.625rem]",
           )}
         >
           {icon}

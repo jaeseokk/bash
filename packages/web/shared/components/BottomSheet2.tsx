@@ -17,6 +17,7 @@ export interface BottomSheet2Props
   title?: React.ReactNode;
   disabledOverlay?: boolean;
   disableInteractOutside?: boolean;
+  hideCloseButton?: boolean;
   onClose?: () => void;
 }
 
@@ -26,6 +27,7 @@ const BottomSheet2 = ({
   title,
   disabledOverlay,
   disableInteractOutside,
+  hideCloseButton,
   onClose,
   ...props
 }: BottomSheet2Props) => {
@@ -52,13 +54,15 @@ const BottomSheet2 = ({
         <ScrollArea className="mt-9 flex flex-col">
           <div className="px-9 pb-9">{children}</div>
         </ScrollArea>
-        <SheetPrimitive.Close
-          className="absolute right-9 top-[2.5rem] rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-          onClick={onClose}
-        >
-          <Cross2Icon className="h-6 w-6" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
+        {!hideCloseButton && (
+          <SheetPrimitive.Close
+            className="absolute right-9 top-[2.5rem] rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+            onClick={onClose}
+          >
+            <Cross2Icon className="h-6 w-6" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        )}
       </SheetContent>
     </Sheet>
   );

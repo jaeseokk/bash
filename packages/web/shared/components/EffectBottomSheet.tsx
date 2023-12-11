@@ -28,6 +28,7 @@ const EffectBottomSheet = ({
       title="꾸미기"
       disabledOverlay
       disableInteractOutside
+      hideCloseButton
       {...props}
     >
       <div className="space-y-4">

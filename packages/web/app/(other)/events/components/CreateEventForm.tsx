@@ -20,17 +20,16 @@ import EditIcon from "@/assets/edit.svg";
 import CrownIcon from "@/assets/crown_gradient.svg";
 import LocationIcon from "@/assets/location_gradient.svg";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
+import PeopleIcon from "@/assets/people_gradient.svg";
 import FloatingArea from "@/components/FloatingArea";
-import BottomSheet2 from "@/components/BottomSheet2";
 import PreviewLayer from "./PreviewLayer";
-import { Player } from "@lottiefiles/react-lottie-player";
-import heart from "@/assets/heart.json";
 import EventBackground from "@/components/EventBackground";
 import Layer, { LayerContentWithScrollArea } from "@/components/Layer";
 import EffectBottomSheet from "@/components/EffectBottomSheet";
 import StickerContainer from "@/components/StickerContainer";
 import { STICKERS } from "@/constants/sticker";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NumericInput from "@/components/NumericInput";
 
 const COVER_IMAGE_LIST = [
   "https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/cover-images/01_mood.png",
@@ -113,6 +112,7 @@ interface CreateEventFormData {
   endDate: Date | null;
   authorName: string | null;
   location: string | null;
+  spots: number | null;
   description: string | null;
   effect: string | null;
 }
@@ -227,7 +227,7 @@ const CreateEventForm = ({
             </button>
           </div>
         </Block>
-        <Block className="mb-6">
+        <Block className="mb-6 space-y-2.5">
           <Field labelIcon={<CalendarIcon />} label="날짜 및 시간">
             <Controller
               name="startDate"
@@ -258,8 +258,6 @@ const CreateEventForm = ({
               control={control}
             />
           </Field>
-        </Block>
-        <Block className="mb-6 space-y-2.5">
           <Field labelIcon={<CrownIcon />} label="주최자">
             <Input
               placeholder="이름을 적어주세요"
@@ -272,6 +270,20 @@ const CreateEventForm = ({
               placeholder="장소 위치, 주소, 링크"
               minRows={1}
               {...register("location")}
+            />
+          </Field>
+          <Field labelIcon={<PeopleIcon />} label="인원수">
+            <NumericInput
+              placeholder="무제한"
+              {...register("spots", {
+                setValueAs: (value) => {
+                  if (value === "") {
+                    return undefined;
+                  }
+
+                  return Number(value);
+                },
+              })}
             />
           </Field>
         </Block>
@@ -291,13 +303,7 @@ const CreateEventForm = ({
                 return (
                   <EffectBottomSheet
                     open={showEffectSheet}
-                    onOpenChange={(open) => {
-                      setShowEffectSheet(open);
-
-                      if (!open) {
-                        setSelectingEffect(undefined);
-                      }
-                    }}
+                    onOpenChange={setShowEffectSheet}
                     value={effect}
                     onChange={setSelectingEffect}
                     onSubmit={(value) => {

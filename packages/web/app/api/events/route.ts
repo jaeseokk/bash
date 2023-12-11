@@ -29,6 +29,8 @@ const CreateEventInputSchema = z.object({
   authorName: z.optional(z.string()),
   location: z.optional(z.string()),
   description: z.optional(z.string()),
+  spots: z.optional(z.nullable(z.number())),
+  effect: z.optional(z.string()),
 });
 
 export async function POST(request: NextRequest) {
@@ -53,6 +55,8 @@ export async function POST(request: NextRequest) {
       location: input.location,
       authorId: session.user.id,
       description: input.description,
+      spots: input.spots,
+      effect: input.effect,
     },
   });
 

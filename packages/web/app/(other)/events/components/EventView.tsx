@@ -12,6 +12,7 @@ import ViewField from "@/components/ViewField";
 import CalendarIcon from "@/assets/calendar_gradient.svg";
 import CrownIcon from "@/assets/crown_gradient.svg";
 import LocationIcon from "@/assets/location_gradient.svg";
+import PeopleIcon from "@/assets/people_gradient.svg";
 import ReplyRadioGroup from "@/components/ReplyRadioGroup";
 import { Button } from "@/components/ui/button";
 import FloatingArea from "@/components/FloatingArea";
@@ -100,6 +101,11 @@ const EventView = ({
   const { openDialog } = useAlertDialog();
   const session = useSession();
   const router = useRouter();
+  const attendancesThatSayYes = preview
+    ? []
+    : eventInfo.attendances.filter(
+        (attendance) => attendance.status === "ATTENDING",
+      );
   const dateDisplay = useMemo(() => {
     if (eventInfo.startDate && eventInfo.endDate) {
       return `${formatDate(eventInfo.startDate)} ~ ${formatDate(
@@ -111,6 +117,39 @@ const EventView = ({
 
     return undefined;
   }, [eventInfo.endDate, eventInfo.startDate]);
+  const authorName = useMemo(() => {
+    if (eventInfo.authorName) {
+      return eventInfo.authorName;
+    } else if (preview) {
+      return session.data?.user.name;
+    } else {
+      return eventInfo.author.username;
+    }
+  }, [eventInfo, preview, session]);
+  const spotsDisplay = useMemo(() => {
+    if (!eventInfo.spots) {
+      return null;
+    } else if (preview) {
+      return <>0 / {eventInfo.spots}명이 참석 예정입니다.</>;
+    } else {
+      return (
+        <>
+          <span
+            className={cn(
+              attendancesThatSayYes.length > eventInfo.spots
+                ? "text-red-600"
+                : attendancesThatSayYes.length > 0
+                  ? "text-[#AEFF5E]"
+                  : null,
+            )}
+          >
+            {attendancesThatSayYes.length}
+          </span>{" "}
+          / {eventInfo.spots}명이 참석 예정입니다.
+        </>
+      );
+    }
+  }, []);
   const isMyEvent = !preview && session.data?.user.id === eventInfo.authorId;
   const isPublished = !preview && !!eventInfo.publishedAt;
   const myAttendance = preview
@@ -198,7 +237,7 @@ const EventView = ({
             />
           </div>
         </Block>
-        <Block className="mb-6 space-y-6">
+        <Block className="mb-6 space-y-2">
           <div>
             <ViewField icon={<CalendarIcon />} size="lg">
               {dateDisplay}
@@ -206,20 +245,27 @@ const EventView = ({
           </div>
           <div>
             <ViewField icon={<CrownIcon />} size="lg">
-              주최자 : {eventInfo.authorName}
+              주최자 : {authorName}
             </ViewField>
           </div>
         </Block>
         <Block className="mb-6 space-y-2">
-          <ViewField icon={<LocationIcon />}>
-            <Linkify>{eventInfo.location}</Linkify>
-          </ViewField>
+          {spotsDisplay && (
+            <ViewField icon={<PeopleIcon />}>{spotsDisplay}</ViewField>
+          )}
+          {eventInfo.location && (
+            <ViewField icon={<LocationIcon />}>
+              <p className="whitespace-pre-wrap [&_a]:underline">
+                <Linkify>{eventInfo.location}</Linkify>
+              </p>
+            </ViewField>
+          )}
         </Block>
         {eventInfo.description && (
           <Block>
-            <div className="whitespace-pre-wrap text-[1.5rem] [&_a]:underline">
+            <p className="whitespace-pre-wrap text-[1rem] [&_a]:underline">
               <Linkify>{eventInfo.description}</Linkify>
-            </div>
+            </p>
           </Block>
         )}
         {!preview && (
@@ -236,13 +282,6 @@ const EventView = ({
         <div className="mt-8 flex justify-center">
           <LetsLogo />
         </div>
-        {!preview && (
-          <Block2 className="mt-[1.5rem]">
-            <Button variant="outline" asChild>
-              <Link href="/events/new">내 이벤트 직접 만들기</Link>
-            </Button>
-          </Block2>
-        )}
         <Block2 className="mb-[1.75rem] mt-8">
           <div className="rounded-xl border border-[#343434] p-8">
             <ReplyRadioGroup
@@ -391,10 +430,7 @@ interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Block = ({ children, className, ...rest }: BlockProps) => {
   return (
-    <div
-      className={cn("mx-auto max-w-[750px] px-8 text-center", className)}
-      {...rest}
-    >
+    <div className={cn("mx-auto max-w-[750px] px-8", className)} {...rest}>
       {children}
     </div>
   );

@@ -8,6 +8,9 @@ export interface EventItem extends PrismaDBMainTypes.Event {
 }
 
 export interface EventDetail extends PrismaDBMainTypes.Event {
+  author: {
+    username: string;
+  };
   attendances: {
     id: number;
     userId: number;
@@ -41,5 +44,6 @@ export type PreviewEventDetail = Pick<
   | "authorName"
   | "location"
   | "description"
+  | "spots"
   | "effect"
 >;
