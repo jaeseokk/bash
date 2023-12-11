@@ -6,50 +6,58 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 import { EventDetail } from "@/types/events";
 import { formatDistanceToNowInKorean } from "@/utils";
 import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
+import Emoji from "@/components/Emoji";
 
 export interface ActivityStatusProps {
   activities: EventDetail["activities"];
 }
 
 const ActivityStatus = ({ activities }: ActivityStatusProps) => {
-  if (activities.length) {
-    return null
+  if (activities.length === 0) {
+    return null;
   }
 
   return (
-    <Layer
-      title="이벤트 활동"
-      trigger={
-        <div className="space-y-[1.25rem] px-8">
-          <div className="font-bold">이벤트 활동</div>
-          <div className="space-y-8">
-            {activities.slice(0, 3).map((activity) => (
-              <ActivityItem
-                key={activity.id}
-                status={activity.status}
-                name={activity.user.username}
-                message={activity.message}
-                date={activity.createdAt}
-              />
-            ))}
-          </div>
+    <div className="space-y-[1.25rem] px-8">
+      <div className="flex items-center justify-between font-bold">
+        <div>이벤트 활동</div>
+        <div>
+          <Layer
+            title="이벤트 활동"
+            trigger={
+              <button className="text-[0.875rem] underline">더보기</button>
+            }
+          >
+            <LayerContentWithScrollArea>
+              <div className="space-y-8 py-8">
+                {activities.map((activity) => (
+                  <ActivityItem
+                    key={activity.id}
+                    status={activity.status}
+                    name={activity.user.username}
+                    message={activity.message}
+                    date={activity.createdAt}
+                    emoji={activity.emoji}
+                  />
+                ))}
+              </div>
+            </LayerContentWithScrollArea>
+          </Layer>
         </div>
-      }
-    >
-      <LayerContentWithScrollArea>
-        <div className="space-y-8 py-8">
-          {activities.map((activity) => (
-            <ActivityItem
-              key={activity.id}
-              status={activity.status}
-              name={activity.user.username}
-              message={activity.message}
-              date={activity.createdAt}
-            />
-          ))}
-        </div>
-      </LayerContentWithScrollArea>
-    </Layer>
+      </div>
+      <div className="space-y-8">
+        {activities.slice(0, 3).map((activity) => (
+          <ActivityItem
+            key={activity.id}
+            status={activity.status}
+            name={activity.user.username}
+            message={activity.message}
+            date={activity.createdAt}
+            emoji={activity.emoji}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -74,12 +82,26 @@ interface ActivityItemProps {
   name: string;
   message?: string | null;
   date: string | Date;
+  emoji?: string | null;
 }
 
-const ActivityItem = ({ status, name, message, date }: ActivityItemProps) => {
+const ActivityItem = ({
+  status,
+  name,
+  message,
+  date,
+  emoji,
+}: ActivityItemProps) => {
   return (
-    <div className="flex space-x-4">
-      <ProfileAvatar size="3rem" name={name} />
+    <div className="flex items-start space-x-4">
+      <div className="relative">
+        <ProfileAvatar size="3rem" name={name} />
+        {emoji && (
+          <div className="absolute bottom-0 right-0">
+            <Emoji code={emoji as any} size="1.125rem" />
+          </div>
+        )}
+      </div>
       <div>
         <div className="text-[0.875rem] font-bold">
           {getTitleMessage(status, name)}

@@ -115,7 +115,10 @@ const AttendForm = ({
                   })}
                 />
               </Field>
-              <Field label="전화번호">
+              <Field
+                label="전화번호"
+                message="이벤트 내용을 전달 받을 전화번호를 입력해주세요 (안내 용도로만 활용)"
+              >
                 <NumericInput
                   placeholder="010-0000-0000"
                   maxLength={11}

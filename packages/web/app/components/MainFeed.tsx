@@ -24,7 +24,7 @@ const MainFeed = ({}: MainFeedProps) => {
 
   return (
     <div>
-      <div className="mx-auto max-w-[750px]">
+      <div className="mx-auto max-w-[750px] pb-9">
         <h2 className="mb-4 px-8 text-[2.8125rem] font-bold leading-[1.2]">
           Welcome back {session.data?.user?.name}!
         </h2>

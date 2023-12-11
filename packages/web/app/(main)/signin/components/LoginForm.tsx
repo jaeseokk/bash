@@ -141,7 +141,7 @@ const LoginForm = ({
             label="전화번호"
             message={
               step === Step.PHONE_NUMBER ? (
-                "전화번호는 이벤트 안내를 위해서만 활용되니 안심하세요."
+                "전화번호는 안내문자 발송시에만 활용됩니다"
               ) : step > Step.PHONE_NUMBER ? (
                 <>
                   위 번호로 인증번호를 보내드렸어요.

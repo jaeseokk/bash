@@ -276,7 +276,7 @@ const CreateEventForm = ({
             label="참석자 응답"
             topMessage="게스트가 이 중에 답변을 고를 수 있어요!"
           >
-            <div className="rounded-xl border border-input p-8">
+            <div className="rounded-xl border border-input px-2 py-8">
               <ReplyRadioGroup disabled={true} />
             </div>
           </Field>

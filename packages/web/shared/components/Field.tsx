@@ -32,7 +32,7 @@ const Field = ({
       )}
       {children}
       {message && (
-        <div className="mt-1 text-[0.825rem] text-[#ffffffb3]">{message}</div>
+        <div className="mt-1 text-[0.75rem] text-[#ffffffb3]">{message}</div>
       )}
     </label>
   );

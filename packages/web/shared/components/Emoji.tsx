@@ -10,6 +10,8 @@ import emoji_1f389 from "@/public/images/emoji/1f389.png";
 import emoji_1f490 from "@/public/images/emoji/1f490.png";
 import emoji_1f497 from "@/public/images/emoji/1f497.png";
 import emoji_1f973 from "@/public/images/emoji/1f973.png";
+import emoji_1f914 from "@/public/images/emoji/1f914.png";
+import emoji_1f622 from "@/public/images/emoji/1f622.png";
 
 const DATA = {
   "1f4dd": {
@@ -39,6 +41,14 @@ const DATA = {
   "1f973": {
     url: emoji_1f973,
     native: "🥳",
+  },
+  "1f914": {
+    url: emoji_1f914,
+    native: "🤔",
+  },
+  "1f622": {
+    url: emoji_1f622,
+    native: "😢",
   },
 } as const;
 

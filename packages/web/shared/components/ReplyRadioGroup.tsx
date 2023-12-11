@@ -2,37 +2,58 @@ import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { PrismaDBMainConstants } from "@bash/db";
 import { cn } from "@/utils";
+import Emoji from "@/components/Emoji";
+
+const OPTIONS = [
+  {
+    value: PrismaDBMainConstants.AttendanceStatus.ATTENDING,
+    icon: <Emoji code="1f4dd" />,
+    label: "갈게요!",
+  },
+  {
+    value: PrismaDBMainConstants.AttendanceStatus.MAYBE,
+    icon: <Emoji code="1f914" />,
+    label: "아마도?",
+  },
+  {
+    value: PrismaDBMainConstants.AttendanceStatus.NOT_ATTENDING,
+    icon: <Emoji code="1f622" />,
+    label: "어려울 듯",
+  },
+];
 
 export interface ReplyRadioGroupProps
-  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {}
+  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {
+  showOnlySelected?: boolean;
+}
 
-const ReplyRadioGroup = ({ ...props }: ReplyRadioGroupProps) => {
+const ReplyRadioGroup = ({
+  showOnlySelected,
+  ...props
+}: ReplyRadioGroupProps) => {
   return (
-    <RadioGroupPrimitive.Root {...props}>
+    <RadioGroupPrimitive.Root className="flex justify-center" {...props}>
       <div
         className={cn(
-          "flex w-full justify-center space-x-[1.625rem]",
+          "flex w-full max-w-[20rem] justify-between",
           props.disabled && "opacity-50",
         )}
       >
-        <RadioGroupPrimitive.Item
-          className="group"
-          value={PrismaDBMainConstants.AttendanceStatus.ATTENDING}
-        >
-          <ItemContent icon={"👍"}>갈게요!</ItemContent>
-        </RadioGroupPrimitive.Item>
-        <RadioGroupPrimitive.Item
-          className="group"
-          value={PrismaDBMainConstants.AttendanceStatus.MAYBE}
-        >
-          <ItemContent icon={"🤔"}>아마도?</ItemContent>
-        </RadioGroupPrimitive.Item>
-        <RadioGroupPrimitive.Item
-          className="group"
-          value={PrismaDBMainConstants.AttendanceStatus.NOT_ATTENDING}
-        >
-          <ItemContent icon={"😢"}>어려울 듯</ItemContent>
-        </RadioGroupPrimitive.Item>
+        {OPTIONS.map((option) => {
+          if (showOnlySelected && option.value !== props.value) {
+            return null;
+          }
+
+          return (
+            <RadioGroupPrimitive.Item
+              key={option.value}
+              className="group"
+              value={option.value}
+            >
+              <ItemContent icon={option.icon}>{option.label}</ItemContent>
+            </RadioGroupPrimitive.Item>
+          );
+        })}
       </div>
     </RadioGroupPrimitive.Root>
   );

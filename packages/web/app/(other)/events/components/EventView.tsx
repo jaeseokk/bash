@@ -20,6 +20,7 @@ import Edit2Icon from "@/assets/edit2.svg";
 import NoticeIcon from "@/assets/notice.svg";
 import InviteIcon from "@/assets/invite.svg";
 import PosterIcon from "@/assets/poster.svg";
+import LetsLogo from "@/assets/lets_logo.svg";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import BottomSheet2 from "@/components/BottomSheet2";
 import AttendForm from "@/components/AttendForm";
@@ -35,6 +36,7 @@ import { useAlertDialog } from "@/components/AlertDialogProvider";
 import Linkify from "linkify-react";
 import StickerContainer from "@/components/StickerContainer";
 import ShareLayer from "./ShareLayer";
+import { useIntersection } from "@/hooks/useIntersection";
 
 export interface CommonEventViewProps {
   preview?: boolean;
@@ -94,6 +96,14 @@ const EventView = ({
   onPublish,
   onAttendCallback,
 }: EventViewProps) => {
+  const intersectionRef = React.useRef(null);
+  const intersection = useIntersection(intersectionRef, {
+    root: null,
+    rootMargin: "0px",
+    threshold: 1,
+  });
+
+  console.log(intersection);
   const [loading, startLoading] = useLoading();
   const { openDialog } = useAlertDialog();
   const session = useSession();
@@ -199,6 +209,7 @@ const EventView = ({
 
     handleCloseAttendDialog();
   };
+  const isReplySectionPinned = !intersection?.isIntersecting;
 
   return (
     <>
@@ -227,9 +238,9 @@ const EventView = ({
                 height: "auto",
               }}
               placeholder="blur"
-              blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                shimmer(1, 1),
-              )}`}
+              blurDataURL={`/_next/image?url=${encodeURIComponent(
+                eventInfo.coverImage,
+              )}&w=16&q=1`}
               sizes="100vw"
             />
           </div>
@@ -268,31 +279,40 @@ const EventView = ({
         {!preview && (
           <>
             <Block>
-              <Divider />
+              <Divider className="pb-0" />
             </Block>
+            <FloatingArea disabledFloating={isMyEvent || !!myAttendance}>
+              <div className="relative px-8 py-[2.5rem] " ref={intersectionRef}>
+                <div
+                  className={cn(
+                    "pointer-events-none absolute inset-0 z-[-1] opacity-0 transition-opacity",
+                    isReplySectionPinned && "opacity-100",
+                  )}
+                  style={{
+                    background: `linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, #000 53.65%)`,
+                  }}
+                />
+                <ReplyRadioGroup
+                  value={myAttendance?.status ?? ""}
+                  disabled={preview}
+                  showOnlySelected={!!myAttendance}
+                  onClick={() => {
+                    handleShowAttendDialog();
+                  }}
+                />
+              </div>
+            </FloatingArea>
             <div className="mx-auto max-w-[750px] space-y-[2.5rem]">
-              <AttendeesStatus attendances={attendancesThatSayYes} />
+              <AttendeesStatus attendances={eventInfo.attendances} />
               <ActivityStatus activities={eventInfo.activities} />
             </div>
           </>
         )}
-        <Block2 className="mb-[1.75rem] mt-8">
-          <div className="rounded-xl border border-[#343434] p-8">
-            <ReplyRadioGroup
-              value={myAttendance?.status}
-              disabled={isMyEvent || preview}
-              onClick={() => {
-                if (isMyEvent) {
-                  return;
-                }
-
-                handleShowAttendDialog();
-              }}
-            />
-          </div>
-        </Block2>
+        <div className="flex items-center justify-center py-20">
+          <LetsLogo />
+        </div>
       </div>
-      {!preview && (
+      {!preview && (isMyEvent || (!isMyEvent && !!myAttendance)) && (
         <FloatingArea>
           <BottomButton.Root>
             {isMyEvent && (
@@ -336,7 +356,7 @@ const EventView = ({
               </>
             )}
             <ShareLayer
-              url={`https://lets.run/events/${eventInfo.slug}`}
+              url={`https://lets.fyi/events/${eventInfo.slug}`}
               trigger={
                 <BottomButton.Item
                   icon={<InviteIcon />}
