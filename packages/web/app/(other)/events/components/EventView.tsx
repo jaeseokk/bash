@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn, formatDate, shimmer, toBase64 } from "@/utils";
-import { PrismaDBMainConstants } from "@bash/db";
+import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -241,6 +241,8 @@ const EventView = ({
     : eventInfo.attendances.find(
         (attendance) => attendance.userId === session.data?.user.id,
       );
+  const [cachedAttendanceStatus, setCachedAttendanceStatus] =
+    useState<PrismaDBMainTypes.AttendanceStatus>();
   const myLatestActivity = preview
     ? undefined
     : eventInfo.activities.find(
@@ -375,7 +377,8 @@ const EventView = ({
                   value={myAttendance?.status ?? ""}
                   disabled={preview}
                   showOnlySelected={!!myAttendance}
-                  onClick={() => {
+                  onClick={(value) => {
+                    setCachedAttendanceStatus(value as any);
                     handleShowAttendDialog();
                   }}
                 />
@@ -526,10 +529,13 @@ const EventView = ({
         <BottomSheet2
           title={"참석여부 답하기"}
           open={showAttendDialog}
-          onClose={handleCloseAttendDialog}
+          onClose={() => {
+            handleCloseAttendDialog();
+            setCachedAttendanceStatus(undefined);
+          }}
         >
           <AttendForm
-            defaultStatus={myAttendance?.status}
+            defaultStatus={myAttendance?.status ?? cachedAttendanceStatus}
             defaultEmoji={myLatestActivity?.emoji}
             onSubmit={handleAttend}
             onSubmitWithSign={async (data) => {

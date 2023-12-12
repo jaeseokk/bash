@@ -23,12 +23,17 @@ const OPTIONS = [
 ];
 
 export interface ReplyRadioGroupProps
-  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {
+  extends Omit<
+    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
+    "onClick"
+  > {
   showOnlySelected?: boolean;
+  onClick?: (value: string) => void;
 }
 
 const ReplyRadioGroup = ({
   showOnlySelected,
+  onClick,
   ...props
 }: ReplyRadioGroupProps) => {
   return (
@@ -49,6 +54,9 @@ const ReplyRadioGroup = ({
               key={option.value}
               className="group"
               value={option.value}
+              onClick={(e) => {
+                onClick?.(option.value);
+              }}
             >
               <ItemContent icon={option.icon}>{option.label}</ItemContent>
             </RadioGroupPrimitive.Item>
