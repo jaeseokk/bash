@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { getServerSession } from "@/server/auth";
 import { getPrismaClientDbMain } from "@/server/prisma";
 import { getMyEvents } from "@/server/events";
+import { sendSlackMessage } from "@/server/message";
 
 const prisma = getPrismaClientDbMain();
 

@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const coverImage = searchParams.get("coverImage") || "";
   const title = searchParams.get("title") || "";
-  const startDate = searchParams.get("startDate") || "";
+  const startDate1 = searchParams.get("startDate1") || "";
+  const startDate2 = searchParams.get("startDate2") || "";
   const location = searchParams.get("location") || "";
   const fontData = await fetch(
     new URL("../../../public/fonts/Pretendard-Bold.ttf", import.meta.url),
@@ -106,10 +107,12 @@ export async function GET(request: NextRequest) {
         >
           <div
             style={{
-              whiteSpace: "pre-wrap",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            {startDate}
+            <div>{startDate1}</div>
+            <div>{startDate2}</div>
           </div>
           {location && (
             <div

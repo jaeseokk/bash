@@ -13,11 +13,18 @@ export interface PosterShareLayerProps
   eventInfo: PrismaDBMainTypes.Event;
 }
 
+const splitDate = (date: string) => {
+  const replaced = date.replace(") ", ")@") ?? "";
+  return replaced.split("@");
+};
+
 const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
+  const splited = splitDate(formatDate(eventInfo.startDate));
   const searchParams = new URLSearchParams({
     coverImage: eventInfo.coverImage ?? "",
     title: eventInfo.title ?? "",
-    startDate: formatDate(eventInfo.startDate).replace(") ", ")\n") ?? "",
+    startDate1: splited[0] ?? "",
+    startDate2: splited[1] ?? "",
     location: eventInfo.location ?? "",
   });
   const imageUrl = `${

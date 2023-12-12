@@ -6,6 +6,10 @@ export const sendSlackMessageToNotificationTestChannel = async (
   to: string,
   message: string,
 ) => {
+  await sendSlackMessage(to, message);
+};
+
+export const sendSlackMessage = async (header: string, message: string) => {
   await fetch("https://slack.com/api/chat.postMessage", {
     method: "POST",
     headers: {
@@ -14,7 +18,7 @@ export const sendSlackMessageToNotificationTestChannel = async (
     },
     body: JSON.stringify({
       channel: "C0698S7CE6A",
-      text: `[${to}]\n\n${message}`,
+      text: `[${header}]\n\n${message}`,
     }),
   });
 };
