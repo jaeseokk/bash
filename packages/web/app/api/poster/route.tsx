@@ -5,8 +5,8 @@ import { NextRequest } from "next/server";
 export const runtime = "edge";
 
 const size = {
-  width: 280,
-  height: 450,
+  width: 560,
+  height: 900,
 };
 
 export async function GET(request: NextRequest) {
@@ -55,10 +55,10 @@ export async function GET(request: NextRequest) {
             height="200"
             style={{
               position: "absolute",
-              top: "-30px",
-              left: "-130px",
-              width: "540px",
-              height: "540px",
+              top: "-60px",
+              left: "-260px",
+              width: "1080px",
+              height: "1080px",
             }}
           />
         </div>
@@ -67,24 +67,24 @@ export async function GET(request: NextRequest) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "240x",
-            height: "240px",
+            width: "480x",
+            height: "480px",
             borderRadius: "16px",
             overflow: "hidden",
           }}
         >
-          <img src={coverImage} alt="" width="240" height="240" sizes="100vw" />
+          <img src={coverImage} alt="" width="480" height="480" sizes="100vw" />
         </div>
         <div
           style={{
             position: "absolute",
-            left: "20px",
-            top: "20px",
-            width: "210px",
-            fontSize: "28px",
+            left: "40px",
+            top: "40px",
+            width: "420px",
+            fontSize: "56px",
             fontWeight: 700,
             lineHeight: "110%",
-            textShadow: "0 1px 10px rgb(0 0 0 / 25%)",
+            textShadow: "0 1px 5px rgb(0 0 0 / 25%)",
             color: "white",
           }}
         >
@@ -93,13 +93,12 @@ export async function GET(request: NextRequest) {
         <div
           style={{
             position: "absolute",
-            bottom: "20px",
-            left: "20px",
-            width: "180px",
-            fontSize: "20px",
+            bottom: "40px",
+            left: "40px",
+            fontSize: "40px",
             fontWeight: 700,
             lineHeight: "130%",
-            textShadow: "0 1px 10px rgb(0 0 0 / 25%)",
+            textShadow: "0 1px 5px rgb(0 0 0 / 25%)",
             color: "white",
             display: "flex",
             flexDirection: "column",
@@ -109,6 +108,7 @@ export async function GET(request: NextRequest) {
             style={{
               display: "flex",
               flexDirection: "column",
+              width: "480px",
             }}
           >
             <div>{startDate1}</div>
@@ -117,13 +117,27 @@ export async function GET(request: NextRequest) {
           {location && (
             <div
               style={{
-                marginTop: "16px",
+                width: "360px",
+                marginTop: "32px",
                 whiteSpace: "pre-wrap",
               }}
             >
               {location}
             </div>
           )}
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "4px",
+            right: "4px",
+            fontSize: "24px",
+            fontWeight: 700,
+            color: "white",
+            opacity: 0.8,
+          }}
+        >
+          @lets.fyi
         </div>
       </div>
     ),
