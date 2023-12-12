@@ -49,8 +49,12 @@ const handler = NextAuth({
               username: credentials.username,
             },
           });
+          console.log(newUser);
 
-          if (newUser.createdAt === newUser.updatedAt && isDeployProd) {
+          if (
+            newUser.createdAt.getTime() === newUser.updatedAt.getTime() &&
+            isDeployProd
+          ) {
             sendSlackMessage(
               "신규 사용자",
               `전화번호: ${newUser.phoneNumber}\n이름: ${newUser.username}`,
