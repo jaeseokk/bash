@@ -5,8 +5,8 @@ export const runtime = "edge";
 
 export const alt = "Event Cover Image";
 export const size = {
-  width: 1200,
-  height: 630,
+  width: 600,
+  height: 315,
 };
 export const contentType = "image/png";
 
@@ -47,16 +47,16 @@ export default async function Image({
             }}
           >
             <img
-              width="630"
-              height="630"
-              src={`https://lets.fyi/_next/image?url=${encodeURIComponent(
+              width="315"
+              height="315"
+              src={`${getUrlOrigin()}/_next/image?url=${encodeURIComponent(
                 event.coverImage,
               )}&w=16&q=10`}
               style={{
                 position: "absolute",
-                top: "-285px",
-                width: "1200px",
-                height: "1200px",
+                top: "-142px",
+                width: "600px",
+                height: "600px",
                 left: 0,
                 right: 0,
               }}
@@ -77,16 +77,16 @@ export default async function Image({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "540x",
-              height: "540px",
+              width: "270px",
+              height: "270px",
               borderRadius: "16px",
               overflow: "hidden",
             }}
           >
             <img
-              width="630"
-              height="630"
-              src={`https://lets.fyi/_next/image?url=${encodeURIComponent(
+              width="315"
+              height="315"
+              src={`${getUrlOrigin()}/_next/image?url=${encodeURIComponent(
                 event.coverImage,
               )}&w=128&q=10`}
             />
@@ -97,13 +97,13 @@ export default async function Image({
               alignItems: "center",
               justifyContent: "center",
               position: "absolute",
-              top: "54px",
-              right: "170px",
+              top: "27px",
+              right: "85px",
             }}
           >
             <svg
-              width="122"
-              height="64"
+              width="61"
+              height="32"
               viewBox="0 0 61 32"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
