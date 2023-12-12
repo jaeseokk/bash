@@ -31,6 +31,8 @@ export async function GET(request: NextRequest) {
           alignItems: "center",
           justifyContent: "center",
           fontFamily: '"Pretendard"',
+          wordBreak: "keep-all",
+          wordWrap: "break-word",
         }}
       >
         <div
