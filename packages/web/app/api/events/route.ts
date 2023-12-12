@@ -6,6 +6,7 @@ import { getServerSession } from "@/server/auth";
 import { getPrismaClientDbMain } from "@/server/prisma";
 import { getMyEvents } from "@/server/events";
 import { sendSlackMessage } from "@/server/message";
+import { isDeployProd } from "@/utils";
 
 const prisma = getPrismaClientDbMain();
 
@@ -60,6 +61,13 @@ export async function POST(request: NextRequest) {
       effect: input.effect,
     },
   });
+
+  if (isDeployProd) {
+    sendSlackMessage(
+      "신규 이벤트",
+      `제목: ${res.title}\n링크: https://lets.fyi/events/${res.slug}`,
+    );
+  }
 
   return NextResponse.json(res, { status: 200 });
 }

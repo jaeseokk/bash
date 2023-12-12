@@ -3,6 +3,8 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getPrismaClientDbMain } from "@/server/prisma";
 import { Redis } from "@upstash/redis";
+import { sendSlackMessage } from "@/server/message";
+import { isDeployProd } from "@/utils";
 
 const prisma = getPrismaClientDbMain();
 const oneDayInSeconds = 86400;
@@ -47,6 +49,13 @@ const handler = NextAuth({
               username: credentials.username,
             },
           });
+
+          if (newUser.createdAt === newUser.updatedAt && isDeployProd) {
+            sendSlackMessage(
+              "신규 사용자",
+              `전화번호: ${newUser.phoneNumber}\n이름: ${newUser.username}`,
+            );
+          }
 
           return newUser;
         }
