@@ -10,6 +10,22 @@ export interface StickerContainerProps {
   effect: keyof typeof STICKERS;
 }
 
+const getLocalStorage = (key: string) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  return localStorage.getItem(key);
+};
+
+const setLocalStorage = (key: string, value: string) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  localStorage.setItem(key, value);
+};
+
 const StickerContainer = ({ eventKey, effect }: StickerContainerProps) => {
   const [containerInfo, setContainerInfo] = useState({
     scrollHeight: 0,
@@ -43,12 +59,12 @@ const StickerContainer = ({ eventKey, effect }: StickerContainerProps) => {
       };
       const key = `${eventKey}_${effect}_${index}`;
 
-      localStorage.setItem(key, JSON.stringify(stickerPosition));
+      setLocalStorage(key, JSON.stringify(stickerPosition));
     };
 
   const getInitialPosition = (effect: keyof typeof STICKERS, index: number) => {
     const key = `${eventKey}_${effect}_${index}`;
-    const stickerPosition = localStorage.getItem(key);
+    const stickerPosition = getLocalStorage(key);
 
     if (!stickerPosition) {
       const initialPosition = {
@@ -56,7 +72,7 @@ const StickerContainer = ({ eventKey, effect }: StickerContainerProps) => {
         y: STICKERS[effect].data[index].initialPosition.y,
       };
 
-      localStorage.setItem(key, JSON.stringify(initialPosition));
+      setLocalStorage(key, JSON.stringify(initialPosition));
       return initialPosition;
     }
 

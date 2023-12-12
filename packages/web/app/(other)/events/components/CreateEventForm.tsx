@@ -120,6 +120,7 @@ const CreateEventForm = ({
     defaultValues: {
       ...initialData,
       coverImage: initialData?.coverImage ?? COVER_IMAGE_LIST[0],
+      effect: initialData?.effect ?? "effect1",
     },
   });
   const { isSubmitting } = formState;
