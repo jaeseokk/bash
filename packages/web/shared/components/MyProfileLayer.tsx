@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import ky from "ky";
 import { useForm } from "react-hook-form";
 import { PrismaDBMainTypes } from "@bash/db";
+import { useAlertDialog } from "@/components/AlertDialogProvider";
 
 interface ProfileUpdateForm {
   instagram?: string | null;
@@ -42,6 +43,7 @@ const MyProfileLayer = ({ ...props }: MyProfileLayerProps) => {
     },
   });
   const { isSubmitting, isDirty } = formState;
+  const { openDialog } = useAlertDialog();
 
   return (
     <Layer title="프로필" {...props}>
@@ -54,9 +56,18 @@ const MyProfileLayer = ({ ...props }: MyProfileLayerProps) => {
               return;
             }
 
-            await ky.put(`/api/user`, { json: data });
-            await refetch();
-            props.onClose?.();
+            try {
+              await ky.put(`/api/user`, { json: data });
+              await refetch();
+              props.onClose?.();
+            } catch (e) {
+              if (e instanceof Error) {
+                openDialog({
+                  title: e.message,
+                  hideCancel: true,
+                });
+              }
+            }
           })}
         >
           <div>

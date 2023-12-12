@@ -16,6 +16,13 @@ export async function GET(request: Request) {
     where: {
       id: session.user.id,
     },
+    select: {
+      id: true,
+      username: true,
+      twitter: true,
+      instagram: true,
+      description: true,
+    },
   });
 
   return NextResponse.json(user, { status: 200 });
@@ -41,6 +48,13 @@ export async function PUT(request: Request) {
       id: session.user.id,
     },
     data: input,
+    select: {
+      id: true,
+      username: true,
+      twitter: true,
+      instagram: true,
+      description: true,
+    },
   });
 
   return NextResponse.json(user, { status: 200 });
