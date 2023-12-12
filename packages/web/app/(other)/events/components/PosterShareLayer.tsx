@@ -63,22 +63,34 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
           </div>
           <div className="sticky bottom-9 mt-6 w-full space-y-[0.75rem]">
             {isSupportedShareApi ? (
-              <Button
-                type="button"
-                className="w-full"
-                onClick={handleShare}
-                pending={isLoading}
-              >
-                공유
-              </Button>
+              <>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleShare}
+                  pending={isLoading}
+                >
+                  공유
+                </Button>
+                <Button
+                  type="button"
+                  className="w-full bg-black"
+                  variant="outline"
+                  onClick={handleSaveImage}
+                >
+                  저장
+                </Button>
+              </>
             ) : (
-              <Button
-                type="button"
-                className="w-full"
-                onClick={handleSaveImage}
-              >
-                저장
-              </Button>
+              <>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleSaveImage}
+                >
+                  저장
+                </Button>
+              </>
             )}
           </div>
         </div>
