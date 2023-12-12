@@ -63,6 +63,7 @@ export async function PUT(request: NextRequest) {
           title: true,
           author: {
             select: {
+              id: true,
               username: true,
               phoneNumber: true,
             },
@@ -87,7 +88,9 @@ export async function PUT(request: NextRequest) {
   const isFirstAttendance =
     res.event.activities.filter(
       (activity) => activity.userId !== session.user.id,
-    ).length === 1;
+    ).length === 1 &&
+    input.status === "ATTENDING" &&
+    session.user.id !== res.event.author.id;
 
   if (isFirstAttendance) {
     await sendMessage(
