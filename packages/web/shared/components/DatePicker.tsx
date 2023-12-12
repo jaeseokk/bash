@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { format, isBefore } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ import RemoveButton from "@/components/RemoveButton";
 import { set } from "date-fns";
 import BottomSheet2 from "@/components/BottomSheet2";
 import { formatDate } from "@/utils";
+import { flushSync } from "react-dom";
 
 const TIME_OPTIONS = [
   ...Array.from({ length: 24 })
@@ -49,6 +50,7 @@ export interface DatePickerProps {
 }
 
 const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const [startDateState, setStartDateState] = useState<Date | undefined>(
     startDate,
   );
@@ -66,22 +68,25 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
       return;
     }
 
-    setStartDateState((prev) => {
-      if (!prev) {
-        return set(date, {
-          hours: 19,
-          minutes: 0,
-          seconds: 0,
-        });
-      }
+    flushSync(() => {
+      setStartDateState((prev) => {
+        if (!prev) {
+          return set(date, {
+            hours: 19,
+            minutes: 0,
+            seconds: 0,
+          });
+        }
 
-      return set(prev, {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        date: date.getDate(),
+        return set(prev, {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          date: date.getDate(),
+        });
       });
+      setIsRange(false);
     });
-    setIsRange(false);
+    triggerRef.current?.focus();
   };
   const calendarProps = {
     mode: "single" as const,
@@ -171,7 +176,7 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
                       }
                     }}
                   >
-                    <SelectTrigger id="framework">
+                    <SelectTrigger id="framework" ref={triggerRef}>
                       <SelectValue placeholder="시간을 선택하세요" />
                     </SelectTrigger>
                     <SelectContent position="popper">
