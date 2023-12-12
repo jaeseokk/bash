@@ -84,7 +84,10 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  const isFirstAttendance = res.event.activities.length === 1;
+  const isFirstAttendance =
+    res.event.activities.filter(
+      (activity) => activity.userId !== session.user.id,
+    ).length === 1;
 
   if (isFirstAttendance) {
     await sendMessage(
