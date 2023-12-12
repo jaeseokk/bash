@@ -5,6 +5,9 @@ import Layer, { LayerContent } from "@/components/Layer";
 import Image from "next/image";
 import confirmImage from "@/public/images/confirm.png";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useToast } from "@/components/ui/use-toast";
 
 export interface PublishConfirmLayerProps
   extends React.ComponentPropsWithoutRef<typeof Layer> {
@@ -26,6 +29,19 @@ const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
 
     await navigator.share({
       url,
+    });
+  };
+  const [, copyToClipboard] = useCopyToClipboard();
+  const { toast } = useToast();
+
+  const handleCopy = () => {
+    if (!url) {
+      return;
+    }
+
+    copyToClipboard(url);
+    toast({
+      title: "링크 복사 완료",
     });
   };
 
@@ -52,14 +68,23 @@ const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
             </div>
           </div>
           <div>
-            <Button
-              variant="highlight"
-              className="w-full"
-              type="button"
-              onClick={handleShare}
-            >
-              초대링크 공유하기
-            </Button>
+            {isSupportedShareApi ? (
+              <Button
+                variant="highlight"
+                className="w-full"
+                type="button"
+                onClick={handleShare}
+              >
+                초대링크 공유하기
+              </Button>
+            ) : (
+              <div className="space-y-2">
+                <Input value={url} readOnly />
+                <Button className="w-full" type="button" onClick={handleCopy}>
+                  링크 복사
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </LayerContent>

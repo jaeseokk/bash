@@ -401,7 +401,7 @@ const EventView = ({
               </div>
             </FloatingArea>
             <div className="relative mx-auto max-w-[750px] py-4">
-              {!myAttendance ? (
+              {!myAttendance && !isMyEvent ? (
                 <>
                   <div className="space-y-[2.5rem]">
                     <AttendeesStatus attendances={DUMMY.attendees} />
