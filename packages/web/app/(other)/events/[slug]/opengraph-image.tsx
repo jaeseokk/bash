@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getUrlOrigin } from "@/utils";
 
 export const runtime = "edge";
 
@@ -14,13 +15,10 @@ export default async function Image({
 }: {
   params: { slug: string };
 }) {
-  const baseUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://lets.fyi"
-      : `http://localhost:${process.env.PORT || 3000}`;
+  const origin = getUrlOrigin();
 
   try {
-    const event = await fetch(`${baseUrl}/api/events/${slug}`).then((res) =>
+    const event = await fetch(`${origin}/api/events/${slug}`).then((res) =>
       res.json(),
     );
 

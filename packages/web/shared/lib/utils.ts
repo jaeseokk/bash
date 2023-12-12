@@ -185,3 +185,17 @@ export const generateRandomPoints = (w: number, h: number, count: number) => {
 
   return points;
 };
+
+export const isProd = process.env.NODE_ENV === "production";
+
+export const isDeployProd = process.env.VERCEL_ENV === "production";
+
+export const getUrlOrigin = () => {
+  if (isDeployProd) {
+    return "https://lets.fyi";
+  } else if (isProd) {
+    return `${process.env.VERCEL_URL}`;
+  } else {
+    return `http://localhost:${process.env.PORT || "3000"}`;
+  }
+};

@@ -1,5 +1,5 @@
 const getSrc = (fileName: string) =>
-  `https://fytunrrwifmbhobjfpsp.supabase.co/storage/v1/object/public/effects/${fileName}`;
+  `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co/storage/v1/object/public/effects/${fileName}`;
 
 const initialPositions = [
   { x: 69.07666666666667, y: 2.747848837209302 },

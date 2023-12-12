@@ -2,7 +2,15 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { cn, formatDate, shimmer, toBase64 } from "@/utils";
+import {
+  cn,
+  formatDate,
+  getUrlOrigin,
+  isDeployProd,
+  isProd,
+  shimmer,
+  toBase64,
+} from "@/utils";
 import { PrismaDBMainConstants, PrismaDBMainTypes } from "@bash/db";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -30,7 +38,6 @@ import ActivityStatus from "./ActivityStatus";
 import PosterShareLayer from "./PosterShareLayer";
 import { EventDetail, PreviewEventDetail } from "@/types/events";
 import { useLoading } from "@/hooks/useLoading";
-import InviteBottomSheet from "./InviteBottomSheet";
 import EventBackground from "@/components/EventBackground";
 import { useAlertDialog } from "@/components/AlertDialogProvider";
 import Linkify from "linkify-react";
@@ -289,6 +296,15 @@ const EventView = ({
     handleCloseAttendDialog();
   };
   const isReplySectionPinned = !intersection?.isIntersecting;
+  const shareUrl = useMemo(() => {
+    if (preview) {
+      return "";
+    }
+
+    const origin = getUrlOrigin();
+
+    return `${origin}/events/${eventInfo.slug}`;
+  }, [eventInfo, preview]);
 
   return (
     <>
@@ -473,7 +489,7 @@ const EventView = ({
               </>
             )}
             <ShareLayer
-              url={`https://lets.fyi/events/${eventInfo.slug}`}
+              url={shareUrl}
               trigger={
                 <BottomButton.Item
                   icon={<InviteIcon />}

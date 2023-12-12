@@ -1,3 +1,5 @@
+import { messageService } from "@/server/clients";
+
 const isProd = process.env.VERCEL_ENV === "production";
 
 export const sendSlackMessageToNotificationTestChannel = async (
@@ -16,6 +18,20 @@ export const sendSlackMessageToNotificationTestChannel = async (
     }),
   });
 };
+
+export const sendSms = async (to: string, message: string) => {
+  const res = await messageService.sendOne({
+    to,
+    from: "07082331145",
+    text: message,
+  });
+};
+
 export const sendMessage = async (to: string, message: string) => {
-  await sendSlackMessageToNotificationTestChannel(to, message);
+  if (!isProd) {
+    await sendSlackMessageToNotificationTestChannel(to, message);
+    return;
+  }
+
+  await sendSms(to, message);
 };
