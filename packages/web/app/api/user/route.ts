@@ -22,9 +22,9 @@ export async function GET(request: Request) {
 }
 
 const UpdateUserInputSchema = z.object({
-  twitter: z.optional(z.string()),
-  instagram: z.optional(z.string()),
-  description: z.optional(z.string()),
+  twitter: z.optional(z.nullable(z.string())),
+  instagram: z.optional(z.nullable(z.string())),
+  description: z.optional(z.nullable(z.string())),
 });
 
 export async function PUT(request: Request) {
