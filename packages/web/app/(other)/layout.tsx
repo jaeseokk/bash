@@ -8,6 +8,7 @@ import LetsLogo from "@/assets/lets_logo.svg";
 import AppProviders from "../components/AppProviders";
 import AlertDialogProvider from "@/components/AlertDialogProvider/AlertDialogProvider";
 import { Toaster } from "@/components/ui/toaster";
+import GoogleAnalytics from "@/components/GloogleAnalytics";
 
 export const metadata: Metadata = {
   title: "렛츠 LET'S",
@@ -57,6 +58,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={Pretendard.className}>
+        <GoogleAnalytics />
         <AppProviders>
           <SessionProvider>
             <AlertDialogProvider>

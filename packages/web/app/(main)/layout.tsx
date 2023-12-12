@@ -9,6 +9,7 @@ import AppProviders from "../components/AppProviders";
 import { cn } from "@/utils";
 import AlertDialogProvider from "@/components/AlertDialogProvider/AlertDialogProvider";
 import { Toaster } from "@/components/ui/toaster";
+import GoogleAnalytics from "@/components/GloogleAnalytics";
 
 export const metadata: Metadata = {
   title: "렛츠 LET'S",
@@ -63,6 +64,7 @@ export default async function RootLayout({
           "bg-[url('/images/main_background.png')] bg-cover bg-top bg-no-repeat",
         )}
       >
+        <GoogleAnalytics />
         <AppProviders>
           <SessionProvider>
             <AlertDialogProvider>
