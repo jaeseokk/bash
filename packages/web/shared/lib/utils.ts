@@ -199,3 +199,7 @@ export const getUrlOrigin = () => {
     return `http://localhost:${process.env.PORT || "3000"}`;
   }
 };
+
+export const isUndefined = <T>(value: T | undefined): value is undefined => {
+  return value === undefined;
+};

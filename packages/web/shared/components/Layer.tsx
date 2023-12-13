@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -9,14 +10,9 @@ import {
 } from "@/components/ui/sheet";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { SetStateAction, useCallback, useState } from "react";
+import { cn, isUndefined } from "@/lib/utils";
 import { layerAtom } from "@/stores/layer";
 import { useAtom } from "jotai";
-
-const isUndefined = <T,>(value: T | undefined): value is undefined => {
-  return value === undefined;
-};
 
 export interface LayerProps
   extends React.ComponentPropsWithoutRef<typeof Sheet> {

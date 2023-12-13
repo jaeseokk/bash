@@ -33,6 +33,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import NumericInput from "@/components/NumericInput";
 import ReplyRadioGroup from "@/components/ReplyRadioGroup";
 import * as process from "process";
+import { Popover } from "@/components/ui/popover";
+import NudgePopover from "@/components/NudgePopover";
 
 const baseUrl = `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co`;
 
@@ -199,12 +201,20 @@ const CreateEventForm = ({
                 sizes="100vw"
               />
             )}
-            <button
-              type="button"
-              className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full bg-[#000000cc]"
+            <NudgePopover
+              side="top"
+              sideOffset={6}
+              trigger={
+                <button
+                  type="button"
+                  className="absolute bottom-[1rem] right-[1rem] flex h-[3rem] w-[3rem] items-center justify-center rounded-full border-[1.5px] border-white bg-[#000000cc]"
+                >
+                  <EditIcon />
+                </button>
+              }
             >
-              <EditIcon />
-            </button>
+              이미지를 바꿔보세요
+            </NudgePopover>
           </div>
         </Block>
         <Block className="mb-6 space-y-2.5">
@@ -310,7 +320,6 @@ const CreateEventForm = ({
                 );
               }}
             />
-
             <BottomButton.Divider />
             <PreviewLayer
               trigger={
