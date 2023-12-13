@@ -10,6 +10,13 @@ import {
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { SetStateAction, useCallback, useState } from "react";
+import { layerAtom } from "@/stores/layer";
+import { useAtom } from "jotai";
+
+const isUndefined = <T,>(value: T | undefined): value is undefined => {
+  return value === undefined;
+};
 
 export interface LayerProps
   extends React.ComponentPropsWithoutRef<typeof Sheet> {
@@ -19,6 +26,7 @@ export interface LayerProps
   trigger?: React.ReactNode;
   onClose?: () => void;
   autoFocus?: boolean;
+  urlStateKey?: string;
 }
 
 const Layer = ({
@@ -28,13 +36,39 @@ const Layer = ({
   trigger,
   onClose,
   disableAutoFocus,
+  urlStateKey,
+  defaultOpen,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
   ...props
 }: LayerProps) => {
+  const isControlled = !isUndefined(openProp);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
+  const [urlState, setUrlState] = useAtom(layerAtom);
+  const open = isControlled
+    ? openProp
+    : urlStateKey
+      ? urlState === urlStateKey
+      : uncontrolledOpen;
+
+  const onOpenChange = (open: boolean) => {
+    if (!isControlled) {
+      if (urlStateKey) {
+        setUrlState(open ? urlStateKey : undefined);
+      } else {
+        setUncontrolledOpen(open);
+      }
+    }
+
+    setUrlState(open ? urlStateKey : undefined);
+    onOpenChangeProp?.(open);
+  };
+
   return (
-    <Sheet {...props}>
+    <Sheet open={open} onOpenChange={onOpenChange} {...props}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
       <SheetContent
-        className="flex h-full flex-col"
+        className="flex h-full flex-col border-t-0"
         side="bottom"
         onOpenAutoFocus={(e) => {
           e.preventDefault();

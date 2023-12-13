@@ -312,14 +312,17 @@ const CreateEventForm = ({
             />
 
             <BottomButton.Divider />
-            <BottomButton.Item
-              icon={<PreviewIcon />}
-              onClick={() => {
-                setCachedFormData(getValues());
+            <PreviewLayer
+              trigger={
+                <BottomButton.Item icon={<PreviewIcon />}>
+                  미리보기
+                </BottomButton.Item>
+              }
+              eventInfo={cachedFormData}
+              onOpenChange={(open) => {
+                setCachedFormData(open ? getValues() : undefined);
               }}
-            >
-              미리보기
-            </BottomButton.Item>
+            />
           </BottomButton.Root>
           <Button
             className="w-full rounded-none"
@@ -331,6 +334,7 @@ const CreateEventForm = ({
         </FloatingArea>
       </form>
       <Layer
+        urlStateKey={"preview"}
         open={showCoverImageBottomSheet}
         onClose={() => {
           setShowCoverImageBottomSheet(false);
@@ -402,13 +406,6 @@ const CreateEventForm = ({
           </div>
         </LayerContentWithScrollArea>
       </Layer>
-      <PreviewLayer
-        open={!!cachedFormData}
-        onClose={() => {
-          setCachedFormData(undefined);
-        }}
-        eventInfo={cachedFormData}
-      />
     </>
   );
 };

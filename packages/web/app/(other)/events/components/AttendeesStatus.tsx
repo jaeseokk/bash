@@ -55,6 +55,7 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
         </div>
         <div>
           <Layer
+            urlStateKey={"attendees-status"}
             title="참석자 리스트"
             trigger={
               <button className="text-[0.875rem] underline">더보기</button>

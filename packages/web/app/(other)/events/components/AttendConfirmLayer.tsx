@@ -25,7 +25,7 @@ const AttendConfirmLayer = ({ ...props }: AttendConfirmLayerProps) => {
   }, [props.open]);
 
   return (
-    <Layer hideCloseButton {...props}>
+    <Layer urlStateKey={"attend-confirm"} hideCloseButton {...props}>
       <LayerContent className="h-full">
         <div className="flex h-full flex-col items-center justify-center space-y-8 pb-20">
           <div>

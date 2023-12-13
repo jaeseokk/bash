@@ -46,7 +46,7 @@ const PublishConfirmLayer = ({ url, ...props }: PublishConfirmLayerProps) => {
   };
 
   return (
-    <Layer {...props}>
+    <Layer urlStateKey={"share"} {...props}>
       <LayerContent className="h-full overflow-auto">
         <div className="flex h-full flex-col justify-between">
           <div className="flex h-full flex-col items-center justify-center space-y-8 pb-20">

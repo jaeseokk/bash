@@ -57,7 +57,7 @@ const PosterShareLayer = ({ eventInfo, ...props }: PosterShareLayerProps) => {
   };
 
   return (
-    <Layer title="포스터 공유" {...props}>
+    <Layer urlStateKey={"poster-share"} title="포스터 공유" {...props}>
       <LayerContentWithScrollArea>
         <div className="flex flex-col items-center justify-between pt-6">
           <div className="border border-[#AEFF5E]">

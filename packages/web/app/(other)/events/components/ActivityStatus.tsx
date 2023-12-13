@@ -23,6 +23,7 @@ const ActivityStatus = ({ activities }: ActivityStatusProps) => {
         <div>이벤트 활동</div>
         <div>
           <Layer
+            urlStateKey={"event-activities"}
             title="이벤트 활동"
             trigger={
               <button className="text-[0.875rem] underline">더보기</button>

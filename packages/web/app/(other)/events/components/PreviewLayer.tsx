@@ -13,7 +13,7 @@ export interface PreviewLayerProps
 
 const PreviewLayer = ({ eventInfo, ...props }: PreviewLayerProps) => {
   return (
-    <Layer {...props}>
+    <Layer urlStateKey={"preview"} {...props}>
       <div className="absolute inset-0">
         <ScrollArea className="h-full">
           <header className="w-full bg-transparent">

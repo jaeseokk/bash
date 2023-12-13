@@ -36,8 +36,6 @@ const EventPage = async ({ params: { slug } }: EventPageProps) => {
   return (
     <main className="pt-4">
       <EventViewContainer slug={slug} />
-      <AttendConfirmLayer />
-      <MyProfileLayer />
     </main>
   );
 };

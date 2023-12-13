@@ -91,6 +91,7 @@ const EventViewContainer = ({ slug }: EventViewContainerProps) => {
         onClose={attendConfirmDialogControl.onCancel}
       />
       <MyProfileLayer
+        urlStateKey={undefined}
         open={profileDialogControl.show}
         onClose={profileDialogControl.onCancel}
       />
