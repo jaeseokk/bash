@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "렛츠 LET'S",
   description: "파티 누구나 쉽게, 누구나 멋지게",
   openGraph: {
-    images: "https://lets.fyi/default_og.png",
+    images: "https://lets.fyi/default_og2.png",
   },
 };
 
