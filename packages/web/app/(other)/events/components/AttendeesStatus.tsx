@@ -98,7 +98,7 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
       </div>
       <ScrollArea>
         <div className="flex space-x-[0.75rem] px-8">
-          {attendances.map((attendance) => (
+          {attendancesByStatus["ATTENDING"].map((attendance) => (
             <UserItem key={attendance.id} name={attendance.user.username} />
           ))}
         </div>
