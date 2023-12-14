@@ -49,6 +49,7 @@ const MyProfileLayer = ({ ...props }: MyProfileLayerProps) => {
   // TEMP: avatarFallback이 없는 경우에만 업데이트
   useEffect(() => {
     if (data?.avatarFallback && !session.data?.user.avatarFallback) {
+      console.log("need to update");
       session.update({
         avatarFallback: data.avatarFallback,
       });
