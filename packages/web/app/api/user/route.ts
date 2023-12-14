@@ -22,6 +22,7 @@ export async function GET(request: Request) {
       twitter: true,
       instagram: true,
       description: true,
+      avatarFallback: true,
     },
   });
 
