@@ -13,7 +13,6 @@ import ky from "ky";
 import { useForm } from "react-hook-form";
 import { PrismaDBMainTypes } from "@bash/db";
 import { useAlertDialog } from "@/components/AlertDialogProvider";
-import { useEffect } from "react";
 
 interface ProfileUpdateForm {
   instagram?: string | null;
@@ -45,16 +44,6 @@ const MyProfileLayer = ({ ...props }: MyProfileLayerProps) => {
   });
   const { isSubmitting, isDirty } = formState;
   const { openDialog } = useAlertDialog();
-
-  // TEMP: avatarFallback이 없는 경우에만 업데이트
-  useEffect(() => {
-    if (data?.avatarFallback && !session.data?.user.avatarFallback) {
-      console.log("need to update");
-      session.update({
-        avatarFallback: data.avatarFallback,
-      });
-    }
-  }, [data, session]);
 
   return (
     <Layer title="프로필" {...props}>
