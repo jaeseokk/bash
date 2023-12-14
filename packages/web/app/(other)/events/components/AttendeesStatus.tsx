@@ -83,6 +83,7 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
                               <UserItem
                                 key={item.id}
                                 name={item.user.username}
+                                avatarFallback={item.user.avatarFallback}
                               />
                             ))}
                           </ul>
@@ -99,7 +100,11 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
       <ScrollArea>
         <div className="flex space-x-[0.75rem] px-8">
           {attendancesByStatus["ATTENDING"].map((attendance) => (
-            <UserItem key={attendance.id} name={attendance.user.username} />
+            <UserItem
+              key={attendance.id}
+              name={attendance.user.username}
+              avatarFallback={attendance.user.avatarFallback}
+            />
           ))}
         </div>
         <ScrollBar orientation="horizontal" />
@@ -110,12 +115,13 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
 
 interface UserItemProps {
   name: string;
+  avatarFallback?: string | null;
 }
 
-const UserItem = ({ name }: UserItemProps) => {
+const UserItem = ({ name, avatarFallback }: UserItemProps) => {
   return (
     <div className="flex flex-col items-center space-y-[0.25rem]">
-      <ProfileAvatar size="3rem" name={name} />
+      <ProfileAvatar size="3rem" name={name} avatarFallback={avatarFallback} />
       <div className="line-clamp-2 w-full text-center text-[0.75rem]">
         {name}
       </div>

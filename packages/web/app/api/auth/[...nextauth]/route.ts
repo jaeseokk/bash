@@ -5,6 +5,7 @@ import { getPrismaClientDbMain } from "@/server/prisma";
 import { Redis } from "@upstash/redis";
 import { sendSlackMessage } from "@/server/message";
 import { isDeployProd } from "@/utils";
+import { createUser } from "@/server/users";
 
 const prisma = getPrismaClientDbMain();
 const oneDayInSeconds = 86400;
@@ -37,19 +38,10 @@ const handler = NextAuth({
         }
 
         if (credentials.username) {
-          const newUser = await prisma.user.upsert({
-            where: {
-              phoneNumber: credentials.phoneNumber,
-            },
-            update: {
-              username: credentials.username,
-            },
-            create: {
-              phoneNumber: credentials.phoneNumber,
-              username: credentials.username,
-            },
+          const newUser = await createUser({
+            phoneNumber: credentials.phoneNumber,
+            username: credentials.username,
           });
-          console.log(newUser);
 
           if (
             newUser.createdAt.getTime() === newUser.updatedAt.getTime() &&
@@ -110,16 +102,22 @@ const handler = NextAuth({
           id: token.id,
           name: token.name,
           phoneNumber: token.phoneNumber,
+          avatarFallback: token.avatarFallback,
         };
       }
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser, trigger }) {
+    async jwt({ session, token, user, account, profile, isNewUser, trigger }) {
+      if (trigger === "update" && session?.avatarFallback) {
+        token.avatarFallback = session.avatarFallback;
+      }
+
       if (user) {
         // @ts-ignore
         token.id = user.id;
         token.name = user.username;
         token.phoneNumber = user.phoneNumber;
+        token.avatarFallback = user.avatarFallback;
       }
       return token;
     },

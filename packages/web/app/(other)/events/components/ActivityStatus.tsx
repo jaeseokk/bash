@@ -39,6 +39,7 @@ const ActivityStatus = ({ activities }: ActivityStatusProps) => {
                     message={activity.message}
                     date={activity.createdAt}
                     emoji={activity.emoji}
+                    avatarFallback={activity.user.avatarFallback}
                   />
                 ))}
               </div>
@@ -55,6 +56,7 @@ const ActivityStatus = ({ activities }: ActivityStatusProps) => {
             message={activity.message}
             date={activity.createdAt}
             emoji={activity.emoji}
+            avatarFallback={activity.user.avatarFallback}
           />
         ))}
       </div>
@@ -84,6 +86,7 @@ interface ActivityItemProps {
   message?: string | null;
   date: string | Date;
   emoji?: string | null;
+  avatarFallback?: string | null;
 }
 
 const ActivityItem = ({
@@ -92,11 +95,16 @@ const ActivityItem = ({
   message,
   date,
   emoji,
+  avatarFallback,
 }: ActivityItemProps) => {
   return (
     <div className="flex items-start space-x-4">
       <div className="relative">
-        <ProfileAvatar size="3rem" name={name} />
+        <ProfileAvatar
+          size="3rem"
+          name={name}
+          avatarFallback={avatarFallback}
+        />
         {emoji && (
           <div className="absolute bottom-0 right-0">
             <Emoji code={emoji as any} size="1.125rem" />

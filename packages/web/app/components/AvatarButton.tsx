@@ -23,6 +23,7 @@ export interface AvatarButtonProps {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    avatarFallback?: string | null;
   };
 }
 
@@ -37,7 +38,11 @@ const AvatarButton = ({ user }: AvatarButtonProps) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <ProfileAvatar size="2rem" name={user?.name} />
+          <ProfileAvatar
+            size="2rem"
+            name={user?.name}
+            avatarFallback={user?.avatarFallback}
+          />
         </DropdownMenuTrigger>
         <DropdownMenuContent avoidCollisions>
           <DropdownMenuItem onClick={handleShowProfileLayer}>

@@ -66,6 +66,7 @@ const MyEvents = ({}: MyEventsProps) => {
                         size="1.5rem"
                         white
                         name={event.author.username}
+                        avatarFallback={event.author.avatarFallback}
                       />
                       <span className="ml-1">
                         Hosted by {event.author.username}

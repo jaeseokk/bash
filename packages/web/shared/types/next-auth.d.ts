@@ -7,6 +7,7 @@ declare module "next-auth/jwt" {
   interface JWT extends Record, DefaultJWT {
     id: UserId;
     phoneNumber?: string;
+    avatarFallback?: string | null;
   }
 }
 
@@ -15,6 +16,7 @@ declare module "next-auth" {
     user: {
       id: UserId;
       phoneNumber?: string;
+      avatarFallback?: string | null;
     } & DefaultSession["user"];
   }
 
@@ -22,6 +24,7 @@ declare module "next-auth" {
     id: UserId;
     phoneNumber?: string;
     username?: string;
+    avatarFallback?: string | null;
     needToRegister?: boolean;
   }
 }

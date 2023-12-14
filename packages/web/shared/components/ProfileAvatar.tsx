@@ -7,9 +7,15 @@ export interface ProfileAvatarProps {
   size?: string | number;
   name?: string | null;
   white?: boolean;
+  avatarFallback?: string | null;
 }
 
-const ProfileAvatar = ({ size = "1rem", name, white }: ProfileAvatarProps) => {
+const ProfileAvatar = ({
+  size = "1rem",
+  name,
+  white,
+  avatarFallback,
+}: ProfileAvatarProps) => {
   return (
     <Avatar
       style={{
@@ -22,11 +28,16 @@ const ProfileAvatar = ({ size = "1rem", name, white }: ProfileAvatarProps) => {
         {name ? (
           <span
             className={cn(
-              "inline-flex h-full w-full items-center justify-center rounded-full border border-white font-bold",
-              white && "border-black",
+              "inline-flex h-full w-full items-center justify-center rounded-full font-bold",
+              avatarFallback
+                ? "text-black"
+                : white
+                  ? "border border-black text-black"
+                  : "border border-white text-white",
             )}
             style={{
               fontSize: `calc(${size} * 0.5)`,
+              background: avatarFallback ?? undefined,
             }}
           >
             {name[0].toUpperCase()}

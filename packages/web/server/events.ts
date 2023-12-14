@@ -23,7 +23,9 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
     include: {
       author: {
         select: {
+          id: true,
           username: true,
+          avatarFallback: true,
         },
       },
       attendances: {
@@ -32,6 +34,7 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
             select: {
               id: true,
               username: true,
+              avatarFallback: true,
             },
           },
         },
@@ -42,6 +45,7 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
             select: {
               id: true,
               username: true,
+              avatarFallback: true,
             },
           },
         },
@@ -103,6 +107,7 @@ export const getMyEvents = async () => {
         select: {
           id: true,
           username: true,
+          avatarFallback: true,
         },
       },
     },

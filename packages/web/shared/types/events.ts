@@ -4,6 +4,7 @@ export interface EventItem extends PrismaDBMainTypes.Event {
   author: {
     id: number;
     username: string;
+    avatarFallback?: string | null;
   };
 }
 
@@ -17,7 +18,9 @@ export interface EventDetail extends PrismaDBMainTypes.Event {
     eventId: number;
     status: PrismaDBMainTypes.AttendanceStatus;
     user: {
+      id: number;
       username: string;
+      avatarFallback?: string | null;
     };
   }[];
   activities: {
@@ -30,7 +33,9 @@ export interface EventDetail extends PrismaDBMainTypes.Event {
     emoji: string;
     status: PrismaDBMainTypes.AttendanceStatus;
     user: {
+      id: number;
       username: string;
+      avatarFallback?: string | null;
     };
   }[];
 }
