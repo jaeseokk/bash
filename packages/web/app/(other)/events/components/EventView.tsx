@@ -44,6 +44,7 @@ import Linkify from "linkify-react";
 import StickerContainer from "@/components/StickerContainer";
 import ShareLayer from "./ShareLayer";
 import { useIntersection } from "@/hooks/useIntersection";
+import Link from "next/link";
 
 const DUMMY = {
   activities: [
@@ -442,7 +443,13 @@ const EventView = ({
           </>
         )}
         <div className="flex items-center justify-center py-20">
-          <LetsLogo />
+          {preview ? (
+            <LetsLogo />
+          ) : (
+            <Link href="/">
+              <LetsLogo />
+            </Link>
+          )}
         </div>
       </div>
       {!preview && (isMyEvent || (!isMyEvent && !!myAttendance)) && (
