@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/utils";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 /**
  * border-radius: 1.875rem;
@@ -74,7 +75,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
         disabled={pending}
       >
-        {pending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+        {pending && (
+          <Image
+            className="mr-2"
+            src="/images/spinner.svg"
+            alt="loading"
+            width="16"
+            height={16}
+          />
+        )}
         {children}
       </button>
     );
