@@ -87,7 +87,7 @@ export async function PUT(request: NextRequest) {
 
   const isFirstAttendance =
     res.event.activities.filter(
-      (activity) => activity.userId !== session.user.id,
+      (activity) => activity.userId !== res.event.author.id,
     ).length === 1 &&
     input.status === "ATTENDING" &&
     session.user.id !== res.event.author.id;
