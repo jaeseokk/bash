@@ -1,5 +1,5 @@
 import * as React from "react";
-import BottomSheet2 from "@/components/BottomSheet2";
+import BottomSheet from "@/components/BottomSheet";
 import { cn } from "@/utils";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { STICKERS } from "@/constants/sticker";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 const OPTIONS = Object.keys(STICKERS) as (keyof typeof STICKERS)[];
 
 export interface EffectBottomSheetProps
-  extends React.ComponentPropsWithoutRef<typeof BottomSheet2> {
+  extends React.ComponentPropsWithoutRef<typeof BottomSheet> {
   value?: string | null;
   onChange: (value?: string | null) => void;
   onSubmit: (value?: string | null) => void;
@@ -24,7 +24,7 @@ const EffectBottomSheet = ({
   ...props
 }: EffectBottomSheetProps) => {
   return (
-    <BottomSheet2
+    <BottomSheet
       title="꾸미기"
       disabledOverlay
       disableInteractOutside
@@ -74,7 +74,7 @@ const EffectBottomSheet = ({
           </Button>
         </div>
       </div>
-    </BottomSheet2>
+    </BottomSheet>
   );
 };
 

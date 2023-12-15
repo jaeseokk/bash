@@ -27,10 +27,13 @@ const MyEvents = ({}: MyEventsProps) => {
       <div className="px-8">
         <strong>{data.length}개</strong>의 이벤트가 있습니다.
       </div>
-      <ScrollArea className="mt-4 w-full">
+      <ScrollArea
+        className="mt-4 w-full"
+        viewportClassName="snap-x snap-mandatory scroll-pl-8"
+      >
         <ul className="flex items-center space-x-4 px-8 pb-4 after:block after:h-full after:w-0 after:flex-none after:content-['']">
           {data.map((event) => (
-            <li key={event.id} className="flex-none">
+            <li key={event.id} className="flex-none snap-start">
               <Link href={`/events/${event.slug}`}>
                 <div className="relative w-[15.625rem] overflow-hidden rounded-2xl">
                   <div className="relative h-[11.25rem]">
@@ -45,9 +48,7 @@ const MyEvents = ({}: MyEventsProps) => {
                         objectPosition: "center",
                       }}
                       placeholder="blur"
-                      blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                        shimmer(1, 1),
-                      )}`}
+                      blurDataURL={`/_next/image?url=${event.coverImage}&w=16&q=1`}
                       sizes="100vw"
                       alt={event.title}
                     />

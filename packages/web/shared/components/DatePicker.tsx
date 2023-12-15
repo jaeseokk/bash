@@ -5,8 +5,6 @@ import { useMemo, useRef, useState } from "react";
 import { format, isBefore } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import BottomSheet from "@/components/BottomSheet";
-import { DateRange } from "react-day-picker";
 import {
   Select,
   SelectContent,
@@ -17,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import RemoveButton from "@/components/RemoveButton";
 import { set } from "date-fns";
-import BottomSheet2 from "@/components/BottomSheet2";
+import BottomSheet from "@/components/BottomSheet";
 import { formatDate } from "@/utils";
 import { flushSync } from "react-dom";
 
@@ -121,7 +119,7 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
       >
         <Input placeholder={placeholder} value={display} readOnly />
       </button>
-      <BottomSheet2
+      <BottomSheet
         title="날짜 선택"
         open={showCalendar}
         onClose={() => {
@@ -199,7 +197,7 @@ const DatePicker = ({ startDate, onChange, placeholder }: DatePickerProps) => {
             </div>
           </div>
         </div>
-      </BottomSheet2>
+      </BottomSheet>
     </>
   );
 };

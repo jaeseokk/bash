@@ -1,12 +1,12 @@
 import * as React from "react";
-import BottomSheet2 from "@/components/BottomSheet2";
+import BottomSheet from "@/components/BottomSheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { useToast } from "@/components/ui/use-toast";
 
 export interface InviteBottomSheetProps
-  extends React.ComponentPropsWithoutRef<typeof BottomSheet2> {
+  extends React.ComponentPropsWithoutRef<typeof BottomSheet> {
   url: string;
 }
 
@@ -22,7 +22,7 @@ const InviteBottomSheet = ({ url, ...props }: InviteBottomSheetProps) => {
   };
 
   return (
-    <BottomSheet2 title="초대하기" {...props}>
+    <BottomSheet title="초대하기" {...props}>
       <Input value={url} readOnly />
       <div className="mt-8 space-y-4">
         <div></div>
@@ -30,7 +30,7 @@ const InviteBottomSheet = ({ url, ...props }: InviteBottomSheetProps) => {
           링크 복사
         </Button>
       </div>
-    </BottomSheet2>
+    </BottomSheet>
   );
 };
 

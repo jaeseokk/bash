@@ -30,7 +30,7 @@ import InviteIcon from "@/assets/invite.svg";
 import PosterIcon from "@/assets/poster.svg";
 import LetsLogo from "@/assets/lets_logo.svg";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import BottomSheet2 from "@/components/BottomSheet2";
+import BottomSheet from "@/components/BottomSheet";
 import AttendForm from "@/components/AttendForm";
 import Divider from "@/components/Divider";
 import AttendeesStatus from "./AttendeesStatus";
@@ -401,10 +401,10 @@ const EventView = ({
                 />
               </div>
             </FloatingArea>
-            <div className="relative mx-auto max-w-[750px] py-4">
+            <div className="relative mx-auto max-w-[750px]">
               {!myAttendance && !isMyEvent ? (
                 <>
-                  <div className="space-y-[2.5rem]">
+                  <div className="space-y-[2.5rem] py-4">
                     <AttendeesStatus attendances={DUMMY.attendees} />
                     <ActivityStatus activities={DUMMY.activities} />
                   </div>
@@ -434,7 +434,7 @@ const EventView = ({
                   </div>
                 </>
               ) : (
-                <div className="space-y-[2.5rem]">
+                <div className="space-y-[2.5rem] py-4 empty:hidden">
                   <AttendeesStatus attendances={eventInfo.attendances} />
                   <ActivityStatus activities={eventInfo.activities} />
                 </div>
@@ -442,15 +442,23 @@ const EventView = ({
             </div>
           </>
         )}
-        <div className="flex items-center justify-center py-20">
+        <div className="flex items-center justify-center py-20 opacity-50">
           {preview ? (
             <LetsLogo />
           ) : (
-            <Link href="/">
-              <LetsLogo />
-            </Link>
+            <div className="flex flex-col items-center">
+              <Link href="/">
+                <LetsLogo />
+              </Link>
+              {!isMyEvent && (
+                <Button className="mt-6" variant="outline" size="sm" asChild>
+                  <Link href="/events/new">내 이벤트 직접 만들기</Link>
+                </Button>
+              )}
+            </div>
           )}
         </div>
+        <div className="flex items-center justify-center"></div>
       </div>
       {!preview && (isMyEvent || (!isMyEvent && !!myAttendance)) && (
         <FloatingArea>
@@ -549,7 +557,7 @@ const EventView = ({
         </FloatingArea>
       )}
       {!preview && (
-        <BottomSheet2
+        <BottomSheet
           title={"참석여부 답하기"}
           open={showAttendDialog}
           onClose={() => {
@@ -575,7 +583,7 @@ const EventView = ({
             onVerify={onVerify}
             onCancel={handleCloseAttendDialog}
           />
-        </BottomSheet2>
+        </BottomSheet>
       )}
     </>
   );
