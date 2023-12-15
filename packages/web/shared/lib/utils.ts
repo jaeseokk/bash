@@ -139,7 +139,9 @@ export const formatDate = (date: Date | string | null | undefined) => {
     return replaceToAMPM(format(dateObj, "M월 d일(E) hh:mm a", { locale: ko }));
   }
 
-  return replaceToAMPM(format(dateObj, "yyyy년 M월 d일(E) hh:mm a"));
+  return replaceToAMPM(
+    format(dateObj, "yyyy년 M월 d일(E) hh:mm a", { locale: ko }),
+  );
 };
 
 export const getFullUrl = (pathProp: string) => {
