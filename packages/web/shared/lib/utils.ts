@@ -205,3 +205,7 @@ export const getUrlOrigin = () => {
 export const isUndefined = <T>(value: T | undefined): value is undefined => {
   return value === undefined;
 };
+
+export const utcToKst = (date: Date) => {
+  return new Date(date.getTime() + 9 * 60 * 60 * 1000);
+};
