@@ -12,6 +12,7 @@ node_modules
 
 # testing
 /coverage
+/prisma/_test_queries
 
 # misc
 .DS_Store
