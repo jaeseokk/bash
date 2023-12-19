@@ -46,19 +46,21 @@ const notifyBefore1Day = async (date: Date) => {
   });
 
   const promisesForGuests = events.flatMap((event) => {
-    return event.attendances.map((attendance) => {
-      return sendMessage(
-        attendance.user.phoneNumber,
-        `[렛츠 Let's] 안녕하세요 ${attendance.user.username}님, '${
-          event.title
-        }'${getJosa(event.title, "이/가")} 내일 ${format(
-          utcToKst(event.startDate),
-          "hh:mm a",
-        )}에 시작해요. 상세내용과 업데이트를 확인하세요.\n확인링크 : https://lets.fyi/events/${
-          event.slug
-        }`,
-      );
-    });
+    return event.attendances
+      .filter((attendance) => attendance.status === "ATTENDING")
+      .map((attendance) => {
+        return sendMessage(
+          attendance.user.phoneNumber,
+          `[렛츠 Let's] 안녕하세요 ${attendance.user.username}님, '${
+            event.title
+          }'${getJosa(event.title, "이/가")} 내일 ${format(
+            utcToKst(event.startDate),
+            "hh:mm a",
+          )}에 시작해요. 상세내용과 업데이트를 확인하세요.\n확인링크 : https://lets.fyi/events/${
+            event.slug
+          }`,
+        );
+      });
   });
 
   const promisesForHost = events.map((event) => {
