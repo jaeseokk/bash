@@ -6,6 +6,7 @@ import AvatarFallbackIcon from "@/assets/avatar.svg";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import Divider from "@/components/Divider";
 import { EventDetail } from "@/types/events";
+import { cn } from "@/lib/utils";
 
 const groupBy = <T, K extends string>(
   list: T[],
@@ -80,11 +81,12 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
                           </div>
                           <ul className="grid grid-cols-4 gap-4">
                             {list.map((item) => (
-                              <UserItem
-                                key={item.id}
-                                name={item.user.username}
-                                avatarFallback={item.user.avatarFallback}
-                              />
+                              <li className="list-none" key={item.id}>
+                                <UserItem
+                                  name={item.user.username}
+                                  avatarFallback={item.user.avatarFallback}
+                                />
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -98,13 +100,15 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
         </div>
       </div>
       <ScrollArea>
-        <div className="flex space-x-[0.75rem] px-8">
+        <div className="flex space-x-[0.75rem] px-8 pb-4">
           {attendancesByStatus["ATTENDING"].map((attendance) => (
-            <UserItem
-              key={attendance.id}
-              name={attendance.user.username}
-              avatarFallback={attendance.user.avatarFallback}
-            />
+            <li className="list-none" key={attendance.id}>
+              <UserItem
+                className="w-12"
+                name={attendance.user.username}
+                avatarFallback={attendance.user.avatarFallback}
+              />
+            </li>
           ))}
         </div>
         <ScrollBar orientation="horizontal" />
@@ -114,13 +118,17 @@ const AttendeesStatus = ({ attendances }: AttendeesStatusProps) => {
 };
 
 interface UserItemProps {
+  className?: string;
   name: string;
   avatarFallback?: string | null;
 }
 
-const UserItem = ({ name, avatarFallback }: UserItemProps) => {
+const UserItem = ({ className, name, avatarFallback }: UserItemProps) => {
   return (
-    <div className="flex flex-col items-center space-y-[0.25rem]">
+    <div
+      className={cn("flex flex-col items-center space-y-[0.25rem]", className)}
+      title={name}
+    >
       <ProfileAvatar size="3rem" name={name} avatarFallback={avatarFallback} />
       <div className="line-clamp-2 w-full text-center text-[0.75rem]">
         {name}

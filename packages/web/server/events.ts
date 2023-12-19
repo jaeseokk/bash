@@ -37,6 +37,11 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
               avatarFallback: true,
             },
           },
+          activities: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
         },
       },
       activities: {
@@ -62,7 +67,15 @@ export const getEventBy = async ({ id, slug }: GetEventByProps) => {
     throw new Error("Event not found");
   }
 
-  return event;
+  return {
+    ...event,
+    attendances: event?.attendances.sort((a, b) => {
+      return (
+        (b.activities[0]?.createdAt.getTime() ?? 0) -
+        (a.activities[0]?.createdAt.getTime() ?? 0)
+      );
+    }),
+  } as typeof event;
 };
 
 export interface publishEventProps {
