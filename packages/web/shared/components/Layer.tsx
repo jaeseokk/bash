@@ -64,8 +64,8 @@ const Layer = ({
     <Sheet open={open} onOpenChange={onOpenChange} {...props}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
       <SheetContent
-        className="flex h-full flex-col border-t-0"
-        side="bottom"
+        className="flex flex-col"
+        side="full"
         onOpenAutoFocus={(e) => {
           e.preventDefault();
         }}
