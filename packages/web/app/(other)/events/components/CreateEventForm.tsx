@@ -33,8 +33,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import NumericInput from "@/components/NumericInput";
 import ReplyRadioGroup from "@/components/ReplyRadioGroup";
 import * as process from "process";
-import { Popover } from "@/components/ui/popover";
 import NudgePopover from "@/components/NudgePopover";
+import ky from "ky";
+import { useLoading } from "@/hooks/useLoading";
 
 const baseUrl = `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co`;
 
@@ -127,6 +128,7 @@ const CreateEventForm = ({
   });
   const { isSubmitting } = formState;
   const coverImage = watch("coverImage");
+  const [customCoverImages, setCustomCoverImages] = useState<string[]>([]);
   const effectWatch = watch("effect") as keyof typeof STICKERS | null;
   const [showCoverImageBottomSheet, setShowCoverImageBottomSheet] =
     useState(false);
@@ -139,6 +141,19 @@ const CreateEventForm = ({
     | null;
   const submit = async (data: CreateEventFormData) => {
     await onSubmit(data);
+  };
+  const [isUploading, startUploading] = useLoading();
+  const handleUploadCoverImage = (file: File) => {
+    return startUploading(async () => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await ky.post("/api/upload-cover-image", {
+        body: formData,
+      });
+      const json = (await res.json()) as { fullPath: string };
+      const url = `${baseUrl}/storage/v1/object/public/${json.fullPath}`;
+      setCustomCoverImages((prev) => [url, ...prev]);
+    });
   };
 
   return (
@@ -345,6 +360,45 @@ const CreateEventForm = ({
       <Layer
         urlStateKey={"preview"}
         open={showCoverImageBottomSheet}
+        topRightAddon={
+          <Button
+            variant="outline"
+            size="sm"
+            type="button"
+            asChild
+            disabled={isUploading}
+          >
+            <label className="cursor-pointer">
+              {isUploading && (
+                <Image
+                  className="mr-2"
+                  src="/images/spinner.svg"
+                  alt="loading"
+                  width="16"
+                  height={16}
+                />
+              )}
+              <input
+                type="file"
+                className="absolute m-[-1px] h-[1px] w-[1px] p-0"
+                style={{
+                  clip: "rect(0px, 0px, 0px, 0px)",
+                }}
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+
+                  if (!file) {
+                    return;
+                  }
+
+                  handleUploadCoverImage(file);
+                }}
+              />
+              업로드
+            </label>
+          </Button>
+        }
         onClose={() => {
           setShowCoverImageBottomSheet(false);
         }}
@@ -352,6 +406,33 @@ const CreateEventForm = ({
         <ScrollArea className="h-full">
           <div className="px-[1.5rem] pb-9">
             <div className="grid grid-cols-2 gap-4 pb-4 pt-20 md:grid-cols-3">
+              {customCoverImages.map((url) => (
+                <div
+                  key={url}
+                  className="flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-[#343434]"
+                  role="button"
+                  onClick={() => {
+                    setValue("coverImage", url);
+                    setShowCoverImageBottomSheet(false);
+                  }}
+                >
+                  <Image
+                    src={url}
+                    alt="Party main image"
+                    width="200"
+                    height="200"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                    }}
+                    placeholder="blur"
+                    blurDataURL={`/_next/image?url=${encodeURIComponent(
+                      url,
+                    )}&w=16&q=1`}
+                    sizes="100vw"
+                  />
+                </div>
+              ))}
               {COVER_IMAGE_LIST.map((url) => (
                 <div
                   key={url}

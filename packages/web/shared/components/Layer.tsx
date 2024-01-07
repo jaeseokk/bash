@@ -23,6 +23,7 @@ export interface LayerProps
   onClose?: () => void;
   autoFocus?: boolean;
   urlStateKey?: string;
+  topRightAddon?: React.ReactNode;
 }
 
 const Layer = ({
@@ -35,6 +36,7 @@ const Layer = ({
   urlStateKey,
   defaultOpen,
   open: openProp,
+  topRightAddon,
   onOpenChange: onOpenChangeProp,
   ...props
 }: LayerProps) => {
@@ -84,12 +86,18 @@ const Layer = ({
         <div className="flex-1 overflow-hidden">{children}</div>
         {!hideCloseButton && (
           <SheetClose
-            className="absolute right-9 top-[2.5rem] rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+            className={cn(
+              "absolute top-[2.5rem] rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary",
+              topRightAddon ? "left-9" : "right-9",
+            )}
             onClick={onClose}
           >
             <Cross2Icon className="h-6 w-6" />
             <span className="sr-only">Close</span>
           </SheetClose>
+        )}
+        {topRightAddon && (
+          <div className="absolute right-9 top-[2.5rem]">{topRightAddon}</div>
         )}
       </SheetContent>
     </Sheet>
