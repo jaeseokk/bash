@@ -36,6 +36,7 @@ import * as process from "process";
 import NudgePopover from "@/components/NudgePopover";
 import ky from "ky";
 import { useLoading } from "@/hooks/useLoading";
+import { useAlertDialog } from "@/components/AlertDialogProvider";
 
 const baseUrl = `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co`;
 
@@ -110,6 +111,7 @@ const CreateEventForm = ({
   initialData,
   onSubmit,
 }: CreateEventFormProps) => {
+  const { openDialog } = useAlertDialog();
   const session = useSession();
   const {
     control,
@@ -145,14 +147,21 @@ const CreateEventForm = ({
   const [isUploading, startUploading] = useLoading();
   const handleUploadCoverImage = (file: File) => {
     return startUploading(async () => {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await ky.post("/api/upload-cover-image", {
-        body: formData,
-      });
-      const json = (await res.json()) as { fullPath: string };
-      const url = `${baseUrl}/storage/v1/object/public/${json.fullPath}`;
-      setCustomCoverImages((prev) => [url, ...prev]);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await ky.post("/api/upload-cover-image", {
+          body: formData,
+        });
+        const json = (await res.json()) as { fullPath: string };
+        const url = `${baseUrl}/storage/v1/object/public/${json.fullPath}`;
+        setCustomCoverImages((prev) => [url, ...prev]);
+      } catch (e) {
+        openDialog({
+          title: (e as Error).message,
+          hideCancel: true,
+        });
+      }
     });
   };
 
