@@ -85,7 +85,6 @@ export default async function Image({
           >
             <img
               width="315"
-              height="315"
               src={`${getUrlOrigin()}/_next/image?url=${encodeURIComponent(
                 event.coverImage,
               )}&w=128&q=10`}

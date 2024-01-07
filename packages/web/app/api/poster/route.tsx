@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
             overflow: "hidden",
           }}
         >
-          <img src={coverImage} alt="" width="480" height="480" sizes="100vw" />
+          <img src={coverImage} alt="" width="480" sizes="100vw" />
         </div>
         <div
           style={{

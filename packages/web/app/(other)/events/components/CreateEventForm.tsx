@@ -145,9 +145,9 @@ const CreateEventForm = ({
     await onSubmit(data);
   };
   const [isUploading, startUploading] = useLoading();
-  const handleUploadCoverImage = (file: File) => {
-    return startUploading(async () => {
-      try {
+  const handleUploadCoverImage = async (file: File) => {
+    try {
+      await startUploading(async () => {
         const formData = new FormData();
         formData.append("file", file);
         const res = await ky.post("/api/upload-cover-image", {
@@ -156,13 +156,13 @@ const CreateEventForm = ({
         const json = (await res.json()) as { fullPath: string };
         const url = `${baseUrl}/storage/v1/object/public/${json.fullPath}`;
         setCustomCoverImages((prev) => [url, ...prev]);
-      } catch (e) {
-        openDialog({
-          title: (e as Error).message,
-          hideCancel: true,
-        });
-      }
-    });
+      });
+    } catch (e) {
+      openDialog({
+        title: (e as Error).message,
+        hideCancel: true,
+      });
+    }
   };
 
   return (
