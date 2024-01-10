@@ -41,6 +41,19 @@ import { useAlertDialog } from "@/components/AlertDialogProvider";
 const baseUrl = `https://${process.env.NEXT_PUBLIC_SUPABASE_ID}.supabase.co`;
 
 const COVER_IMAGE_LIST = [
+  `${baseUrl}/storage/v1/object/public/cover-images/cover22.png`,
+  `${baseUrl}/storage/v1/object/public/cover-images/cover23.png`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_1.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_2.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_3.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_4.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_5.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_6.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_7.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_8.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_9.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_11.jpg`,
+  `${baseUrl}/storage/v1/object/public/cover-images/new_19.jpg`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover1.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover2.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover3.png`,
@@ -62,8 +75,6 @@ const COVER_IMAGE_LIST = [
   `${baseUrl}/storage/v1/object/public/cover-images/cover19.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover20.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover21.png`,
-  `${baseUrl}/storage/v1/object/public/cover-images/cover22.png`,
-  `${baseUrl}/storage/v1/object/public/cover-images/cover23.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover24.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover25.png`,
   `${baseUrl}/storage/v1/object/public/cover-images/cover26.png`,
