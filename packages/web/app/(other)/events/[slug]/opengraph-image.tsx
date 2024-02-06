@@ -1,5 +1,5 @@
-import { ImageResponse } from "next/og";
 import { getUrlOrigin } from "@/utils";
+import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
@@ -46,6 +46,7 @@ export default async function Image({
               overflow: "hidden",
             }}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               width="315"
               height="315"
@@ -60,6 +61,7 @@ export default async function Image({
                 left: 0,
                 right: 0,
               }}
+              alt=""
             />
           </div>
           <div
@@ -83,11 +85,13 @@ export default async function Image({
               overflow: "hidden",
             }}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               width="315"
               src={`${getUrlOrigin()}/_next/image?url=${encodeURIComponent(
                 event.coverImage,
-              )}&w=128&q=10`}
+              )}&w=128&q=50`}
+              alt=""
             />
           </div>
           <div
